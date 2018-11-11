@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.casino.josh.casino_java.Adapters.BuildAdapter;
 import com.casino.josh.casino_java.Adapters.ComputerHandAdapter;
 import com.casino.josh.casino_java.Models.BasePlayerModel;
 import com.casino.josh.casino_java.Models.CardModel;
@@ -30,18 +31,19 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
     private HandAdapter mHand;
     private TableAdapter mTable;
     private ComputerHandAdapter mComputerHand;
-
+    private BuildAdapter mBuilds;
     /**
      * Constructor for MakeMoveButtonClickListener
      * @param makeMoveFragment MakeMoveButtonFragment
      * @param a_humanAdapter HandAdapter
      * @param a_tableAdapter ComputerHandAdapter
      */
-    public MakeMoveButtonClickListener(MakeMoveButtonFragment makeMoveFragment, HandAdapter a_humanAdapter, TableAdapter a_tableAdapter, ComputerHandAdapter a_computerAdapter){
+    public MakeMoveButtonClickListener(MakeMoveButtonFragment makeMoveFragment, HandAdapter a_humanAdapter, TableAdapter a_tableAdapter, ComputerHandAdapter a_computerAdapter, BuildAdapter a_BuildAdapter){
         this.makeMoveFragment = makeMoveFragment;
         mHand = a_humanAdapter;
         mTable = a_tableAdapter;
         mComputerHand = a_computerAdapter;
+        mBuilds = a_BuildAdapter;
     }
 
     /**
@@ -102,6 +104,7 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                                         mTable.getCards().addAll(GameActivity.mTournament.getCurrentRound().getTable().getLooseCards());
                                         mTable.notifyDataSetChanged();
                                         mHand.notifyDataSetChanged();
+
                                         GameActivity.mChosenCard = null;
                                         GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
 
@@ -117,6 +120,34 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                                                                     Toast.LENGTH_SHORT);
                                     toast.show();
                                 }
+                            }else if(turnOptions.getCheckedRadioButtonId() == R.id.build){
+                                    if(GameActivity.mChosenCard != null && GameActivity.mCaptureCard != null){
+                                        if(GameActivity.mTournament.getCurrentRound().execTurn(BasePlayerModel.TurnOptions.BUILD)){
+                                            mHand.getCards().clear();
+                                            mHand.getCards().addAll(GameActivity.mTournament.getCurrentRound().getCurrenntPlayer().getHand());
+                                            mTable.getCards().clear();
+                                            mTable.getCards().addAll(GameActivity.mTournament.getCurrentRound().getTable().getLooseCards());
+                                            mTable.notifyDataSetChanged();
+                                            mHand.notifyDataSetChanged();
+                                            mBuilds.getBuilds().clear();
+                                            mBuilds.getBuilds().addAll(GameActivity.mTournament.getCurrentRound().getTable().getBuilds());
+                                            mBuilds.notifyDataSetChanged();
+
+                                            GameActivity.mChosenCard = null;
+                                            GameActivity.mCaptureCard = null;
+                                            GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
+                                        }
+                                    }else {
+                                        Toast toast = Toast.makeText(makeMoveFragment.getContext(),
+                                                "Please select a card.",
+                                                Toast.LENGTH_SHORT);
+                                        toast.show();
+                                    }
+                            }else{
+                                Toast toast = Toast.makeText(makeMoveFragment.getContext(),
+                                        "Unable to make a build.",
+                                        Toast.LENGTH_SHORT);
+                                toast.show();
                             }
                         }
                     });

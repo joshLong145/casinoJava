@@ -167,8 +167,15 @@
         android:id="@+id/table"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="100dp"
         android:layout_toLeftOf="@id/save_game"
+        android:scrollbars="horizontal"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/table_builds"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="180dp"
         android:scrollbars="horizontal"/>
 
 </RelativeLayout>

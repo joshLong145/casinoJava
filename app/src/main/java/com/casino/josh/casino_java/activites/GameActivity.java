@@ -1,5 +1,6 @@
 package com.casino.josh.casino_java.activites;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -9,11 +10,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.casino.josh.casino_java.Adapters.BuildAdapter;
 import com.casino.josh.casino_java.Adapters.ComputerHandAdapter;
 import com.casino.josh.casino_java.Fragments.ComputerPileFragment;
 import com.casino.josh.casino_java.Fragments.DeckButtonFragment;
 import com.casino.josh.casino_java.Fragments.LogButtonFragment;
+import com.casino.josh.casino_java.Models.BuildModel;
 import com.casino.josh.casino_java.Models.CardModel;
+import com.casino.josh.casino_java.ViewModels.BuildViewModel;
 import com.casino.josh.casino_java.ViewModels.ComputerHandViewModel;
 import com.casino.josh.casino_java.Adapters.HandAdapter;
 import com.casino.josh.casino_java.ViewModels.HandViewModel;
@@ -35,12 +39,16 @@ public class GameActivity extends FragmentActivity  {
     private HandViewModel handVM;
     private ComputerHandViewModel mComputerHandVM;
     private TableViewModel tableVM;
+    private BuildViewModel buildVM;
 
     public static TournamentModel mTournament;
     public static RecyclerView mTableModelView;
     public static RecyclerView mHumanHandModelView;
     public static RecyclerView mComputerModelView;
+    public static RecyclerView mBuildModelView;
     public static CardModel mChosenCard = null;
+    public static CardModel mCaptureCard = null;
+    public static Vector<CardModel> mLooseCards = new Vector<>();
 
     /**
      * Executed on creation of the activity (When no instance of the activity is cached on disk of device).
@@ -54,6 +62,8 @@ public class GameActivity extends FragmentActivity  {
         handVM = ViewModelProviders.of(this).get(HandViewModel.class);
         mComputerHandVM = ViewModelProviders.of(this).get(ComputerHandViewModel.class);
         tableVM = ViewModelProviders.of(this).get(TableViewModel.class);
+        buildVM = ViewModelProviders.of(this).get(BuildViewModel.class);
+
         mTournament = new TournamentModel();
 
         // If the activity is in portrait. change to landscape.
@@ -65,6 +75,8 @@ public class GameActivity extends FragmentActivity  {
         mComputerHandVM.setHand(mTournament.getCurrentRound().getPlayers().get(1).getHand());
 
         tableVM.setCards(mTournament.getCurrentRound().getTable().getLooseCards());
+
+        buildVM.setBuilds(new Vector<>());
     }
 
     /**
@@ -142,6 +154,20 @@ public class GameActivity extends FragmentActivity  {
             ComputerHandAdapter mAdapter = new ComputerHandAdapter(computerCards, this);
             mComputerModelView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
+        });
+
+        mBuildModelView = findViewById(R.id.table_builds);
+        mBuildModelView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager mBuildLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mBuildModelView.setLayoutManager(mBuildLayoutManager);
+
+        BuildViewModel buildVM = ViewModelProviders.of(this).get(BuildViewModel.class);
+
+        buildVM.getBuilds().observe(this, (Vector<BuildModel> builds) ->{
+            BuildAdapter adapter = new BuildAdapter(builds, this);
+            mBuildModelView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
         });
 
         // Add fragment components framelayouts defined within the XML layout.

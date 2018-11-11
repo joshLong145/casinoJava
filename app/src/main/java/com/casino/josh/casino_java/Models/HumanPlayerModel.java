@@ -1,5 +1,6 @@
 package com.casino.josh.casino_java.Models;
 
+import com.casino.josh.casino_java.Adapters.TurnLogAdapter;
 import com.casino.josh.casino_java.Models.BasePlayerModel;
 import com.casino.josh.casino_java.Models.TableModel;
 import com.casino.josh.casino_java.activites.GameActivity;
@@ -48,6 +49,15 @@ public class HumanPlayerModel extends BasePlayerModel {
                     turnLog += " " + card.toString();
                 }
 
+                TurnLogModel.AddToLog(turnLog);
+
+                return true;
+            }
+        } else if(option == TurnOptions.BUILD){
+            if(table.createBuild(GameActivity.mLooseCards, GameActivity.mChosenCard, GameActivity.mCaptureCard)){
+                getHand().remove(GameActivity.mChosenCard);
+
+                String turnLog = "Human created a build with the card: " + GameActivity.mChosenCard.toString();
                 TurnLogModel.AddToLog(turnLog);
 
                 return true;

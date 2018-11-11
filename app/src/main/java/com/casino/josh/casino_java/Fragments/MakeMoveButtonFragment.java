@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.casino.josh.casino_java.Adapters.BuildAdapter;
 import com.casino.josh.casino_java.Adapters.ComputerHandAdapter;
 import com.casino.josh.casino_java.Adapters.HandAdapter;
 import com.casino.josh.casino_java.Listeners.MakeMoveButtonClickListener;
@@ -53,7 +54,8 @@ public class MakeMoveButtonFragment extends Fragment {
         makeMove.setOnClickListener(new MakeMoveButtonClickListener(this,
                                                                         (HandAdapter) GameActivity.mHumanHandModelView.getAdapter(),
                                                                         (TableAdapter) GameActivity.mTableModelView.getAdapter(),
-                                                                        (ComputerHandAdapter)GameActivity.mComputerModelView.getAdapter())
+                                                                        (ComputerHandAdapter)GameActivity.mComputerModelView.getAdapter(),
+                                                                        (BuildAdapter)GameActivity.mBuildModelView.getAdapter())
         );
 
         return makeMove;

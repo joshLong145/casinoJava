@@ -87,7 +87,6 @@ public class PileAdapter extends RecyclerView.Adapter<PileAdapter.ViewHolder> {
         );
 
         holder.mimageBttn.setImageResource(res);
-        holder.mimageBttn.setOnClickListener(new HandOnClickListener(mDataSet.get(position)));
     }
 
     /**

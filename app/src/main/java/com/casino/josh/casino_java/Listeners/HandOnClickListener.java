@@ -1,6 +1,8 @@
 package com.casino.josh.casino_java.Listeners;
 
+import android.content.Context;
 import android.view.View;
+import android.widget.Toast;
 
 import com.casino.josh.casino_java.Models.CardModel;
 import com.casino.josh.casino_java.activites.GameActivity;
@@ -11,12 +13,14 @@ import com.casino.josh.casino_java.activites.GameActivity;
 
 public class HandOnClickListener implements View.OnClickListener {
     private CardModel mCard;
+    private Context mContext;
 
     /**
      * Constructor for event listener.
      * @param card
      */
-    public HandOnClickListener(CardModel card){
+    public HandOnClickListener(CardModel card, Context a_context){
+        mContext = a_context;
         mCard = card;
     }
 
@@ -27,5 +31,7 @@ public class HandOnClickListener implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         GameActivity.mChosenCard = mCard;
+        Toast cardSelectedPrompt =  Toast.makeText(mContext, "Selected: " + mCard.toString(), Toast.LENGTH_SHORT);
+        cardSelectedPrompt.show();
     }
 }

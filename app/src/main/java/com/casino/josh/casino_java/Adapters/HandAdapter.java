@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 
 import com.casino.josh.casino_java.Listeners.HandOnClickListener;
@@ -83,7 +84,8 @@ public class HandAdapter extends RecyclerView.Adapter<HandAdapter.ViewHolder> {
         );
 
         holder.mimageBttn.setImageResource(res);
-        holder.mimageBttn.setOnClickListener(new HandOnClickListener(mDataSet.get(position)));
+
+        holder.mimageBttn.setOnClickListener(new HandOnClickListener(mDataSet.get(position), holder.itemView.getContext()));
     }
 
     /**

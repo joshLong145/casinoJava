@@ -1,0 +1,83 @@
+package com.casino.josh.casino_java.Models;
+
+import com.casino.josh.casino_java.Models.CardModel;
+
+import java.util.Vector;
+import java.util.Collections;
+
+/**
+ * Created by josh on 11/1/18.
+ */
+
+public class DeckModel {
+    private Vector<CardModel> mCards = new Vector<>();
+    private int _currentCardIndex = 51;
+
+    /**
+     * Creates the cards within the deck.
+     */
+    void create(){
+        final int ACE = 1;
+        final int MAXSUIT = 4;
+        final int MAXVALUE = 13;
+
+        char[] suits = {'h', 's', 'c', 'd'};
+
+        for(int suit = 0; suit < MAXSUIT; suit++){
+            for(int value = 1; value <= MAXVALUE; value++ ){
+                if(value == ACE){
+                    CardModel ace = new CardModel(suits[suit], value, true);
+                    mCards.add(ace);
+                }else{
+                    CardModel card = new CardModel(suits[suit], value, false);
+                    mCards.add(card);
+                }
+            }
+        }
+
+        // once the deck has been created, shuffle it.
+
+        shuffle();
+    }
+
+    /**
+     * Ranomizes card collection to simulate shuffling of the cards.
+     */
+    public void shuffle(){
+        Collections.shuffle(mCards);
+    }
+
+    /**
+     * removes 4 cards from a collection and distributes to a collection which is returned.
+     * @return
+     */
+    public Vector<CardModel> dealHand(){
+        final int HANDSIZE = 4;
+
+        Vector<CardModel> dealtCards = new Vector<>();
+        if(_currentCardIndex > 0 && _currentCardIndex < mCards.size()){
+            for(int i = 0; i < HANDSIZE; i ++){
+                CardModel card = mCards.lastElement();
+                dealtCards.add(card);
+                mCards.removeElementAt(_currentCardIndex);
+                _currentCardIndex--;
+            }
+        }
+
+        return dealtCards;
+    }
+
+    /**
+     * Returns a vector of CardModel objects
+     * @return Vector<CardModel>
+     */
+    public final Vector<CardModel> getCards(){ return mCards; }
+
+    /**
+     * Return the size of the CardModel collection.
+     * @return
+     */
+    public final int getSize(){return mCards.size();}
+
+
+}

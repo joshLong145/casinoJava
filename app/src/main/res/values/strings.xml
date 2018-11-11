@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Casino_Java</string>
+    <string name="home_button_string">Play Game</string>
+    <string name="load_game_string">load save game</string>
+    <string name="move_string">make move</string>
+    <string name="save_game_string">save game</string>
+    <string name="help_string">help</string>
+    <string name="card_desc">TODO</string>
+    <string name="trail_option">trail</string>
+    <string name="build">build</string>
+    <string name="build_option">build</string>
+    <string name="capture_option">capture</string>
+    <string name="head_option">heads</string>
+    <string name="tail_option">tails</string>
+    <string name="pile_string">pile</string>
+    <string name="seed_deck">load seeded deck?</string>
+    <string name="seed_yes">yes</string>
+    <string name="seed_no">no</string>
+    <string name="deck_string">see deck</string>
+    <string name="log_string">turn log</string>
+</resources>

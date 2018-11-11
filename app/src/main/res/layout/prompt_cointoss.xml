@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="10dp" >
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/toss_option">
+
+        <RadioButton
+            android:id="@+id/tails"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="@string/tail_option"/>
+
+        <RadioButton
+            android:id="@+id/heads"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="@string/head_option"/>
+
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="@string/seed_deck"/>
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/seed_deck_option">
+
+        <RadioButton
+            android:id="@+id/seed_yes"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="@string/seed_no"/>
+
+        <RadioButton
+            android:id="@+id/seed_no"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="@string/seed_yes"/>
+
+    </RadioGroup>
+
+
+</LinearLayout>

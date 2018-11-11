@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="10dp" >
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/move_options">
+
+        <RadioButton
+            android:id="@+id/trail"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="@string/trail_option"/>
+
+        <RadioButton
+            android:id="@+id/build"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="@string/build_option"/>
+
+        <RadioButton
+            android:id="@+id/capture"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="@string/capture_option"/>
+
+    </RadioGroup>
+
+</LinearLayout>

@@ -166,7 +166,7 @@ public class GameActivity extends FragmentActivity  {
         BuildViewModel buildVM = ViewModelProviders.of(this).get(BuildViewModel.class);
 
         buildVM.getBuilds().observe(this, (Vector<BuildModel> builds) ->{
-            BuildAdapter adapter = new BuildAdapter(builds, this);
+            BuildAdapter adapter = new BuildAdapter(builds, this, this);
             mBuildModelView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         });

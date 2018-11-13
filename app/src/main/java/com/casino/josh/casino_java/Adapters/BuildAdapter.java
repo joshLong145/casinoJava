@@ -1,19 +1,15 @@
 package com.casino.josh.casino_java.Adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.casino.josh.casino_java.Listeners.BuildOnClickListener;
-import com.casino.josh.casino_java.Listeners.HandOnClickListener;
 import com.casino.josh.casino_java.Models.BuildModel;
-import com.casino.josh.casino_java.Models.CardModel;
 import com.casino.josh.casino_java.R;
 
 import java.util.Vector;
@@ -27,16 +23,17 @@ public class BuildAdapter extends RecyclerView.Adapter<BuildAdapter.ViewHolder> 
 
     private Vector<BuildModel> mDataSet;
     private Context context;
-
+    private FragmentActivity mActivity;
     /**
      * Constructor for the Adapter
      * @param a_dataset Vector<CardModel>
      * @param a_context Context
      */
-    public BuildAdapter(Vector<BuildModel> a_dataset, Context a_context) {
+    public BuildAdapter(Vector<BuildModel> a_dataset, Context a_context, FragmentActivity a_activity) {
         super();
         mDataSet = a_dataset;
         context = a_context;
+        mActivity = a_activity;
     }
 
     /**
@@ -69,7 +66,8 @@ public class BuildAdapter extends RecyclerView.Adapter<BuildAdapter.ViewHolder> 
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mButton.setText(mDataSet.get(position).toString());
+        final String data = mDataSet.get(position).toString() + "\n" + mDataSet.get(position).getBuildOwner();
+        holder.mButton.setText(data);
         holder.mButton.setOnClickListener(new BuildOnClickListener(mDataSet.get(position), holder.itemView.getContext()));
     }
 

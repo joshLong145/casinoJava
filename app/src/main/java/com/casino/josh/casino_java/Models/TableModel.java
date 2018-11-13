@@ -67,10 +67,14 @@ public class TableModel {
      * @return boolean
      */
     public boolean isCaptureCard(Vector<CardModel> hand, CardModel selectedCard, final String playerName){
+        if(mBuilds.size() <= 0){
+            return false;
+        }
+
         for (BuildModel build : mBuilds) {
             if(selectedCard.getValue() == build.getCaptureValue() && playerName == build.getBuildOwner()) {
                 for(CardModel card : hand){
-                        if (card.getValue() == build.getCaptureValue() && playerName == build.getBuildOwner()) {
+                        if (card.getValue() == build.getCaptureValue() && playerName == build.getBuildOwner() && card != selectedCard) {
                             return false;
                         }
                     }
@@ -101,23 +105,27 @@ public class TableModel {
 
 
     public Vector<CardModel> captureBuilds(Vector<BuildModel> builds, CardModel captureCard){
-        for(BuildModel build : builds){
-            if(build.getCaptureValue() != captureCard.getValue())
-                return new Vector<>();
-        }
-
-        Vector<CardModel> capturedBuildCards = new Vector<>();
-
-        for(BuildModel build : builds){
-            for(Vector<CardModel> set : build.getBuild()){
-                for(CardModel card : set)
-                    capturedBuildCards.add(card);
+        if(builds != null) {
+            for (BuildModel build : builds) {
+                if (build.getCaptureValue() != captureCard.getValue())
+                    return new Vector<>();
             }
 
-            mBuilds.remove(build);
+            Vector<CardModel> capturedBuildCards = new Vector<>();
+
+            for (BuildModel build : builds) {
+                for (Vector<CardModel> set : build.getBuild()) {
+                    for (CardModel card : set)
+                        capturedBuildCards.add(card);
+                }
+
+                mBuilds.remove(build);
+            }
+
+            return capturedBuildCards;
         }
 
-        return capturedBuildCards;
+        return new Vector<>();
     }
 
     /**

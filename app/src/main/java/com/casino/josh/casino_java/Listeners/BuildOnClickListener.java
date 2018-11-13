@@ -16,6 +16,7 @@ import java.util.Vector;
 public class BuildOnClickListener implements View.OnClickListener {
     private BuildModel mBuild;
     private Context mContext;
+    
     /**
      * Default constructor.
      */
@@ -30,13 +31,16 @@ public class BuildOnClickListener implements View.OnClickListener {
      */
     @Override
     public void onClick(View v) {
-            if(!GameActivity.mBuilds.contains(mBuild)){
-                GameActivity.mBuilds.add(mBuild);
+        if(GameActivity.mBuilds == null)
+            GameActivity.mBuilds = new Vector<>();
 
-                Toast toast = Toast.makeText(mContext,
-                        "Build Selected",
-                        Toast.LENGTH_SHORT);
-                toast.show();
-            }
+        if (!GameActivity.mBuilds.contains(mBuild)) {
+            GameActivity.mBuilds.add(mBuild);
+
+            Toast toast = Toast.makeText(mContext,
+                    "Build Selected",
+                    Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 }

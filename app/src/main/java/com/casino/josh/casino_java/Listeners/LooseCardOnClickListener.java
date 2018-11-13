@@ -5,6 +5,8 @@ import android.view.View;
 import com.casino.josh.casino_java.Models.CardModel;
 import com.casino.josh.casino_java.activites.GameActivity;
 
+import java.util.Vector;
+
 /**
  * Created by josh on 11/11/18.
  */
@@ -26,6 +28,9 @@ public class LooseCardOnClickListener implements View.OnClickListener {
      */
     @Override
     public void onClick(View v) {
+        if(GameActivity.mLooseCards == null)
+            GameActivity.mLooseCards = new Vector<>();
+
         if(!GameActivity.mLooseCards.contains(mCard))
             GameActivity.mLooseCards.add(mCard);
     }

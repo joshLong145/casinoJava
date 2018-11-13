@@ -84,8 +84,11 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                                         GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
 
                                     } else {
+                                        GameActivity.mChosenCard = null;
+                                        GameActivity.mCaptureCard = null;
+                                        GameActivity.mLooseCards = new Vector<>();
                                         Toast toast = Toast.makeText(makeMoveFragment.getContext(),
-                                                                    "Need to capture with that card",
+                                                                    "Unable to trail selected card card",
                                                                             Toast.LENGTH_SHORT);
                                         toast.show();
                                     }
@@ -112,8 +115,11 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                                         GameActivity.mBuilds = null;
                                         GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
                                     }else{
+                                        GameActivity.mChosenCard = null;
+                                        GameActivity.mCaptureCard = null;
+                                        GameActivity.mLooseCards = new Vector<>();
                                         Toast toast = Toast.makeText(makeMoveFragment.getContext(),
-                                                "Cannot capture with that card.",
+                                                "Cannot capture selection with that card.",
                                                 Toast.LENGTH_SHORT);
                                         toast.show();
                                     }
@@ -142,6 +148,9 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
 
                                             GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
                                         }else{
+                                            GameActivity.mChosenCard = null;
+                                            GameActivity.mCaptureCard = null;
+                                            GameActivity.mLooseCards = new Vector<>();
                                             Toast toast = Toast.makeText(makeMoveFragment.getContext(),
                                                     "Cannot build with selected cards.",
                                                     Toast.LENGTH_SHORT);
@@ -153,11 +162,6 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                                                 Toast.LENGTH_SHORT);
                                         toast.show();
                                     }
-                            }else{
-                                Toast toast = Toast.makeText(makeMoveFragment.getContext(),
-                                        "Unable to make a build.",
-                                        Toast.LENGTH_SHORT);
-                                toast.show();
                             }
                         }
                     });

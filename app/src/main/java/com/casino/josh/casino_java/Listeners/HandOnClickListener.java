@@ -45,6 +45,8 @@ public class HandOnClickListener implements View.OnClickListener {
                 CardModel tmp = GameActivity.mCaptureCard;
                 GameActivity.mCaptureCard = GameActivity.mChosenCard;
                 GameActivity.mChosenCard = tmp;
+                Toast cardSelectedPrompt =  Toast.makeText(mContext, "Swapped capture card and selected card." + mCard.toString(), Toast.LENGTH_SHORT);
+                cardSelectedPrompt.show();
             }
         }
 

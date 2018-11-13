@@ -1,5 +1,7 @@
 package com.casino.josh.casino_java.Models;
 
+import android.os.Build;
+
 import com.casino.josh.casino_java.Models.CardModel;
 import com.casino.josh.casino_java.Models.DeckModel;
 import com.casino.josh.casino_java.activites.GameActivity;
@@ -60,6 +62,28 @@ public class TableModel {
     }
 
     /**
+     * Checks if the player has more than one card with the same sum to capture with.
+     * @param hand
+     * @return boolean
+     */
+    public boolean isCaptureCard(Vector<CardModel> hand, CardModel selectedCard, final String playerName){
+        for (BuildModel build : mBuilds) {
+            if(selectedCard.getValue() == build.getCaptureValue() && playerName == build.getBuildOwner()) {
+                for(CardModel card : hand){
+                        if (card.getValue() == build.getCaptureValue() && playerName == build.getBuildOwner()) {
+                            return false;
+                        }
+                    }
+
+                }
+        }
+
+
+
+        return true;
+    }
+
+    /**
      * Returns a vector of CardModels that are the same value as the card being played.
      * @param playedCard CardModel
      * @return Vector<CardModel>
@@ -75,6 +99,27 @@ public class TableModel {
         return capturedCards;
     }
 
+
+    public Vector<CardModel> captureBuilds(Vector<BuildModel> builds, CardModel captureCard){
+        for(BuildModel build : builds){
+            if(build.getCaptureValue() != captureCard.getValue())
+                return new Vector<>();
+        }
+
+        Vector<CardModel> capturedBuildCards = new Vector<>();
+
+        for(BuildModel build : builds){
+            for(Vector<CardModel> set : build.getBuild()){
+                for(CardModel card : set)
+                    capturedBuildCards.add(card);
+            }
+
+            mBuilds.remove(build);
+        }
+
+        return capturedBuildCards;
+    }
+
     /**
      * Creates a new build object if the specified rules for build creation are met. if not false is returned and the turn is not completed.
      * @param looseCards
@@ -82,7 +127,7 @@ public class TableModel {
      * @param captureCard
      * @return
      */
-    public boolean createBuild(Vector<CardModel> looseCards, final CardModel chosenCard, final CardModel captureCard){
+    public boolean createBuild(Vector<CardModel> looseCards, final CardModel chosenCard, final CardModel captureCard, final String owner){
         int sum = 0;
 
         for(CardModel card : looseCards){
@@ -94,6 +139,8 @@ public class TableModel {
             BuildModel build = new BuildModel();
             looseCards.add(chosenCard);
             build.addBuildToBuild(looseCards);
+            build.setBuildOwner(owner);
+            build.setCaptureValue(captureCard.getValue());
             mBuilds.add(build);
 
             return true;

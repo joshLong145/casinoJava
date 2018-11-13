@@ -11,6 +11,7 @@ public abstract class BasePlayerModel {
     private Vector<CardModel> _pile;
     private int _points;
     private boolean _isTurn;
+    protected String mName;
 
     /**
      * Enum for verb actions that can be performed.
@@ -71,10 +72,10 @@ public abstract class BasePlayerModel {
     public abstract boolean makeMove(TableModel table, TurnOptions option);
 
     /**
-     * Set a flag for the current player turn.
-     * @param value
+     * Get the name of the current player.
+     * @return String
      */
-    public void setTurn(final boolean value){ _isTurn = value; }
+    public abstract String getName();
 
     /**
      * Serialize data within the class.

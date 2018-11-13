@@ -49,6 +49,7 @@ public class GameActivity extends FragmentActivity  {
     public static CardModel mChosenCard = null;
     public static CardModel mCaptureCard = null;
     public static Vector<CardModel> mLooseCards = new Vector<>();
+    public static Vector<BuildModel> mBuilds = new Vector<>();
 
     /**
      * Executed on creation of the activity (When no instance of the activity is cached on disk of device).

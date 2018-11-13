@@ -20,6 +20,19 @@ public class BuildModel {
     }
 
     /**
+     * Sets the owner of the build.
+     * @param owner
+     */
+    public void setBuildOwner(final String owner){mOwner = owner; }
+
+
+    /**
+     * Get the owner of the build.
+     * @return String
+     */
+    public String getBuildOwner(){ return mOwner; }
+
+    /**
      *  Returns the current capture value for the build.
      * @return
      */
@@ -37,6 +50,12 @@ public class BuildModel {
      */
     public void addBuildToBuild(final Vector<CardModel> build){mCards.add(build); }
 
+
+    /**
+     * Return the container of builds
+     * @return
+     */
+    public final Vector<Vector<CardModel>> getBuild(){ return mCards; }
 
     /**
      * Serialize data.

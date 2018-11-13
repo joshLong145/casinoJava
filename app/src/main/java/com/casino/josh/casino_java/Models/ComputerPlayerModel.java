@@ -12,7 +12,9 @@ public class ComputerPlayerModel extends BasePlayerModel {
     /**
      * Default constructor for the Computer PLayer Class.
      */
-    public ComputerPlayerModel(){}
+    public ComputerPlayerModel(){
+        mName = "Computer";
+    }
 
     /**
      * Implementation of abstract class within BasePlayerModel.
@@ -30,4 +32,10 @@ public class ComputerPlayerModel extends BasePlayerModel {
 
         return true;
     }
+
+    /**
+     * Get the name of the Computer player (Computer).
+     * @return String
+     */
+    public String getName(){return mName;}
 }

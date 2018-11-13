@@ -13,10 +13,13 @@ import java.util.Vector;
 
 public class HumanPlayerModel extends BasePlayerModel {
 
+
     /**
      * Constructor for HumanPlayer
      */
-    public HumanPlayerModel(){}
+    public HumanPlayerModel(){
+        mName = "Human";
+    }
 
     /**
      * Implements abstract class within base class for move execution.
@@ -27,16 +30,20 @@ public class HumanPlayerModel extends BasePlayerModel {
     @Override
     public boolean makeMove(TableModel table, TurnOptions option) {
         if(option == TurnOptions.TRIAL){
-            if(table.canTrailCard(GameActivity.mChosenCard)){
-                getHand().remove(GameActivity.mChosenCard);
-                table.getLooseCards().add(GameActivity.mChosenCard);
-                TurnLogModel.AddToLog("Human trailed the card: " + GameActivity.mChosenCard.toString());
-                return true;
-            }else{
-                return false;
+            if(!GameActivity.mTournament.getCurrentRound().getTable().isCaptureCard(getHand(), GameActivity.mChosenCard, mName)) {
+                if (table.canTrailCard(GameActivity.mChosenCard)) {
+                    getHand().remove(GameActivity.mChosenCard);
+                    table.getLooseCards().add(GameActivity.mChosenCard);
+                    TurnLogModel.AddToLog("Human trailed the card: " + GameActivity.mChosenCard.toString());
+                    return true;
+                } else {
+                    return false;
+                }
             }
         }else if (option == TurnOptions.CAPTURE){
             Vector<CardModel> capturedLooseCards = table.captureLooseCardsOnTable(GameActivity.mChosenCard);
+            Vector<CardModel> capturedBuildCards = table.captureBuilds(GameActivity.mBuilds, GameActivity.mChosenCard);
+
             if(capturedLooseCards.size() > 0){
                 table.getLooseCards().removeAll(capturedLooseCards);
                 capturedLooseCards.add(GameActivity.mChosenCard);
@@ -51,10 +58,19 @@ public class HumanPlayerModel extends BasePlayerModel {
 
                 TurnLogModel.AddToLog(turnLog);
 
+                if(capturedBuildCards.size() > 0){
+                    getPile().addAll(capturedBuildCards);
+                }
+
+                return true;
+            }
+
+            if(capturedBuildCards.size() > 0){
+                getPile().addAll(capturedBuildCards);
                 return true;
             }
         } else if(option == TurnOptions.BUILD){
-            if(table.createBuild(GameActivity.mLooseCards, GameActivity.mChosenCard, GameActivity.mCaptureCard)){
+            if(table.createBuild(GameActivity.mLooseCards, GameActivity.mChosenCard, GameActivity.mCaptureCard, mName)){
                 getHand().remove(GameActivity.mChosenCard);
 
                 String turnLog = "Human created a build with the card: " + GameActivity.mChosenCard.toString();
@@ -66,4 +82,10 @@ public class HumanPlayerModel extends BasePlayerModel {
 
         return false;
     }
+
+    /**
+     * Get the name of the player (Human).
+     * @return String
+     */
+    public String getName(){return mName;}
 }

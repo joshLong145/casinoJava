@@ -104,10 +104,13 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                                         mTable.getCards().addAll(GameActivity.mTournament.getCurrentRound().getTable().getLooseCards());
                                         mTable.notifyDataSetChanged();
                                         mHand.notifyDataSetChanged();
-
+                                        mBuilds.getBuilds().clear();
+                                        mBuilds.getBuilds().addAll(GameActivity.mTournament.getCurrentRound().getTable().getBuilds());
+                                        mBuilds.notifyDataSetChanged();
                                         GameActivity.mChosenCard = null;
+                                        GameActivity.mLooseCards = null;
+                                        GameActivity.mBuilds = null;
                                         GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
-
                                     }else{
                                         Toast toast = Toast.makeText(makeMoveFragment.getContext(),
                                                 "Cannot capture with that card.",
@@ -135,7 +138,14 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
 
                                             GameActivity.mChosenCard = null;
                                             GameActivity.mCaptureCard = null;
+                                            GameActivity.mLooseCards = new Vector<>();
+
                                             GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
+                                        }else{
+                                            Toast toast = Toast.makeText(makeMoveFragment.getContext(),
+                                                    "Cannot build with selected cards.",
+                                                    Toast.LENGTH_SHORT);
+                                            toast.show();
                                         }
                                     }else {
                                         Toast toast = Toast.makeText(makeMoveFragment.getContext(),

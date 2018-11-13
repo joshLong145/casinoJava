@@ -6,9 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.casino.josh.casino_java.Listeners.BuildOnClickListener;
 import com.casino.josh.casino_java.Listeners.HandOnClickListener;
 import com.casino.josh.casino_java.Models.BuildModel;
 import com.casino.josh.casino_java.Models.CardModel;
@@ -67,7 +69,8 @@ public class BuildAdapter extends RecyclerView.Adapter<BuildAdapter.ViewHolder> 
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mTextView.setText(mDataSet.get(position).toString());
+        holder.mButton.setText(mDataSet.get(position).toString());
+        holder.mButton.setOnClickListener(new BuildOnClickListener(mDataSet.get(position), holder.itemView.getContext()));
     }
 
     /**
@@ -90,10 +93,10 @@ public class BuildAdapter extends RecyclerView.Adapter<BuildAdapter.ViewHolder> 
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView mTextView;
+        private Button mButton;
         public ViewHolder(View itemView) {
             super(itemView);
-            mTextView = itemView.findViewById(R.id.build_view);
+            mButton = itemView.findViewById(R.id.build_view);
         }
     }
 

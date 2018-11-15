@@ -147,6 +147,19 @@
 
     </FrameLayout>
 
+    <TextView
+        android:id="@+id/human_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="320dp"
+        android:layout_marginLeft="300dp"/>
+
+    <TextView
+        android:id="@+id/computer_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="300dp"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/human_hand"
         android:layout_width="wrap_content"

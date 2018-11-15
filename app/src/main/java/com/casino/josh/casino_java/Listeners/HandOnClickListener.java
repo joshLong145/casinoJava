@@ -30,25 +30,10 @@ public class HandOnClickListener implements View.OnClickListener {
      */
     @Override
     public void onClick(View v) {
-        if(GameActivity.mChosenCard == null) {
-            GameActivity.mChosenCard = mCard;
-            Toast cardSelectedPrompt =  Toast.makeText(mContext, "Selected card: " + mCard.toString(), Toast.LENGTH_SHORT);
-            cardSelectedPrompt.show();
-        }else{
-            GameActivity.mCaptureCard = mCard;
-            Toast cardSelectedPrompt =  Toast.makeText(mContext, "Selected capture card: " + mCard.toString(), Toast.LENGTH_SHORT);
-            cardSelectedPrompt.show();
-        }
-
-        if(GameActivity.mCaptureCard != null) {
-            if (GameActivity.mChosenCard.getValue() > GameActivity.mCaptureCard.getValue()) {
-                CardModel tmp = GameActivity.mCaptureCard;
-                GameActivity.mCaptureCard = GameActivity.mChosenCard;
-                GameActivity.mChosenCard = tmp;
-                Toast cardSelectedPrompt =  Toast.makeText(mContext, "Swapped capture card and selected card." + mCard.toString(), Toast.LENGTH_SHORT);
-                cardSelectedPrompt.show();
-            }
-        }
+        GameActivity.mChosenCard = mCard;
+        Toast cardSelectedPrompt =  Toast.makeText(mContext, "Selected card: " + mCard.toString(), Toast.LENGTH_SHORT);
+        cardSelectedPrompt.show();
 
     }
 }
+

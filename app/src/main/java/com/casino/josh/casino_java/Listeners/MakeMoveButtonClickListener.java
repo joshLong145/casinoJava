@@ -85,7 +85,6 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
 
                                     } else {
                                         GameActivity.mChosenCard = null;
-                                        GameActivity.mCaptureCard = null;
                                         GameActivity.mLooseCards = new Vector<>();
                                         Toast toast = Toast.makeText(makeMoveFragment.getContext(),
                                                                     "Unable to trail selected card card",
@@ -99,7 +98,7 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                                     toast.show();
                                 }
                             } else if (turnOptions.getCheckedRadioButtonId() == R.id.capture) {
-                                if (GameActivity.mChosenCard != null) {
+                                if (GameActivity.mChosenCard != null && GameActivity.mLooseCards != null) {
                                     if(GameActivity.mTournament.getCurrentRound().execTurn(BasePlayerModel.TurnOptions.CAPTURE)){
                                         mHand.getCards().clear();
                                         mHand.getCards().addAll(GameActivity.mTournament.getCurrentRound().getCurrenntPlayer().getHand());
@@ -116,7 +115,6 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                                         GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
                                     }else{
                                         GameActivity.mChosenCard = null;
-                                        GameActivity.mCaptureCard = null;
                                         GameActivity.mLooseCards = new Vector<>();
                                         Toast toast = Toast.makeText(makeMoveFragment.getContext(),
                                                 "Cannot capture selection with that card.",
@@ -130,7 +128,7 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                                     toast.show();
                                 }
                             }else if(turnOptions.getCheckedRadioButtonId() == R.id.build){
-                                    if(GameActivity.mChosenCard != null && GameActivity.mCaptureCard != null){
+                                    if(GameActivity.mChosenCard != null){
                                         if(GameActivity.mTournament.getCurrentRound().execTurn(BasePlayerModel.TurnOptions.BUILD)){
                                             mHand.getCards().clear();
                                             mHand.getCards().addAll(GameActivity.mTournament.getCurrentRound().getCurrenntPlayer().getHand());
@@ -143,13 +141,11 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                                             mBuilds.notifyDataSetChanged();
 
                                             GameActivity.mChosenCard = null;
-                                            GameActivity.mCaptureCard = null;
                                             GameActivity.mLooseCards = new Vector<>();
 
                                             GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
                                         }else{
                                             GameActivity.mChosenCard = null;
-                                            GameActivity.mCaptureCard = null;
                                             GameActivity.mLooseCards = new Vector<>();
                                             Toast toast = Toast.makeText(makeMoveFragment.getContext(),
                                                     "Cannot build with selected cards.",

@@ -90,20 +90,37 @@ public class TableModel {
     /**
      * Returns a vector of CardModels that are the same value as the card being played.
      * @param playedCard CardModel
+     * @param selectedLooseCards Vector<CardModel>
      * @return Vector<CardModel>
      */
-    public Vector<CardModel> captureLooseCardsOnTable(CardModel playedCard){
+    public Vector<CardModel> captureLooseCardsOnTable(CardModel playedCard, Vector<CardModel> selectedLooseCards){
         Vector<CardModel> capturedCards = new Vector<>();
-        for(CardModel card : _looseCards){
+
+        for(CardModel card : selectedLooseCards){
             if(card.getValue() == playedCard.getValue()){
                capturedCards.add(card);
+            }else {
+                return new Vector<>();
             }
+        }
+
+        _looseCards.removeAll(selectedLooseCards);
+
+        // check the remaing loose cards to make sure all matching cards where selected for capture.
+        for(CardModel card : _looseCards){
+            if(playedCard.getValue() == card.getValue())
+                return new Vector<>();
         }
 
         return capturedCards;
     }
 
-
+    /**
+     * Capture selected builds that are on the table.
+     * @param builds
+     * @param captureCard
+     * @return
+     */
     public Vector<CardModel> captureBuilds(Vector<BuildModel> builds, CardModel captureCard){
         if(builds != null) {
             for (BuildModel build : builds) {
@@ -128,30 +145,34 @@ public class TableModel {
         return new Vector<>();
     }
 
+
+
     /**
      * Creates a new build object if the specified rules for build creation are met. if not false is returned and the turn is not completed.
      * @param looseCards
      * @param chosenCard
-     * @param captureCard
+     * @param hand
      * @return
      */
-    public boolean createBuild(Vector<CardModel> looseCards, final CardModel chosenCard, final CardModel captureCard, final String owner){
+    public boolean createBuild(Vector<CardModel> looseCards, final CardModel chosenCard, final Vector<CardModel> hand, final String owner){
         int sum = 0;
 
         for(CardModel card : looseCards){
             sum += card.getValue();
         }
 
-        if(sum + chosenCard.getValue() == captureCard.getValue()){
-            getLooseCards().removeAll(looseCards);
-            BuildModel build = new BuildModel();
-            looseCards.add(chosenCard);
-            build.addBuildToBuild(looseCards);
-            build.setBuildOwner(owner);
-            build.setCaptureValue(captureCard.getValue());
-            mBuilds.add(build);
+        for(CardModel card : hand) {
+            if (sum + chosenCard.getValue() == card.getValue()) {
+                getLooseCards().removeAll(looseCards);
+                BuildModel build = new BuildModel();
+                looseCards.add(chosenCard);
+                build.addBuildToBuild(looseCards);
+                build.setBuildOwner(owner);
+                build.setCaptureValue(card.getValue());
+                mBuilds.add(build);
 
-            return true;
+                return true;
+            }
         }
 
         return false;

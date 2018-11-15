@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
 
 import com.casino.josh.casino_java.Adapters.BuildAdapter;
 import com.casino.josh.casino_java.Adapters.ComputerHandAdapter;
@@ -46,8 +47,9 @@ public class GameActivity extends FragmentActivity  {
     public static RecyclerView mHumanHandModelView;
     public static RecyclerView mComputerModelView;
     public static RecyclerView mBuildModelView;
+    public static TextView mHumanScore;
+    public static TextView mComputerScore;
     public static CardModel mChosenCard = null;
-    public static CardModel mCaptureCard = null;
     public static Vector<CardModel> mLooseCards = new Vector<>();
     public static Vector<BuildModel> mBuilds = new Vector<>();
 
@@ -170,6 +172,11 @@ public class GameActivity extends FragmentActivity  {
             mBuildModelView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         });
+
+        mComputerScore = findViewById(R.id.computer_score);
+        mComputerScore.setText("Computer Score: " + Integer.toString(mTournament.getComputerPlayer().getPoints()));
+        mHumanScore = findViewById(R.id.human_score);
+        mHumanScore.setText("Human Score: " + Integer.toString(mTournament.getHumanPlayer().getPoints()));
 
         // Add fragment components framelayouts defined within the XML layout.
         FragmentTransaction transaction = fragmentManager.beginTransaction();

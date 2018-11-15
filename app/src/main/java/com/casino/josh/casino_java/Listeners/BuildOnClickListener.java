@@ -16,7 +16,7 @@ import java.util.Vector;
 public class BuildOnClickListener implements View.OnClickListener {
     private BuildModel mBuild;
     private Context mContext;
-    
+
     /**
      * Default constructor.
      */

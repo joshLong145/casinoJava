@@ -152,13 +152,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="320dp"
-        android:layout_marginLeft="300dp"/>
+        android:layout_marginLeft="370dp"
+        android:textColor="#ffffff"/>
+
+    <TextView
+        android:id="@+id/current_turn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="320dp"
+        android:layout_marginLeft="490dp"
+        android:textColor="#ffffff"/>
+
 
     <TextView
         android:id="@+id/computer_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="300dp"/>
+        android:layout_marginLeft="370dp"
+        android:textColor="#ffffff"/>
+
+
+    <TextView
+        android:id="@+id/round_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="490dp"
+        android:textColor="#ffffff"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/human_hand"

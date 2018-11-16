@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.casino.josh.casino_java.Adapters.BuildAdapter;
 import com.casino.josh.casino_java.Adapters.ComputerHandAdapter;
@@ -43,12 +44,17 @@ public class GameActivity extends FragmentActivity  {
     private BuildViewModel buildVM;
 
     public static TournamentModel mTournament;
+
     public static RecyclerView mTableModelView;
     public static RecyclerView mHumanHandModelView;
     public static RecyclerView mComputerModelView;
     public static RecyclerView mBuildModelView;
+
     public static TextView mHumanScore;
     public static TextView mComputerScore;
+    public static TextView mRoundNumber;
+    public static TextView mCurrentTurn;
+
     public static CardModel mChosenCard = null;
     public static Vector<CardModel> mLooseCards = new Vector<>();
     public static Vector<BuildModel> mBuilds = new Vector<>();
@@ -62,24 +68,11 @@ public class GameActivity extends FragmentActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_activity);
-        handVM = ViewModelProviders.of(this).get(HandViewModel.class);
-        mComputerHandVM = ViewModelProviders.of(this).get(ComputerHandViewModel.class);
-        tableVM = ViewModelProviders.of(this).get(TableViewModel.class);
-        buildVM = ViewModelProviders.of(this).get(BuildViewModel.class);
-
-        mTournament = new TournamentModel();
 
         // If the activity is in portrait. change to landscape.
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             getResources().getConfiguration().orientation = Configuration.ORIENTATION_LANDSCAPE;
         }
-
-        handVM.setHand(mTournament.getCurrentRound().getPlayers().get(0).getHand());
-        mComputerHandVM.setHand(mTournament.getCurrentRound().getPlayers().get(1).getHand());
-
-        tableVM.setCards(mTournament.getCurrentRound().getTable().getLooseCards());
-
-        buildVM.setBuilds(new Vector<>());
     }
 
     /**
@@ -89,6 +82,35 @@ public class GameActivity extends FragmentActivity  {
     @Override
     public void onStart(){
         super.onStart();
+
+        int firstTurn = getIntent().getIntExtra("firstTurn", -1);
+
+        mTournament = new TournamentModel(firstTurn);
+
+        handVM = ViewModelProviders.of(this).get(HandViewModel.class);
+        mComputerHandVM = ViewModelProviders.of(this).get(ComputerHandViewModel.class);
+        tableVM = ViewModelProviders.of(this).get(TableViewModel.class);
+        buildVM = ViewModelProviders.of(this).get(BuildViewModel.class);
+
+        handVM.setHand(mTournament.getCurrentRound().getPlayers().get(0).getHand());
+        mComputerHandVM.setHand(mTournament.getCurrentRound().getPlayers().get(1).getHand());
+
+        tableVM.setCards(mTournament.getCurrentRound().getTable().getLooseCards());
+
+        buildVM.setBuilds(new Vector<>());
+
+        // figure out
+        if(firstTurn == 0) {
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "Human goes first.",
+                    Toast.LENGTH_SHORT);
+            toast.show();
+        }else{
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "Computer goes first.",
+                    Toast.LENGTH_SHORT);
+            toast.show();
+        }
 
         // Find the recyclerview asssoicated with this object.
         mTableModelView = findViewById(R.id.table);
@@ -177,6 +199,11 @@ public class GameActivity extends FragmentActivity  {
         mComputerScore.setText("Computer Score: " + Integer.toString(mTournament.getComputerPlayer().getPoints()));
         mHumanScore = findViewById(R.id.human_score);
         mHumanScore.setText("Human Score: " + Integer.toString(mTournament.getHumanPlayer().getPoints()));
+        mRoundNumber = findViewById(R.id.round_number);
+        mRoundNumber.setText("Round number: " + Integer.toString(mTournament.getRoundNumber()));
+        mCurrentTurn = findViewById(R.id.current_turn);
+        mCurrentTurn.setText("Current turn: " + mTournament.getCurrentRound().getTurn());
+
 
         // Add fragment components framelayouts defined within the XML layout.
         FragmentTransaction transaction = fragmentManager.beginTransaction();

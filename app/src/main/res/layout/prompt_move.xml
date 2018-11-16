@@ -23,6 +23,18 @@
             android:text="@string/build_option"/>
 
         <RadioButton
+            android:id="@+id/multi_build"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="@string/multibuild_option"/>
+
+        <RadioButton
+            android:id="@+id/increase_build"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="@string/increase_build_option"/>
+
+        <RadioButton
             android:id="@+id/capture"
             android:layout_width="match_parent"
             android:layout_height="50dp"

@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioGroup;
+import java.util.Random;
 
 import com.casino.josh.casino_java.Fragments.PlayButtonFragment;
 import com.casino.josh.casino_java.R;
@@ -27,6 +28,15 @@ public class PlayButtonClickListener implements View.OnClickListener {
     }
 
     /**
+     * Generate a random number between one and two
+     * @return
+     */
+    private int generateRandom(){
+        Random rand = new Random(System.currentTimeMillis());
+        return rand.nextInt(2) + 1;
+    }
+
+    /**
      * Executes on event of button being pressed.
      * @param view View
      */
@@ -36,7 +46,7 @@ public class PlayButtonClickListener implements View.OnClickListener {
 
         LayoutInflater li = LayoutInflater.from(playFragment.getActivity());
         View promptsView = li.inflate(R.layout.prompt_cointoss, null);
-        RadioGroup turnOptions = promptsView.findViewById(R.id.toss_option);
+        RadioGroup tossOption = promptsView.findViewById(R.id.toss_option);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(playFragment.getActivity());
 
         alertDialogBuilder.setView(promptsView);
@@ -44,9 +54,22 @@ public class PlayButtonClickListener implements View.OnClickListener {
         alertDialogBuilder
                 .setCancelable(true)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        int turn = generateRandom();
+                        if(tossOption.getCheckedRadioButtonId() == R.id.heads){
+                            if(turn == 0)
+                                eventInformationIntent.putExtra("firstTurn", 0);
+                            else
+                                eventInformationIntent.putExtra("firstTurn", 1);
+
+                        }else if(tossOption.getCheckedRadioButtonId() == R.id.tails){
+                            if(turn == 0)
+                                eventInformationIntent.putExtra("firstTurn", 0);
+                            else
+                                eventInformationIntent.putExtra("firstTurn", 1);
+                        }
+
                         playFragment.startActivity(eventInformationIntent);
                     }
         });

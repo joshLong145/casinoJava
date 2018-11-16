@@ -41,7 +41,7 @@ public class HumanPlayerModel extends BasePlayerModel {
                 }
             }
         }else if (option == TurnOptions.CAPTURE){
-            Vector<CardModel> capturedLooseCards = table.captureLooseCardsOnTable(GameActivity.mChosenCard, GameActivity.mLooseCards);
+            Vector<CardModel> capturedLooseCards = table.captureLooseCards(GameActivity.mChosenCard, GameActivity.mLooseCards);
             Vector<CardModel> capturedBuildCards = table.captureBuilds(GameActivity.mBuilds, GameActivity.mChosenCard);
 
             if(capturedLooseCards.size() > 0){
@@ -77,6 +77,14 @@ public class HumanPlayerModel extends BasePlayerModel {
                 String turnLog = "Human created a build with the card: " + GameActivity.mChosenCard.toString();
                 TurnLogModel.AddToLog(turnLog);
 
+                return true;
+            }
+        } else if(option == TurnOptions.MULTIBUILD){
+            if(GameActivity.mBuilds.size() > 0)
+                return false;
+
+            if(table.createMultiBuild(GameActivity.mBuilds.get(0),GameActivity.mLooseCards, GameActivity.mChosenCard, getHand())){
+                getHand().remove(GameActivity.mChosenCard);
                 return true;
             }
         }

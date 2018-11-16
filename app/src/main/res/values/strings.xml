@@ -18,4 +18,6 @@
     <string name="seed_no">no</string>
     <string name="deck_string">see deck</string>
     <string name="log_string">turn log</string>
+    <string name="multibuild_option">multibuild</string>
+    <string name="increase_build_option">increase build</string>
 </resources>

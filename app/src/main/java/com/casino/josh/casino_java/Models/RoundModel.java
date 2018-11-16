@@ -31,11 +31,16 @@ public class RoundModel {
      * Constructor for RoundModel.
      * @param players Vector<BasePlayerModel>
      */
-    public RoundModel(Vector<BasePlayerModel> players){
+    public RoundModel(Vector<BasePlayerModel> players, int firstTurn){
         mTable = new TableModel();
         mPlayers = players;
-        mCurrentPlayerIndex = 0;
-        mCurrentTurn = CurrentTurn.Human;
+        mCurrentPlayerIndex = firstTurn;
+
+        if(mCurrentPlayerIndex == 0)
+            mCurrentTurn = CurrentTurn.Human;
+        else
+            mCurrentTurn = CurrentTurn.Computer;
+
         dealCards();
 
 

@@ -17,7 +17,7 @@ public abstract class BasePlayerModel {
      * Enum for verb actions that can be performed.
      */
     public enum TurnOptions{
-        BUILD, CAPTURE, TRIAL, AI;
+        BUILD, CAPTURE, TRIAL, AI, MULTIBUILD;
     }
 
     /**

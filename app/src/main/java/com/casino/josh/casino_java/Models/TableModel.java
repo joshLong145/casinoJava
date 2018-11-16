@@ -71,6 +71,16 @@ public class TableModel {
             return false;
         }
 
+        boolean matchesBuild = false;
+
+        for(BuildModel build : mBuilds){
+            if(selectedCard.getValue() == build.getCaptureValue())
+                matchesBuild = true;
+        }
+
+        if(!matchesBuild)
+            return false;
+
         for (BuildModel build : mBuilds) {
             if(selectedCard.getValue() == build.getCaptureValue() && playerName == build.getBuildOwner()) {
                 for(CardModel card : hand){
@@ -93,26 +103,31 @@ public class TableModel {
      * @param selectedLooseCards Vector<CardModel>
      * @return Vector<CardModel>
      */
-    public Vector<CardModel> captureLooseCardsOnTable(CardModel playedCard, Vector<CardModel> selectedLooseCards){
-        Vector<CardModel> capturedCards = new Vector<>();
+    public Vector<CardModel> captureLooseCards(CardModel playedCard, Vector<CardModel> selectedLooseCards){
+        int sum = 0;
 
         for(CardModel card : selectedLooseCards){
-            if(card.getValue() == playedCard.getValue()){
-               capturedCards.add(card);
-            }else {
-                return new Vector<>();
+            sum += card.getValue();
+        }
+
+        if(sum % playedCard.getValue() == 0){
+            for(CardModel card : _looseCards){
+                if(card.getValue() == playedCard.getValue()){
+                    if(!selectedLooseCards.contains(card)){
+                        return new Vector<>();
+
+                    }
+                }
             }
+
+            // remove all cards from loose cards.
+            _looseCards.removeAll(selectedLooseCards);
+
+            // return back the collection
+            return selectedLooseCards;
         }
 
-        _looseCards.removeAll(selectedLooseCards);
-
-        // check the remaing loose cards to make sure all matching cards where selected for capture.
-        for(CardModel card : _looseCards){
-            if(playedCard.getValue() == card.getValue())
-                return new Vector<>();
-        }
-
-        return capturedCards;
+        return new Vector<>();
     }
 
     /**
@@ -178,7 +193,34 @@ public class TableModel {
         return false;
     }
 
+    /**
+     *
+     * @param build
+     * @param selectedLooseCards
+     * @param chosenCard
+     * @param hand
+     * @return
+     */
+    public boolean createMultiBuild(BuildModel build, final Vector<CardModel> selectedLooseCards, final CardModel chosenCard, final Vector<CardModel> hand){
+        int sum = 0;
+        for(CardModel card : selectedLooseCards){
+            sum += card.getValue();
+        }
 
+        sum += chosenCard.getValue();
+
+        if(sum == build.getCaptureValue()){
+            for(CardModel card : hand){
+                if(card.getValue() == build.getCaptureValue()){
+                    selectedLooseCards.add(chosenCard);
+                    build.addBuildToBuild(selectedLooseCards);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 
     /**
      *  Add CardModel to loose card collection.

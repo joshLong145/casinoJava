@@ -23,12 +23,12 @@ public class TournamentModel {
     /**
      * Constructor for tournament Model.
      */
-    public TournamentModel(){
+    public TournamentModel(int firstTurn){
         mPlayers = new Vector<>();
         mRounds = new Vector<>();
         mPlayers.add(new HumanPlayerModel());
         mPlayers.add(new ComputerPlayerModel());
-        mRounds.add(new RoundModel(mPlayers));
+        mRounds.add(new RoundModel(mPlayers, firstTurn));
         mRoundNumber = 1;
     }
 
@@ -51,10 +51,16 @@ public class TournamentModel {
     public final BasePlayerModel getComputerPlayer(){ return mPlayers.get(1); }
 
     /**
+     * Get the current round number.
+     * @return integer
+     */
+    public final int getRoundNumber(){ return mRoundNumber; }
+
+    /**
      * Creates a new round object and adds it to the mRounds collection.
      */
     public void makeNewRound(){
-        mRounds.add(new RoundModel(mPlayers));
+        mRounds.add(new RoundModel(mPlayers, 0));
         mCurrentRound++;
         mRoundNumber++;
     }

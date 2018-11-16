@@ -82,6 +82,7 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                                         mHand.notifyDataSetChanged();
                                         GameActivity.mChosenCard = null;
                                         GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
+                                        GameActivity.mCurrentTurn.setText("Current turn: " + GameActivity.mTournament.getCurrentRound().getTurn());
 
                                     } else {
                                         GameActivity.mChosenCard = null;
@@ -110,9 +111,10 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                                         mBuilds.getBuilds().addAll(GameActivity.mTournament.getCurrentRound().getTable().getBuilds());
                                         mBuilds.notifyDataSetChanged();
                                         GameActivity.mChosenCard = null;
-                                        GameActivity.mLooseCards = null;
-                                        GameActivity.mBuilds = null;
+                                        GameActivity.mLooseCards = new Vector<>();
+                                        GameActivity.mBuilds = new Vector<>();
                                         GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
+                                        GameActivity.mCurrentTurn.setText("Current turn: " + GameActivity.mTournament.getCurrentRound().getTurn());
                                     }else{
                                         GameActivity.mChosenCard = null;
                                         GameActivity.mLooseCards = new Vector<>();
@@ -142,13 +144,45 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
 
                                             GameActivity.mChosenCard = null;
                                             GameActivity.mLooseCards = new Vector<>();
+                                            GameActivity.mBuilds = new Vector<>();
 
                                             GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
+                                            GameActivity.mCurrentTurn.setText("Current turn: " + GameActivity.mTournament.getCurrentRound().getTurn());
                                         }else{
                                             GameActivity.mChosenCard = null;
                                             GameActivity.mLooseCards = new Vector<>();
+                                            GameActivity.mBuilds = new Vector<>();
+
                                             Toast toast = Toast.makeText(makeMoveFragment.getContext(),
                                                     "Cannot build with selected cards.",
+                                                    Toast.LENGTH_SHORT);
+                                            toast.show();
+                                        }
+                                    }else if(turnOptions.getCheckedRadioButtonId() == R.id.multi_build){
+                                        if(GameActivity.mTournament.getCurrentRound().execTurn(BasePlayerModel.TurnOptions.MULTIBUILD)){
+                                            mHand.getCards().clear();
+                                            mHand.getCards().addAll(GameActivity.mTournament.getCurrentRound().getCurrenntPlayer().getHand());
+                                            mTable.getCards().clear();
+                                            mTable.getCards().addAll(GameActivity.mTournament.getCurrentRound().getTable().getLooseCards());
+                                            mTable.notifyDataSetChanged();
+                                            mHand.notifyDataSetChanged();
+                                            mBuilds.getBuilds().clear();
+                                            mBuilds.getBuilds().addAll(GameActivity.mTournament.getCurrentRound().getTable().getBuilds());
+                                            mBuilds.notifyDataSetChanged();
+
+                                            GameActivity.mChosenCard = null;
+                                            GameActivity.mLooseCards = new Vector<>();
+                                            GameActivity.mBuilds = new Vector<>();
+
+                                            GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
+                                            GameActivity.mCurrentTurn.setText("Current turn: " + GameActivity.mTournament.getCurrentRound().getTurn());
+                                        }else{
+                                            GameActivity.mChosenCard = null;
+                                            GameActivity.mLooseCards = new Vector<>();
+                                            GameActivity.mBuilds = new Vector<>();
+
+                                            Toast toast = Toast.makeText(makeMoveFragment.getContext(),
+                                                    "Cannot make multi build with selected cards.",
                                                     Toast.LENGTH_SHORT);
                                             toast.show();
                                         }

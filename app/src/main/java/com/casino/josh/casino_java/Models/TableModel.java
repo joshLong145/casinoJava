@@ -234,4 +234,34 @@ public class TableModel {
      */
     public DeckModel getDeck(){return _deck; }
 
+    /**
+     *
+     * @return
+     */
+    public final String toString(){
+        StringBuilder tableString = new StringBuilder();
+        for(BuildModel build : mBuilds)
+            tableString.append(build.toString() + " ");
+
+        for(CardModel card : _looseCards)
+           tableString.append(" " + card.toStringSave());
+
+        tableString.append(System.getProperty("line.separator"));
+        tableString.append(System.getProperty("line.separator"));
+
+        tableString.append("Build Owners: ");
+        for(BuildModel build : mBuilds){
+            tableString.append(build.toString() + " ");
+            tableString.append(build.getBuildOwner());
+        }
+
+        tableString.append(System.getProperty("line.separator"));
+        tableString.append(System.getProperty("line.separator"));
+
+        tableString.append(_deck.toString());
+        tableString.append(System.getProperty("line.separator"));
+
+        return tableString.toString();
+    }
+
 }

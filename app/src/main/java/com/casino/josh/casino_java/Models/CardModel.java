@@ -87,4 +87,14 @@ public class CardModel {
 
         return card;
     }
+
+    /**
+     *
+     * @return
+     */
+    public final String toStringSave(){
+       String cardData = "" + _cardSuit + Integer.toString(_cardValue);
+
+        return cardData;
+    }
 }

@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.casino.josh.casino_java.Listeners.LoadGameOnClickListener;
+
 /**
  * Created by josh on 10/30/18.
  */
@@ -44,6 +46,8 @@ public class LoadGameButtonFragment extends Fragment {
         Button loadGame = new Button(getActivity());
         loadGame.setTextColor(0x005b9c);
         loadGame.setBackgroundColor(0x8555b4);
+        loadGame.setOnClickListener(new LoadGameOnClickListener(this));
+
         return loadGame;
     }
 

@@ -79,5 +79,16 @@ public class DeckModel {
      */
     public final int getSize(){return mCards.size();}
 
+    /**
+     * Serialize data to string.
+     * @return
+     */
+    public final String toString(){
+        String deckString = "Deck:";
+        for(CardModel card : mCards){
+            deckString += " " + card.toStringSave();
+        }
 
+        return deckString;
+    }
 }

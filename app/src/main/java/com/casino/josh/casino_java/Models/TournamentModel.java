@@ -64,4 +64,19 @@ public class TournamentModel {
         mCurrentRound++;
         mRoundNumber++;
     }
+
+    /**
+     * Serialize encapsulated data within class.
+     * @return String
+     */
+    public final String toString(){
+        StringBuilder tournamentData = new StringBuilder();
+        tournamentData.append("Round: " + Integer.toString(mRoundNumber));
+        tournamentData.append(System.getProperty("line.separator"));
+        tournamentData.append(System.getProperty("line.separator"));
+
+        tournamentData.append(mRounds.get(mCurrentRound).toString());
+
+        return tournamentData.toString();
+    }
 }

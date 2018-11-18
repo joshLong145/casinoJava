@@ -1,6 +1,6 @@
 package com.casino.josh.casino_java.activites;
 
-import android.arch.lifecycle.ViewModelProvider;
+
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -17,6 +17,7 @@ import com.casino.josh.casino_java.Adapters.ComputerHandAdapter;
 import com.casino.josh.casino_java.Fragments.ComputerPileFragment;
 import com.casino.josh.casino_java.Fragments.DeckButtonFragment;
 import com.casino.josh.casino_java.Fragments.LogButtonFragment;
+import com.casino.josh.casino_java.Fragments.SaveGameButtonFragment;
 import com.casino.josh.casino_java.Models.BuildModel;
 import com.casino.josh.casino_java.Models.CardModel;
 import com.casino.josh.casino_java.ViewModels.BuildViewModel;
@@ -212,5 +213,6 @@ public class GameActivity extends FragmentActivity  {
         fragmentManager.beginTransaction().add(R.id.computer_pile, new ComputerPileFragment()).commit();
         fragmentManager.beginTransaction().add(R.id.see_deck, new DeckButtonFragment()).commit();
         fragmentManager.beginTransaction().add(R.id.turn_log, new LogButtonFragment()).commit();
+        fragmentManager.beginTransaction().add(R.id.save_game, new SaveGameButtonFragment()).commit();
     }
 }

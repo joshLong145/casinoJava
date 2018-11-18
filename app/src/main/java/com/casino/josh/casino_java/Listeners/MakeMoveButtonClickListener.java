@@ -206,6 +206,7 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                 mTable.getCards().clear();
                 mTable.getCards().addAll(GameActivity.mTournament.getCurrentRound().getTable().getLooseCards());
                 GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(0);
+                GameActivity.mCurrentTurn.setText("Current turn: " + GameActivity.mTournament.getCurrentRound().getTurn());
         }
     }
 }

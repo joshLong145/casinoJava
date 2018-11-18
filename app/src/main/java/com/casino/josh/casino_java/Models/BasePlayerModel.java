@@ -1,5 +1,7 @@
 package com.casino.josh.casino_java.Models;
 
+import android.widget.PopupWindow;
+
 import java.util.Vector;
 
 /**
@@ -81,7 +83,25 @@ public abstract class BasePlayerModel {
      * Serialize data within the class.
      * @return
      */
-    public String toString(){ return ""; }
+    public String toString(){
+        StringBuilder playerData = new StringBuilder();
+        playerData.append(mName + ":");
+        playerData.append(System.getProperty("line.separator"));
+        playerData.append("Score: " +Integer.toString(_points));
+        playerData.append(System.getProperty("line.separator"));
+        playerData.append("Hand:");
+        for(CardModel card : _hand){
+            playerData.append(" " + card.toStringSave());
+        }
+        playerData.append(System.getProperty("line.separator"));
+        playerData.append("Pile:");
+        for(CardModel card : _pile){
+            playerData.append(" " + card.toStringSave());
+        }
+        playerData.append(System.getProperty("line.separator"));
+
+        return playerData.toString();
+    }
 
     /**
      * Trails a card for the player.

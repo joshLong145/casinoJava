@@ -76,12 +76,6 @@ public class RoundModel {
     public TableModel getTable(){ return mTable; }
 
     /**
-     * Serialize current class.
-     * @return String
-     */
-    public String toString(){ return ""; }
-
-    /**
      * Deals cards to both player and computer if both hands are empty.
      */
     private void dealCards(){
@@ -141,5 +135,24 @@ public class RoundModel {
      * @return BasePlayerModel &
      */
     public final BasePlayerModel getCurrenntPlayer(){ return mPlayers.get(mCurrentPlayerIndex); }
+
+    /**
+     * Serialize data encapsulated within class.
+     * @return
+     */
+    public final String toString(){
+        StringBuilder roundData = new StringBuilder();
+
+        for(BasePlayerModel player : mPlayers) {
+            roundData.append(player.toString());
+            roundData.append(System.getProperty("line.separator"));
+        }
+
+        roundData.append(mTable.toString());
+
+        roundData.append("Next Player: " + mCurrentTurn.toString());
+        
+       return roundData.toString();
+    }
 
 }

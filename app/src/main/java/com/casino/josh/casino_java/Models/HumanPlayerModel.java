@@ -63,12 +63,13 @@ public class HumanPlayerModel extends BasePlayerModel {
 
                 return true;
             }
-
-            if(capturedBuildCards.size() > 0){
-                getPile().addAll(capturedBuildCards);
-                getPile().add(GameActivity.mChosenCard);
-                getHand().remove(GameActivity.mChosenCard);
-                return true;
+            if(table.canTrailCard(GameActivity.mChosenCard)) {
+                if (capturedBuildCards.size() > 0) {
+                    getPile().addAll(capturedBuildCards);
+                    getPile().add(GameActivity.mChosenCard);
+                    getHand().remove(GameActivity.mChosenCard);
+                    return true;
+                }
             }
         } else if(option == TurnOptions.BUILD){
             if(table.createBuild(GameActivity.mLooseCards, GameActivity.mChosenCard, getHand(), mName)){

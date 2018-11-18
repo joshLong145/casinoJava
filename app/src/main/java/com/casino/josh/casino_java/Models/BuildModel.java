@@ -66,7 +66,7 @@ public class BuildModel {
         for(Vector<CardModel> build : mCards){
             data += "[";
             for(CardModel card : build){
-                data += " " + card.toString();
+                data += " " + card.toStringSave();
             }
             data += "]";
         }

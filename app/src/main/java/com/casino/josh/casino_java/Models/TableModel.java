@@ -239,7 +239,7 @@ public class TableModel {
      * @return
      */
     public final String toString(){
-        StringBuilder tableString = new StringBuilder();
+        StringBuilder tableString = new StringBuilder("Table: ");
         for(BuildModel build : mBuilds)
             tableString.append(build.toString() + " ");
 

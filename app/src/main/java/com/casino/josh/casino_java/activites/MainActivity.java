@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.casino.josh.casino_java.Fragments.LoadGameButtonFragment;
 import com.casino.josh.casino_java.Fragments.PlayButtonFragment;
+import com.casino.josh.casino_java.Models.TournamentModel;
 import com.casino.josh.casino_java.R;
 
 import java.io.BufferedReader;
@@ -64,10 +65,16 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
+    /**
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param resultData
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent resultData) {
-
+        Intent eventInformationIntent = new Intent(this, GameActivity.class);
         // The ACTION_OPEN_DOCUMENT intent was sent with the request code
         // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
         // response to some other intent, and the code below shouldn't run at all.
@@ -93,6 +100,8 @@ public class MainActivity extends FragmentActivity {
                     }
 
                     inputStream.close();
+                    eventInformationIntent.putExtra("saveData", stringBuilder.toString());
+                    this.startActivity(eventInformationIntent);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
 

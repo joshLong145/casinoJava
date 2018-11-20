@@ -68,8 +68,10 @@ public class PlayButtonClickListener implements View.OnClickListener {
                                 eventInformationIntent.putExtra("firstTurn", 0);
                             else
                                 eventInformationIntent.putExtra("firstTurn", 1);
-                        }
 
+                        }
+                        // if a new game is created. do not load save data.
+                        eventInformationIntent.putExtra("saveData", "");
                         playFragment.startActivity(eventInformationIntent);
                     }
         });

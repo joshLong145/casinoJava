@@ -18,6 +18,7 @@ import com.casino.josh.casino_java.Fragments.ComputerPileFragment;
 import com.casino.josh.casino_java.Fragments.DeckButtonFragment;
 import com.casino.josh.casino_java.Fragments.LogButtonFragment;
 import com.casino.josh.casino_java.Fragments.SaveGameButtonFragment;
+import com.casino.josh.casino_java.Helpers.Serialization;
 import com.casino.josh.casino_java.Models.BuildModel;
 import com.casino.josh.casino_java.Models.CardModel;
 import com.casino.josh.casino_java.ViewModels.BuildViewModel;
@@ -31,6 +32,7 @@ import com.casino.josh.casino_java.Adapters.TableAdapter;
 import com.casino.josh.casino_java.ViewModels.TableViewModel;
 import com.casino.josh.casino_java.Models.TournamentModel;
 
+import java.util.Objects;
 import java.util.Vector;
 
 /** GameActivity
@@ -85,6 +87,13 @@ public class GameActivity extends FragmentActivity  {
         super.onStart();
 
         int firstTurn = getIntent().getIntExtra("firstTurn", -1);
+
+        String saveData = getIntent().getStringExtra("saveData");
+
+        if(!Objects.equals(saveData, "")) {
+            Serialization serial = new Serialization(saveData);
+            serial.parseData();
+        }
 
         mTournament = new TournamentModel(firstTurn);
 
@@ -204,7 +213,6 @@ public class GameActivity extends FragmentActivity  {
         mRoundNumber.setText("Round number: " + Integer.toString(mTournament.getRoundNumber()));
         mCurrentTurn = findViewById(R.id.current_turn);
         mCurrentTurn.setText("Current turn: " + mTournament.getCurrentRound().getTurn());
-
 
         // Add fragment components framelayouts defined within the XML layout.
         FragmentTransaction transaction = fragmentManager.beginTransaction();

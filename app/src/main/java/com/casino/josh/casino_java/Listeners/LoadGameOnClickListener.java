@@ -1,18 +1,11 @@
 package com.casino.josh.casino_java.Listeners;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Environment;
-import android.os.storage.StorageManager;
-import android.provider.DocumentsProvider;
-import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.View;
 
 import com.casino.josh.casino_java.Fragments.LoadGameButtonFragment;
+import com.casino.josh.casino_java.activites.GameActivity;
 
-import java.io.File;
-import java.net.URI;
 
 /**
  * Created by josh on 11/17/18.

@@ -8,6 +8,7 @@ import com.casino.josh.casino_java.Models.CardModel;
 
 import java.util.Objects;
 import java.util.Vector;
+import java.util.regex.Pattern;
 
 /**
  * Created by josh on 11/18/18.
@@ -78,6 +79,7 @@ public class Serialization {
             int buildsIndex = tableString.indexOf('[');
             int endOfBuildsIndex = tableString.lastIndexOf(']') + 1;
             String buildString = tableString.substring(buildsIndex, endOfBuildsIndex);
+            mBuilds = createBuilds(tokenizeBuilds(buildString));
             String looseCardString = tableString.substring(endOfBuildsIndex + 2);
             mLooseCards = createCards(tokenizeInput(looseCardString));
         }else{
@@ -102,6 +104,13 @@ public class Serialization {
         String[] data = serialData.split("\\s+");
 
         return data;
+    }
+
+    private final String[] tokenizeBuilds(final String builds){
+        // split each build but keep brackets using regex statement: "((?<=%1$s)|(?=%1$s))"
+        String[] buildTokens = builds.split(String.format("((?<=%1$s)|(?=%1$s))", Pattern.quote( " ] [ ")));
+
+        return buildTokens;
     }
 
     /**
@@ -129,4 +138,34 @@ public class Serialization {
         return cards;
     }
 
+    /**
+     * Creates BuildModel objects from serial data parsed by helper functions.
+     * @param buildString String
+     * @return Vector<BuildModel>
+     */
+    private final Vector<BuildModel> createBuilds(final String[] buildString){
+        Vector<String[]> buildTokens =  new Vector<>();
+        for(String build : buildString){
+            String[] cards = build.split("\\[([^]]+)\\]");
+            buildTokens.add(cards);
+        }
+
+        Vector<BuildModel> builds = new Vector<>();
+
+        for(String[] buildData : buildTokens){
+            BuildModel build = new BuildModel();
+            for(String cardString : buildData){
+                build.addBuildToBuild(createCards(tokenizeInput(cardString)));
+            }
+            int buildSum = 0;
+            for(CardModel card : build.getBuild().get(0)){
+                buildSum+= card.getValue();
+            }
+
+            builds.add(build);
+            build.setCaptureValue(buildSum);
+        }
+
+        return builds;
+    }
 }

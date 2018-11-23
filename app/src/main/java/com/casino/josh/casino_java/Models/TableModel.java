@@ -65,9 +65,17 @@ public class TableModel {
      * Checks if a card can be trailed from a players hand.
      * @return boolean
      */
-    public boolean canTrailCard(CardModel playedCard){
+    public boolean canTrailCard(CardModel playedCard, final String name){
+
+        // Check if any loose cards match the value of the chosen card.
         for(CardModel card: _looseCards){
             if(card.getValue() == playedCard.getValue())
+                return false;
+        }
+
+        // Check if there are any build owners.
+        for(BuildModel build : mBuilds){
+            if(build.getBuildOwner() == name)
                 return false;
         }
         return true;
@@ -141,6 +149,11 @@ public class TableModel {
 
         return new Vector<>();
     }
+
+    public boolean OwnBuild(final String name){
+        return false;
+    }
+
 
     /**
      * Capture selected builds that are on the table.

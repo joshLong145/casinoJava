@@ -31,6 +31,7 @@ public class HumanPlayerModel extends BasePlayerModel {
         _points = score;
         _hand = hand;
         _pile = pile;
+        mName = "Human";
     }
 
     /**
@@ -43,7 +44,7 @@ public class HumanPlayerModel extends BasePlayerModel {
     public boolean makeMove(TableModel table, TurnOptions option) {
         if(option == TurnOptions.TRIAL){
             if(!GameActivity.mTournament.getCurrentRound().getTable().isCaptureCard(getHand(), GameActivity.mChosenCard, mName)) {
-                if (table.canTrailCard(GameActivity.mChosenCard)) {
+                if (table.canTrailCard(GameActivity.mChosenCard, mName)) {
                     getHand().remove(GameActivity.mChosenCard);
                     table.getLooseCards().add(GameActivity.mChosenCard);
                     TurnLogModel.AddToLog("Human trailed the card: " + GameActivity.mChosenCard.toString());
@@ -75,7 +76,7 @@ public class HumanPlayerModel extends BasePlayerModel {
 
                 return true;
             }
-            if(table.canTrailCard(GameActivity.mChosenCard)) {
+            if(table.canTrailCard(GameActivity.mChosenCard, mName)) {
                 if (capturedBuildCards.size() > 0) {
                     getPile().addAll(capturedBuildCards);
                     getPile().add(GameActivity.mChosenCard);
@@ -94,9 +95,6 @@ public class HumanPlayerModel extends BasePlayerModel {
             }
         } else if(option == TurnOptions.MULTIBUILD){
             if(GameActivity.mBuilds.size() <= 0)
-                return false;
-
-            if(!table.canTrailCard(GameActivity.mChosenCard))
                 return false;
 
             if(GameActivity.mBuilds.size() <= 0)

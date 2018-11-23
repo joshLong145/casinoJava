@@ -99,6 +99,9 @@ public class Serialization {
                 int endOfBuildsIndex = tableString.lastIndexOf(']') + 1;
                 String buildString = tableString.substring(buildsIndex, endOfBuildsIndex);
                 mBuilds = createBuilds(tokenizeBuilds(buildString));
+                int buildOwnerIndex = mSaveData.indexOf("Build Owners:");
+                Vector<String> owners = parseBuildOwers(mSaveData.substring(buildOwnerIndex + 12, mSaveData.indexOf("Deck:")));
+
                 String looseCardString = tableString.substring(endOfBuildsIndex + 1);
                 mLooseCards = createCards(tokenizeInput(looseCardString));
             } else {
@@ -114,7 +117,7 @@ public class Serialization {
             int currentTurnIndex = mSaveData.indexOf("Next Player:");
             String nextPlayerString = mSaveData.substring(currentTurnIndex + 13);
 
-            if(nextPlayerString == "Human")
+            if(Objects.equals(nextPlayerString, "Human"))
                 mCurrentTurn = 0;
             else
                 mCurrentTurn = 1;
@@ -194,7 +197,7 @@ public class Serialization {
     }
 
     /**
-     *
+     * Create a DeckModel object from deserialize data
      * @param cards
      * @return
      */
@@ -227,8 +230,32 @@ public class Serialization {
         return builds;
     }
 
+
+    public Vector<String> parseBuildOwers(String buildOwnerString){
+        Vector<String> buildOwers = new Vector<>();
+
+        while(buildOwnerString != ""){
+            if(buildOwnerString.contains(" [ ") && buildOwnerString.contains(" ] ")){
+                int buildEnd = buildOwnerString.indexOf(" ] ");
+                buildOwnerString = buildOwnerString.substring(buildEnd + 1);
+                if(buildOwnerString.contains(" [ ")) {
+                    String name = buildOwnerString.substring(0, buildOwnerString.indexOf(" [ "));
+                    buildOwers.add(name);
+                    buildOwnerString = buildOwnerString.substring(buildOwnerString.indexOf(" [ "));
+                }else{
+                    String owner = buildOwnerString;
+                    owner.replace(" ", "");
+                    buildOwers.add(owner);
+                    buildOwnerString = "";
+                }
+            }
+        }
+
+        return buildOwers;
+    }
+
     /**
-     *
+     * Parses and
      * @param buildString
      * @return
      */
@@ -240,7 +267,7 @@ public class Serialization {
                stack.push(i);
            }else if(buildString.charAt(i) == ']'){
                int top_index = stack.peek();
-               String cardString = buildString.substring(top_index + 1, i - top_index + 1);
+               String cardString = buildString.substring(top_index + 1, i);
                cards.add(createCards(tokenizeInput(cardString)));
            }
        }
@@ -262,7 +289,7 @@ public class Serialization {
     }
 
     /**
-     *
+     * Creates a Human player object from deserialized data.
      * @param score
      * @param hand
      * @param pile
@@ -275,7 +302,7 @@ public class Serialization {
     }
 
     /**
-     *
+     * Creates a computer player object from deserialize data.
      * @param score
      * @param hand
      * @param pile
@@ -289,7 +316,7 @@ public class Serialization {
 
 
     /**
-     *
+     * Returns a tournament object with all data loaded from deserialization process.
      * @return
      */
     public final TournamentModel createTournament(){

@@ -28,6 +28,7 @@ public class ComputerPlayerModel extends BasePlayerModel {
         _points = score;
         _hand = hand;
         _pile = pile;
+        mName = "Computer";
     }
 
     /**

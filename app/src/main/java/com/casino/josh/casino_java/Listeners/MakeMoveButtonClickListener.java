@@ -107,8 +107,8 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                                         mTable.getCards().addAll(GameActivity.mTournament.getCurrentRound().getTable().getLooseCards());
                                         mTable.notifyDataSetChanged();
                                         mHand.notifyDataSetChanged();
-                                        mBuilds.getBuilds().clear();
-                                        mBuilds.getBuilds().addAll(GameActivity.mTournament.getCurrentRound().getTable().getBuilds());
+                                        //mBuilds.getBuilds().clear();
+                                        //mBuilds.getBuilds().addAll(GameActivity.mTournament.getCurrentRound().getTable().getBuilds());
                                         mBuilds.notifyDataSetChanged();
                                         GameActivity.mChosenCard = null;
                                         GameActivity.mLooseCards = new Vector<>();
@@ -172,8 +172,8 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                                     mTable.getCards().addAll(GameActivity.mTournament.getCurrentRound().getTable().getLooseCards());
                                     mTable.notifyDataSetChanged();
                                     mHand.notifyDataSetChanged();
-                                    mBuilds.getBuilds().clear();
-                                    mBuilds.getBuilds().addAll(GameActivity.mTournament.getCurrentRound().getTable().getBuilds());
+                                    //mBuilds.getBuilds().clear();
+                                    //mBuilds.getBuilds().addAll(GameActivity.mTournament.getCurrentRound().getTable().getBuilds());
                                     mBuilds.notifyDataSetChanged();
 
                                     GameActivity.mChosenCard = null;

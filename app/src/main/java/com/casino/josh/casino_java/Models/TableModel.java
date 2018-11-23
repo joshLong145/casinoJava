@@ -29,6 +29,18 @@ public class TableModel {
     }
 
     /**
+     * Constructor to load in deserialize data.
+     * @param deck
+     * @param looseCards
+     * @param builds
+     */
+    public TableModel(DeckModel deck, Vector<CardModel> looseCards, Vector<BuildModel> builds){
+        _deck = deck;
+        _looseCards = looseCards;
+        mBuilds = builds;
+    }
+
+    /**
      * Constructor to load in a seeded deck into the tournament.
      * @param deck
      */
@@ -232,7 +244,7 @@ public class TableModel {
      * Returns a DeckModel object.
      * @return DeckModel.
      */
-    public DeckModel getDeck(){return _deck; }
+    public DeckModel getDeck(){ return _deck; }
 
     /**
      *

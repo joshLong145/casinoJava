@@ -14,6 +14,19 @@ public class DeckModel {
     private int _currentCardIndex = 51;
 
     /**
+     * Default constructor.
+     */
+    public DeckModel(){}
+
+    /**
+     * Constructor to take a vector of cards to construct a deck.
+     */
+    public DeckModel(Vector<CardModel> cards){
+        mCards = cards;
+        _currentCardIndex = mCards.size() - 1;
+    }
+
+    /**
      * Creates the cards within the deck.
      */
     void create(){

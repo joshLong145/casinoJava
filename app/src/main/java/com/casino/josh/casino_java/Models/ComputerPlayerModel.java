@@ -3,6 +3,8 @@ package com.casino.josh.casino_java.Models;
 import com.casino.josh.casino_java.Models.BasePlayerModel;
 import com.casino.josh.casino_java.Models.TableModel;
 
+import java.util.Vector;
+
 /**
  * Created by josh on 11/7/18.
  */
@@ -14,6 +16,18 @@ public class ComputerPlayerModel extends BasePlayerModel {
      */
     public ComputerPlayerModel(){
         mName = "Computer";
+    }
+
+    /**
+     *
+     * @param score
+     * @param hand
+     * @param pile
+     */
+    public ComputerPlayerModel(int score, Vector<CardModel> hand, Vector<CardModel> pile) {
+        _points = score;
+        _hand = hand;
+        _pile = pile;
     }
 
     /**

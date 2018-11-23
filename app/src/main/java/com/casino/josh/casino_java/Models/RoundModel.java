@@ -48,6 +48,23 @@ public class RoundModel {
     }
 
     /**
+     * Constructor to load in deserialized data from save file.
+     * @param players
+     * @param table
+     * @param firstTurn
+     */
+    public RoundModel(Vector<BasePlayerModel> players, TableModel table, final int firstTurn){
+        mTable = table;
+        mPlayers = players;
+        mCurrentPlayerIndex = firstTurn;
+
+        if(mCurrentPlayerIndex == 0)
+            mCurrentTurn = CurrentTurn.Human;
+        else
+            mCurrentTurn = CurrentTurn.Computer;
+    }
+
+    /**
      * Executes makeMove() for the current active player.
      * @param option
      * @return

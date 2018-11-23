@@ -62,7 +62,7 @@ public class BuildModel {
      * @return String
      */
     public final String toString(){
-        String data = "";
+        String data = "[ ";
         for(Vector<CardModel> build : mCards){
             data += "[";
             for(CardModel card : build){
@@ -70,6 +70,7 @@ public class BuildModel {
             }
             data += "]";
         }
+        data += " ]";
         return data;
     }
 }

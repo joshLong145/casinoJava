@@ -9,10 +9,10 @@ import java.util.Vector;
  */
 
 public abstract class BasePlayerModel {
-    private Vector<CardModel> _hand;
-    private Vector<CardModel> _pile;
-    private int _points;
-    private boolean _isTurn;
+    protected Vector<CardModel> _hand;
+    protected Vector<CardModel> _pile;
+    protected int _points;
+    protected boolean _isTurn;
     protected String mName;
 
     /**
@@ -28,6 +28,18 @@ public abstract class BasePlayerModel {
     public BasePlayerModel(){
         _hand = new Vector<>();
         _pile = new Vector<>();
+    }
+
+    /**
+     * Constructor for deserializing data into BasePlayer object.
+     * @param score
+     * @param hand
+     * @param pile
+     */
+    public BasePlayerModel(int score, Vector<CardModel> hand, Vector<CardModel> pile){
+        _points = score;
+        _hand = hand;
+        _pile = pile;
     }
 
     /**

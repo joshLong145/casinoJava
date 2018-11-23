@@ -33,6 +33,18 @@ public class TournamentModel {
     }
 
     /**
+     *
+     * @param players
+     * @param round
+     */
+    public TournamentModel(Vector<BasePlayerModel> players, RoundModel round, final int roundNumber){
+        mPlayers = players;
+        mRounds = new Vector<>();
+        mRounds.add(round);
+        mRoundNumber = roundNumber;
+    }
+
+    /**
      * Returns an RoundModel object based on what round number is active.
      * @return RoundModel
      */

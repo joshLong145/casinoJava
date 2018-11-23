@@ -22,6 +22,18 @@ public class HumanPlayerModel extends BasePlayerModel {
     }
 
     /**
+     * Constructor to create object from deserialized data.
+     * @param score
+     * @param hand
+     * @param pile
+     */
+    public HumanPlayerModel(int score, Vector<CardModel> hand, Vector<CardModel> pile){
+        _points = score;
+        _hand = hand;
+        _pile = pile;
+    }
+
+    /**
      * Implements abstract class within base class for move execution.
      * @param table TableModel
      * @param option TurnOption
@@ -81,7 +93,13 @@ public class HumanPlayerModel extends BasePlayerModel {
                 return true;
             }
         } else if(option == TurnOptions.MULTIBUILD){
-            if(GameActivity.mBuilds.size() > 0)
+            if(GameActivity.mBuilds.size() <= 0)
+                return false;
+
+            if(!table.canTrailCard(GameActivity.mChosenCard))
+                return false;
+
+            if(GameActivity.mBuilds.size() <= 0)
                 return false;
 
             if(table.createMultiBuild(GameActivity.mBuilds.get(0),GameActivity.mLooseCards, GameActivity.mChosenCard, getHand())){

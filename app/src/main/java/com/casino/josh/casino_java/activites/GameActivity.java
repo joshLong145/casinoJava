@@ -93,9 +93,10 @@ public class GameActivity extends FragmentActivity  {
         if(!Objects.equals(saveData, "")) {
             Serialization serial = new Serialization(saveData);
             serial.parseData();
+            mTournament = serial.createTournament();
+        }else{
+            mTournament = new TournamentModel(firstTurn);
         }
-
-        mTournament = new TournamentModel(firstTurn);
 
         handVM = ViewModelProviders.of(this).get(HandViewModel.class);
         mComputerHandVM = ViewModelProviders.of(this).get(ComputerHandViewModel.class);
@@ -107,7 +108,7 @@ public class GameActivity extends FragmentActivity  {
 
         tableVM.setCards(mTournament.getCurrentRound().getTable().getLooseCards());
 
-        buildVM.setBuilds(new Vector<>());
+        buildVM.setBuilds(mTournament.getCurrentRound().getTable().getBuilds());
 
         // figure out
         if(firstTurn == 0) {

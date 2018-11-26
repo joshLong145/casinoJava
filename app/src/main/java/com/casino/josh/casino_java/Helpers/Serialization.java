@@ -100,7 +100,7 @@ public class Serialization {
                 String buildString = tableString.substring(buildsIndex, endOfBuildsIndex);
                 mBuilds = createBuilds(tokenizeBuilds(buildString));
                 int buildOwnerIndex = mSaveData.indexOf("Build Owners:");
-                Vector<String> owners = parseBuildOwers(mSaveData.substring(buildOwnerIndex + 12, mSaveData.indexOf("Deck:")));
+                addOwnersToBuild(parseBuildOwers(mSaveData.substring(buildOwnerIndex + 12, mSaveData.indexOf("Deck:"))));
 
                 String looseCardString = tableString.substring(endOfBuildsIndex + 1);
                 mLooseCards = createCards(tokenizeInput(looseCardString));
@@ -143,6 +143,11 @@ public class Serialization {
         return data;
     }
 
+    /**
+     * Parse builds for deserialization.
+     * @param builds
+     * @return
+     */
     private final Vector<String> tokenizeBuilds(String builds){
         Vector<String> buildTokens = new Vector<>();
 
@@ -230,6 +235,16 @@ public class Serialization {
         return builds;
     }
 
+    /**
+     * Takes parsed build owner names and adds them to the correct build.
+     * builds and owners are parsed in the same order.
+     * @param owners
+     */
+    private void addOwnersToBuild(final Vector<String> owners){
+        for(int i = 0; i < mBuilds.size(); i++){
+            mBuilds.get(i).setBuildOwner(owners.get(i));
+        }
+    }
 
     public Vector<String> parseBuildOwers(String buildOwnerString){
         Vector<String> buildOwers = new Vector<>();
@@ -239,13 +254,14 @@ public class Serialization {
                 int buildEnd = buildOwnerString.indexOf(" ] ");
                 buildOwnerString = buildOwnerString.substring(buildEnd + 1);
                 if(buildOwnerString.contains(" [ ")) {
-                    String name = buildOwnerString.substring(0, buildOwnerString.indexOf(" [ "));
+                    String name = buildOwnerString.substring(2, buildOwnerString.indexOf(" [ ") - 1);
+                    name.replace(" ", "");
                     buildOwers.add(name);
                     buildOwnerString = buildOwnerString.substring(buildOwnerString.indexOf(" [ "));
                 }else{
                     String owner = buildOwnerString;
                     owner.replace(" ", "");
-                    buildOwers.add(owner);
+                    buildOwers.add(owner.substring(2, owner.length()));
                     buildOwnerString = "";
                 }
             }
@@ -255,7 +271,7 @@ public class Serialization {
     }
 
     /**
-     * Parses and
+     * Parses cards for builds and creates card objects from serial data.
      * @param buildString
      * @return
      */

@@ -78,6 +78,8 @@ public class GameActivity extends FragmentActivity  {
         }
     }
 
+    //TODO: change adapter model so that you no longer store data in temp storage to be used within the model. will make adapter use actually make sense!!!!
+
     /**
      * Executed when the activity is activated and ready to run.
      * Creates components and attaches fragments to desired components defined within the layout.
@@ -133,12 +135,9 @@ public class GameActivity extends FragmentActivity  {
 
         TableViewModel tableVM = ViewModelProviders.of(this).get(TableViewModel.class);
 
-        Vector<CardModel> tableCards = new Vector<>();
-
         // Setup observer for the live data within the recyler view.
         tableVM.getCards().observe(this, (Vector<CardModel> tableData) ->{
-            tableCards.addAll(tableData);
-            TableAdapter mAdapter = new TableAdapter(tableCards, this);
+            TableAdapter mAdapter = new TableAdapter(tableData, this);
             mTableModelView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         });
@@ -158,13 +157,10 @@ public class GameActivity extends FragmentActivity  {
 
         HandViewModel handVM = ViewModelProviders.of(this).get(HandViewModel.class);
 
-        Vector<CardModel> cards = new Vector<>();
 
         // set up live data with initial data.
         handVM.getHand().observe(this, (Vector<CardModel> hand) ->{
-            cards.addAll(hand);
-
-            HandAdapter mAdapter = new HandAdapter(cards, this);
+            HandAdapter mAdapter = new HandAdapter(hand, this);
             mHumanHandModelView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         });
@@ -181,13 +177,9 @@ public class GameActivity extends FragmentActivity  {
 
         ComputerHandViewModel computerHandVM = ViewModelProviders.of(this).get(ComputerHandViewModel.class);
 
-        Vector<CardModel> computerCards = new Vector<>();
-
         // Set up the live data for the view.
         computerHandVM.getHand().observe(this, (Vector<CardModel> hand) ->{
-            computerCards.addAll(hand);
-
-            ComputerHandAdapter mAdapter = new ComputerHandAdapter(computerCards, this);
+            ComputerHandAdapter mAdapter = new ComputerHandAdapter(hand, this);
             mComputerModelView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         });

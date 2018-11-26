@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.casino.josh.casino_java.Adapters.ComputerHandAdapter;
 import com.casino.josh.casino_java.Adapters.HandAdapter;
+import com.casino.josh.casino_java.Helpers.viewUpdater;
 import com.casino.josh.casino_java.Models.BasePlayerModel;
 import com.casino.josh.casino_java.Models.TableModel;
 import com.casino.josh.casino_java.activites.GameActivity;
@@ -109,18 +110,11 @@ public class RoundModel {
             }
 
             if(GameActivity.mComputerModelView != null) {
-                ComputerHandAdapter computerHand = (ComputerHandAdapter) GameActivity.mComputerModelView.getAdapter();
-
-                computerHand.getCards().addAll(mPlayers.get(1).getHand());
-
-                computerHand.notifyDataSetChanged();
+                viewUpdater.updateComputerHandView();
             }
 
             if(GameActivity.mHumanHandModelView != null) {
-                HandAdapter humanHand = (HandAdapter) GameActivity.mHumanHandModelView.getAdapter();
-
-                humanHand.getCards().addAll(mPlayers.get(0).getHand());
-                humanHand.notifyDataSetChanged();
+                viewUpdater.updateHuamnHandView();
             }
         }
 

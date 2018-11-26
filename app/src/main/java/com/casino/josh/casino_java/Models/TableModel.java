@@ -6,6 +6,7 @@ import com.casino.josh.casino_java.Models.CardModel;
 import com.casino.josh.casino_java.Models.DeckModel;
 import com.casino.josh.casino_java.activites.GameActivity;
 
+import java.util.Objects;
 import java.util.Vector;
 
 /**
@@ -65,7 +66,7 @@ public class TableModel {
      * Checks if a card can be trailed from a players hand.
      * @return boolean
      */
-    public boolean canTrailCard(CardModel playedCard, final String name){
+    public boolean canTrailCard(CardModel playedCard, String name){
 
         // Check if any loose cards match the value of the chosen card.
         for(CardModel card: _looseCards){
@@ -75,7 +76,7 @@ public class TableModel {
 
         // Check if there are any build owners.
         for(BuildModel build : mBuilds){
-            if(build.getBuildOwner() == name)
+            if(Objects.equals(build.getBuildOwner(), name))
                 return false;
         }
         return true;
@@ -242,6 +243,32 @@ public class TableModel {
                     return true;
                 }
             }
+        }
+
+        return false;
+    }
+
+    /**
+     *
+     * @param build
+     * @param chosenCard
+     * @param hand
+     * @return
+     */
+    public boolean increaseBuild(BuildModel build, final CardModel chosenCard, final Vector<CardModel> hand, final String name){
+        if(build.getBuildOwner().equals(name))
+            return false;
+
+        int sum = build.getCaptureValue();
+
+        for(CardModel card : hand){
+            if(card != chosenCard && card.getValue() == sum + chosenCard.getValue()){
+                build.getBuild().get(0).add(chosenCard);
+                build.setBuildOwner(name);
+                build.setCaptureValue(sum + chosenCard.getValue());
+                return true;
+            }
+
         }
 
         return false;

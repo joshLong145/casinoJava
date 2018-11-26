@@ -104,6 +104,14 @@ public class HumanPlayerModel extends BasePlayerModel {
                 getHand().remove(GameActivity.mChosenCard);
                 return true;
             }
+        } else if(option == TurnOptions.EXTEND){
+            if(table.increaseBuild(GameActivity.mBuilds.get(0), GameActivity.mChosenCard, getHand(), mName)){
+                getHand().remove(GameActivity.mChosenCard);
+
+                String turnLog = "Human Increased build with: " + GameActivity.mChosenCard.toString();
+                TurnLogModel.AddToLog(turnLog);
+                return true;
+            }
         }
 
         return false;

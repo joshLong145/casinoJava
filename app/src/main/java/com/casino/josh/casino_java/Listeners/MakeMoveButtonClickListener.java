@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.casino.josh.casino_java.Adapters.BuildAdapter;
 import com.casino.josh.casino_java.Adapters.ComputerHandAdapter;
+import com.casino.josh.casino_java.Helpers.viewUpdater;
 import com.casino.josh.casino_java.Models.BasePlayerModel;
 import com.casino.josh.casino_java.Models.CardModel;
 import com.casino.josh.casino_java.Fragments.MakeMoveButtonFragment;
@@ -74,16 +75,7 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                                 if (GameActivity.mChosenCard != null) {
 
                                     if (GameActivity.mTournament.getCurrentRound().execTurn(BasePlayerModel.TurnOptions.TRIAL)) {
-                                        mTable.getCards().clear();
-                                        mTable.getCards().addAll(GameActivity.mTournament.getCurrentRound().getTable().getLooseCards());
-                                        mHand.getCards().clear();
-                                        mHand.getCards().addAll(GameActivity.mTournament.getHumanPlayer().getHand());
-                                        mTable.notifyDataSetChanged();
-                                        mHand.notifyDataSetChanged();
-                                        GameActivity.mChosenCard = null;
-                                        GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
-                                        GameActivity.mCurrentTurn.setText("Current turn: " + GameActivity.mTournament.getCurrentRound().getTurn());
-
+                                        viewUpdater.updateView();
                                     } else {
                                         GameActivity.mChosenCard = null;
                                         GameActivity.mLooseCards = new Vector<>();
@@ -101,20 +93,7 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                             } else if (turnOptions.getCheckedRadioButtonId() == R.id.capture) {
                                 if (GameActivity.mChosenCard != null && GameActivity.mLooseCards != null) {
                                     if(GameActivity.mTournament.getCurrentRound().execTurn(BasePlayerModel.TurnOptions.CAPTURE)){
-                                        mHand.getCards().clear();
-                                        mHand.getCards().addAll(GameActivity.mTournament.getCurrentRound().getCurrenntPlayer().getHand());
-                                        mTable.getCards().clear();
-                                        mTable.getCards().addAll(GameActivity.mTournament.getCurrentRound().getTable().getLooseCards());
-                                        mTable.notifyDataSetChanged();
-                                        mHand.notifyDataSetChanged();
-                                        //mBuilds.getBuilds().clear();
-                                        //mBuilds.getBuilds().addAll(GameActivity.mTournament.getCurrentRound().getTable().getBuilds());
-                                        mBuilds.notifyDataSetChanged();
-                                        GameActivity.mChosenCard = null;
-                                        GameActivity.mLooseCards = new Vector<>();
-                                        GameActivity.mBuilds = new Vector<>();
-                                        GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
-                                        GameActivity.mCurrentTurn.setText("Current turn: " + GameActivity.mTournament.getCurrentRound().getTurn());
+                                        viewUpdater.updateView();
                                     }else{
                                         GameActivity.mChosenCard = null;
                                         GameActivity.mLooseCards = new Vector<>();
@@ -132,22 +111,7 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                             }else if(turnOptions.getCheckedRadioButtonId() == R.id.build){
                                     if(GameActivity.mChosenCard != null){
                                         if(GameActivity.mTournament.getCurrentRound().execTurn(BasePlayerModel.TurnOptions.BUILD)){
-                                            mHand.getCards().clear();
-                                            mHand.getCards().addAll(GameActivity.mTournament.getCurrentRound().getCurrenntPlayer().getHand());
-                                            mTable.getCards().clear();
-                                            mTable.getCards().addAll(GameActivity.mTournament.getCurrentRound().getTable().getLooseCards());
-                                            mTable.notifyDataSetChanged();
-                                            mHand.notifyDataSetChanged();
-                                            //mBuilds.getBuilds().clear();
-                                            //mBuilds.getBuilds().addAll(GameActivity.mTournament.getCurrentRound().getTable().getBuilds());
-                                            mBuilds.notifyDataSetChanged();
-
-                                            GameActivity.mChosenCard = null;
-                                            GameActivity.mLooseCards = new Vector<>();
-                                            GameActivity.mBuilds = new Vector<>();
-
-                                            GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
-                                            GameActivity.mCurrentTurn.setText("Current turn: " + GameActivity.mTournament.getCurrentRound().getTurn());
+                                            viewUpdater.updateView();
                                         }else{
                                             GameActivity.mChosenCard = null;
                                             GameActivity.mLooseCards = new Vector<>();
@@ -166,22 +130,20 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                                     }
                             }else if(turnOptions.getCheckedRadioButtonId() == R.id.multi_build) {
                                 if (GameActivity.mTournament.getCurrentRound().execTurn(BasePlayerModel.TurnOptions.MULTIBUILD)) {
-                                    mHand.getCards().clear();
-                                    mHand.getCards().addAll(GameActivity.mTournament.getCurrentRound().getCurrenntPlayer().getHand());
-                                    mTable.getCards().clear();
-                                    mTable.getCards().addAll(GameActivity.mTournament.getCurrentRound().getTable().getLooseCards());
-                                    mTable.notifyDataSetChanged();
-                                    mHand.notifyDataSetChanged();
-                                    //mBuilds.getBuilds().clear();
-                                    //mBuilds.getBuilds().addAll(GameActivity.mTournament.getCurrentRound().getTable().getBuilds());
-                                    mBuilds.notifyDataSetChanged();
-
+                                    viewUpdater.updateView();
+                                } else {
                                     GameActivity.mChosenCard = null;
                                     GameActivity.mLooseCards = new Vector<>();
                                     GameActivity.mBuilds = new Vector<>();
 
-                                    GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
-                                    GameActivity.mCurrentTurn.setText("Current turn: " + GameActivity.mTournament.getCurrentRound().getTurn());
+                                    Toast toast = Toast.makeText(makeMoveFragment.getContext(),
+                                            "Cannot make multi build with selected cards.",
+                                            Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                            }else if(turnOptions.getCheckedRadioButtonId() == R.id.increase_build) {
+                                if (GameActivity.mTournament.getCurrentRound().execTurn(BasePlayerModel.TurnOptions.EXTEND)){
+                                    viewUpdater.updateView();
                                 } else {
                                     GameActivity.mChosenCard = null;
                                     GameActivity.mLooseCards = new Vector<>();
@@ -206,10 +168,10 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
             alertDialog.show();
         }else{
                 GameActivity.mTournament.getCurrentRound().execTurn(BasePlayerModel.TurnOptions.AI);
-                mComputerHand.getCards().remove(0);
-                mComputerHand.notifyDataSetChanged();
-                mTable.getCards().clear();
-                mTable.getCards().addAll(GameActivity.mTournament.getCurrentRound().getTable().getLooseCards());
+                viewUpdater.updateComputerHandView();
+
+                mTable.notifyDataSetChanged();
+
                 GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(0);
                 GameActivity.mCurrentTurn.setText("Current turn: " + GameActivity.mTournament.getCurrentRound().getTurn());
         }

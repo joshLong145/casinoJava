@@ -6,8 +6,11 @@ import com.casino.josh.casino_java.Models.CardModel;
 import com.casino.josh.casino_java.Models.DeckModel;
 import com.casino.josh.casino_java.activites.GameActivity;
 
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Vector;
+import java.lang.Math;
+import java.util.regex.Pattern;
 
 /**
  * Created by josh on 11/5/18.
@@ -186,7 +189,28 @@ public class TableModel {
         return new Vector<>();
     }
 
+    /**
+     * Capture cards in builds that are eligble for capturing.
+     * @param selectedCard
+     * @return
+     */
+    public Vector<CardModel> captureBuilds(CardModel selectedCard){
+        Vector<CardModel> capturedCards = new Vector<>();
+        for(int i = mBuilds.size(); i > 0; i++){
+            // if the capture value is equal to the card value, capture all cards in the build with that card.
+            if(mBuilds.get(i).getCaptureValue() == selectedCard.getValue()){
+                for(Vector<CardModel> cardSets : mBuilds.get(i).getBuild()){
+                    for(CardModel card : cardSets){
+                        capturedCards.add(card);
+                    }
+                }
+                // Remove  build from vector of current builds.
+                mBuilds.remove(mBuilds.get(i));
+            }
+        }
 
+        return capturedCards;
+    }
 
     /**
      * Creates a new build object if the specified rules for build creation are met. if not false is returned and the turn is not completed.
@@ -314,6 +338,132 @@ public class TableModel {
         tableString.append(System.getProperty("line.separator"));
 
         return tableString.toString();
+    }
+
+
+    /**
+     * Generate all possible combinations of loose cards. in relation to the value of the selected card.
+     * Using n power set algorithm to generate all possible combinations.
+     * After combination is created. Check to see if the sum of the cards is equal to the capture value.
+     * @param captureValue
+     * @return
+     */
+    public Vector<Vector<CardModel>> setCapture(final int captureValue){
+       Vector<Vector<CardModel>> cardSets = new Vector<>();
+       Vector<Vector<CardModel>> capturableSets = new Vector<>();
+
+       for(int i = 0; i < (int) Math.pow(2, _looseCards.size()); i++){
+           Vector<CardModel> cards = new Vector<>();
+
+           for(int j = 0; j < _looseCards.size(); j++){
+               // Check if jth bit in the i is set. If the bit
+               // is set, we consider jth element from set
+               if((i & (1 << j)) != 0){
+                    cards.add(_looseCards.get(j));
+               }
+
+               // Check if the combination is already present.
+               if(!cardSets.contains(cards)) {
+                   cardSets.add(cards);
+               }
+           }
+       }
+
+       for(Vector<CardModel> cardSet : cardSets){
+           int sum = 0;
+
+           for(CardModel card : cardSet){
+               int value = card.getValue();
+
+               if(captureValue == value)
+                   break;
+               else
+                   sum += value;
+
+               if(sum == captureValue)
+                   capturableSets.add(cardSet);
+           }
+       }
+        // Sort data based on length of the array.
+       capturableSets.sort(new Comparator<Vector<CardModel>>() {
+           @Override
+           public int compare(Vector<CardModel> o1, Vector<CardModel> o2) {
+               return (Integer.valueOf(o1.size()).compareTo(o2.size()));
+           }
+       });
+
+        return capturableSets;
+    }
+
+    public Vector<Vector<CardModel>> checkBuildCreation(final int captureCardValue, final int selectedCardValue){
+        Vector<Vector<CardModel>> cardSets = new Vector<>();
+        Vector<Vector<CardModel>> buildSets = new Vector<>();
+
+        for(int i = 0; i < (int) Math.pow(2, _looseCards.size()); i++){
+            Vector<CardModel> cards = new Vector<>();
+
+            for(int j = 0; j < _looseCards.size(); j++){
+                // Check if jth bit in the i is set. If the bit
+                // is set, we consider jth element from set
+                if((i & (1 << j)) != 0){
+                    cards.add(_looseCards.get(j));
+                }
+
+                // Check if the combination is already present.
+                if(!cardSets.contains(cards)) {
+                    cardSets.add(cards);
+                }
+            }
+        }
+
+        // check if cardSet is a valid build.
+        for(Vector<CardModel> cardSet : cardSets) {
+            int sum = 0;
+
+            for (CardModel card : cardSet) {
+                int value = card.getValue();
+
+                if (captureCardValue == value)
+                    break;
+                else
+                    sum += value;
+
+                // If the cardSet is valid, then add it to the list of valid builds.
+                if (sum == captureCardValue)
+                    buildSets.add(cardSet);
+            }
+        }
+
+        // Sort data based on length of the array.
+
+        buildSets.sort(new Comparator<Vector<CardModel>>() {
+            @Override
+            public int compare(Vector<CardModel> o1, Vector<CardModel> o2) {
+                return (Integer.valueOf(o1.size()).compareTo(o2.size()));
+            }
+        });
+
+        return buildSets;
+    }
+
+    /**
+     *
+     * @param selectedCard
+     * @return
+     */
+    public int checkBuilds(CardModel selectedCard){
+        int weight = 0;
+        for(BuildModel build : mBuilds) {
+            if (build.getCaptureValue() == selectedCard.getValue()) {
+                for (Vector<CardModel> cardSets : build.getBuild()) {
+                    for (CardModel card : cardSets) {
+                        weight += card.getValue();
+                    }
+                }
+            }
+        }
+
+        return weight;
     }
 
 }

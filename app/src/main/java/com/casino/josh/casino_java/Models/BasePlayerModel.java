@@ -86,6 +86,26 @@ public abstract class BasePlayerModel {
     public abstract boolean makeMove(TableModel table, TurnOptions option);
 
     /**
+     *
+     * @param table
+     * @param cardValue
+     * @return
+     */
+    protected Vector<Vector<CardModel>> setCaptureCombinations(final TableModel table, final int cardValue){
+        return table.setCapture(cardValue);
+    }
+
+    /**
+     * Capture builds if the capture value of the selected card value matches.
+     * @param table
+     * @param selectedCard
+     * @return Vector<CardModel></CardModel>
+     */
+    protected Vector<CardModel> buildCapture(final TableModel table, final CardModel selectedCard){
+        return table.captureBuilds(selectedCard);
+    }
+
+    /**
      * Get the name of the current player.
      * @return String
      */

@@ -63,7 +63,7 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
             alertDialogBuilder
                     .setCancelable(true)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
+                        // TODO: refactor into modular switch statement to avoid code redundency.
                         /** Executes when positive button on alert dialog is pressed.
                          * @param dialog DialogInterface
                          * @param which int

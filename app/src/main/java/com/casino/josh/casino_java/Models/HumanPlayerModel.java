@@ -57,6 +57,10 @@ public class HumanPlayerModel extends BasePlayerModel {
             Vector<CardModel> capturedLooseCards = table.captureLooseCards(GameActivity.mChosenCard, GameActivity.mLooseCards);
             Vector<CardModel> capturedBuildCards = table.captureBuilds(GameActivity.mBuilds, GameActivity.mChosenCard);
 
+            // if the card chosen is a capture card for a build, and no build of valid capture was selected, return false.
+            if(capturedBuildCards.size() <= 0 && table.isCaptureCard(_hand, GameActivity.mChosenCard, mName))
+                return false;
+
             if(capturedLooseCards.size() > 0){
                 capturedLooseCards.add(GameActivity.mChosenCard);
                 getPile().addAll(capturedLooseCards);

@@ -61,14 +61,25 @@ public class ComputerPlayerModel extends BasePlayerModel {
         bestCaptureWeight = captureWeight.first;
         bestSetIndex = captureWeight.second;
 
+
+        int bestSingleBuildWeight = -1;
         Pair<Pair<CardModel, CardModel>, Integer> singleBuildWeight = assessSingleBuildWeights(table, _hand);
+        bestSingleBuildWeight = singleBuildWeight.second;
 
+        if(bestSingleBuildWeight >= bestCaptureWeight && bestSingleBuildWeight != -1){
+            table.createBuild(mBuildMap.get(singleBuildWeight.first), singleBuildWeight.first.second, _hand, mName);
+            _hand.remove(singleBuildWeight.first.second);
 
-        if(0 < bestCaptureWeight){
+        } else if(0 < bestCaptureWeight){
                 CardModel card = _hand.get(captureWeight.second);
                 Vector<CardModel> capturedCards = mSetMap.get(card.toStringSave());
+                Vector<CardModel> capturedBuildCards = table.captureBuilds(card);
                 table.getLooseCards().removeAll(capturedCards);
                 _hand.remove(card);
+                if(capturedBuildCards != null) {
+                    table.removeBuilds(card);
+                    _pile.addAll(capturedBuildCards);
+                }
                 _pile.addAll(capturedCards);
                 _pile.add(card);
         }else {
@@ -86,7 +97,7 @@ public class ComputerPlayerModel extends BasePlayerModel {
 
 
     private Pair<Pair<CardModel, CardModel>, Integer> assessSingleBuildWeights(TableModel table, Vector<CardModel> hand){
-        Vector<Pair<CardModel, CardModel> cardCombos = new Vector<>();
+        Vector<Pair<CardModel, CardModel>> cardCombos = new Vector<>();
         if(hand.size() > 1){
             for(CardModel buildCard : hand){
                 for(CardModel captureCard : hand){

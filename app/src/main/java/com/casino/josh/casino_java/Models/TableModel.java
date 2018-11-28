@@ -91,14 +91,13 @@ public class TableModel {
      * @return boolean
      */
     public boolean isCaptureCard(Vector<CardModel> hand, CardModel selectedCard, final String playerName){
-        if(mBuilds.size() <= 0){
+        if(mBuilds.size() <= 0)
             return false;
-        }
 
         boolean matchesBuild = false;
 
         for(BuildModel build : mBuilds){
-            if(selectedCard.getValue() == build.getCaptureValue())
+            if(selectedCard.getValue() == build.getCaptureValue() && Objects.equals(playerName, build.getBuildOwner()))
                 matchesBuild = true;
         }
 
@@ -106,9 +105,9 @@ public class TableModel {
             return false;
 
         for (BuildModel build : mBuilds) {
-            if(selectedCard.getValue() == build.getCaptureValue() && playerName == build.getBuildOwner()) {
+            if(selectedCard.getValue() == build.getCaptureValue() && Objects.equals(playerName, build.getBuildOwner())) {
                 for(CardModel card : hand){
-                        if (card.getValue() == build.getCaptureValue() && playerName == build.getBuildOwner() && card != selectedCard) {
+                        if (card.getValue() == build.getCaptureValue() && Objects.equals(playerName, build.getBuildOwner()) && card != selectedCard) {
                             return false;
                         }
                     }
@@ -196,7 +195,7 @@ public class TableModel {
      */
     public Vector<CardModel> captureBuilds(CardModel selectedCard){
         Vector<CardModel> capturedCards = new Vector<>();
-        for(int i = mBuilds.size(); i > 0; i++){
+        for(int i = mBuilds.size() -1; i >= 0; i--){
             // if the capture value is equal to the card value, capture all cards in the build with that card.
             if(mBuilds.get(i).getCaptureValue() == selectedCard.getValue()){
                 for(Vector<CardModel> cardSets : mBuilds.get(i).getBuild()){
@@ -204,12 +203,21 @@ public class TableModel {
                         capturedCards.add(card);
                     }
                 }
-                // Remove  build from vector of current builds.
-                mBuilds.remove(mBuilds.get(i));
             }
         }
 
         return capturedCards;
+    }
+
+    /**
+     * Remove builds from collection with the same capture value as the selected card value.
+     * @param selectedCard
+     */
+    public void removeBuilds(CardModel selectedCard){
+        for(int i = mBuilds.size() - 1; i >= 0; i--){
+            if(mBuilds.get(i).getCaptureValue() == selectedCard.getValue())
+                mBuilds.remove(mBuilds.get(i));
+        }
     }
 
     /**
@@ -429,7 +437,7 @@ public class TableModel {
                     sum += value;
 
                 // If the cardSet is valid, then add it to the list of valid builds.
-                if (sum == captureCardValue)
+                if (sum + selectedCardValue == captureCardValue)
                     buildSets.add(cardSet);
             }
         }

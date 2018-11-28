@@ -171,6 +171,7 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                 viewUpdater.updateComputerHandView();
 
                 mTable.notifyDataSetChanged();
+                mBuilds.notifyDataSetChanged();
 
                 GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(0);
                 GameActivity.mCurrentTurn.setText("Current turn: " + GameActivity.mTournament.getCurrentRound().getTurn());

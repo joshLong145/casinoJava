@@ -111,7 +111,11 @@ public class Serialization {
 
             int deckIndex = mSaveData.indexOf("Deck:");
             String deckString = mSaveData.substring(deckIndex + 6, mSaveData.indexOf("Next Player:"));
-            mDeck = createDeck(createCards(tokenizeInput(deckString)));
+            if(deckString.equals("none"))
+                    mDeck = createDeck(new Vector<>());
+            else
+                mDeck = createDeck(createCards(tokenizeInput(deckString)));
+
             mTable = createTable(mDeck, mLooseCards, mBuilds);
 
             int currentTurnIndex = mSaveData.indexOf("Next Player:");

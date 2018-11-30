@@ -1,5 +1,7 @@
 package com.casino.josh.casino_java.Helpers;
 
+import com.casino.josh.casino_java.Adapters.TableAdapter;
+import com.casino.josh.casino_java.Models.CardModel;
 import com.casino.josh.casino_java.activites.GameActivity;
 
 import java.util.Vector;
@@ -40,4 +42,12 @@ public class viewUpdater {
     public static void updateComputerHandView(){
         GameActivity.mComputerModelView.getAdapter().notifyDataSetChanged();
     }
+
+    public static void updateTableAdapterData(Vector<CardModel> looseCards){
+        TableAdapter adapter  = (TableAdapter)GameActivity.mTableModelView.getAdapter();
+        adapter.getCards().clear();
+        adapter.getCards().addAll(looseCards);
+        adapter.notifyDataSetChanged();
+    }
+
 }

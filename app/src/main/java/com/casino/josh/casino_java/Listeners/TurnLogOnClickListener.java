@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 
 import com.casino.josh.casino_java.Adapters.PileAdapter;
 import com.casino.josh.casino_java.Adapters.TurnLogAdapter;
@@ -35,7 +36,8 @@ public class TurnLogOnClickListener implements View.OnClickListener {
     }
 
     /**
-     *
+     * Overrides on click listener for the TurnLog button.
+     * Creates a alert dialog and displays all data related to previous turns.
      * @param v
      */
     @Override
@@ -63,8 +65,7 @@ public class TurnLogOnClickListener implements View.OnClickListener {
             logAdapter.notifyDataSetChanged();
         });
 
-        alertDialogBuilder.setCancelable(true)
-                .setPositiveButton("OK", null);
+        alertDialogBuilder.setCancelable(true);
 
         AlertDialog alertDialog = alertDialogBuilder.create();
 

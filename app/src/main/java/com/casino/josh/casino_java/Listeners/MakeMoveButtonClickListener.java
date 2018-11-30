@@ -63,111 +63,117 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
             alertDialogBuilder
                     .setCancelable(true)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        // TODO: refactor into modular switch statement to avoid code redundency.
+                        // TODO: refactor into modular switch statement to avoid code redundancy.
                         /** Executes when positive button on alert dialog is pressed.
                          * @param dialog DialogInterface
                          * @param which int
                          */
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if (turnOptions.getCheckedRadioButtonId() == R.id.trail) {
-
-                                if (GameActivity.mChosenCard != null) {
-
-                                    if (GameActivity.mTournament.getCurrentRound().execTurn(BasePlayerModel.TurnOptions.TRIAL)) {
-                                        viewUpdater.updateView();
-                                    } else {
-                                        GameActivity.mChosenCard = null;
-                                        GameActivity.mLooseCards = new Vector<>();
-                                        Toast toast = Toast.makeText(makeMoveFragment.getContext(),
-                                                                    "Unable to trail selected card card",
-                                                                            Toast.LENGTH_SHORT);
-                                        toast.show();
-                                    }
-                                } else {
-                                    Toast toast = Toast.makeText(makeMoveFragment.getContext(),
-                                                                    "Please select a card",
-                                                                            Toast.LENGTH_SHORT);
-                                    toast.show();
-                                }
-                            } else if (turnOptions.getCheckedRadioButtonId() == R.id.capture) {
-                                if (GameActivity.mChosenCard != null && GameActivity.mLooseCards != null) {
-                                    if(GameActivity.mTournament.getCurrentRound().execTurn(BasePlayerModel.TurnOptions.CAPTURE)){
-                                        viewUpdater.updateView();
-                                    }else{
-                                        GameActivity.mChosenCard = null;
-                                        GameActivity.mLooseCards = new Vector<>();
-                                        Toast toast = Toast.makeText(makeMoveFragment.getContext(),
-                                                "Cannot capture selection with that card.",
-                                                Toast.LENGTH_SHORT);
-                                        toast.show();
-                                    }
-                                } else {
-                                    Toast toast = Toast.makeText(makeMoveFragment.getContext(),
-                                                            "Please select a card.",
-                                                                    Toast.LENGTH_SHORT);
-                                    toast.show();
-                                }
-                            }else if(turnOptions.getCheckedRadioButtonId() == R.id.build){
-                                    if(GameActivity.mChosenCard != null){
-                                        if(GameActivity.mTournament.getCurrentRound().execTurn(BasePlayerModel.TurnOptions.BUILD)){
+                            if (GameActivity.mChosenCard != null) {
+                                switch (turnOptions.getCheckedRadioButtonId()) {
+                                    case R.id.trail:
+                                        if (GameActivity.mTournament.runRound(makeMoveFragment, 1)) {
                                             viewUpdater.updateView();
-                                        }else{
-                                            GameActivity.mChosenCard = null;
-                                            GameActivity.mLooseCards = new Vector<>();
-                                            GameActivity.mBuilds = new Vector<>();
-
+                                        } else {
                                             Toast toast = Toast.makeText(makeMoveFragment.getContext(),
-                                                    "Cannot build with selected cards.",
+                                                    "Unable to trail selected card card",
                                                     Toast.LENGTH_SHORT);
                                             toast.show();
                                         }
-                                    }else{
-                                        Toast toast = Toast.makeText(makeMoveFragment.getContext(),
-                                                "Please select a card to perform an action with.",
-                                                Toast.LENGTH_SHORT);
-                                        toast.show();
-                                    }
-                            }else if(turnOptions.getCheckedRadioButtonId() == R.id.multi_build) {
-                                if (GameActivity.mTournament.getCurrentRound().execTurn(BasePlayerModel.TurnOptions.MULTIBUILD)) {
-                                    viewUpdater.updateView();
-                                } else {
-                                    GameActivity.mChosenCard = null;
-                                    GameActivity.mLooseCards = new Vector<>();
-                                    GameActivity.mBuilds = new Vector<>();
+                                        break;
+                                    case R.id.build:
+                                        if (GameActivity.mLooseCards == null) {
+                                            if (GameActivity.mTournament.runRound(makeMoveFragment, 2)) {
+                                                viewUpdater.updateView();
+                                            } else {
+                                                Toast toast = Toast.makeText(makeMoveFragment.getContext(),
+                                                        "Unable to build with selected cards",
+                                                        Toast.LENGTH_SHORT);
+                                                toast.show();
+                                            }
+                                        } else {
+                                            Toast toast = Toast.makeText(makeMoveFragment.getContext(),
+                                                    "Please select cards to build with.",
+                                                    Toast.LENGTH_SHORT);
+                                            toast.show();
+                                        }
+                                        break;
 
-                                    Toast toast = Toast.makeText(makeMoveFragment.getContext(),
-                                            "Cannot make multi build with selected cards.",
-                                            Toast.LENGTH_SHORT);
-                                    toast.show();
-                                }
-                            }else if(turnOptions.getCheckedRadioButtonId() == R.id.increase_build) {
-                                if (GameActivity.mTournament.getCurrentRound().execTurn(BasePlayerModel.TurnOptions.EXTEND)){
-                                    viewUpdater.updateView();
-                                } else {
-                                    GameActivity.mChosenCard = null;
-                                    GameActivity.mLooseCards = new Vector<>();
-                                    GameActivity.mBuilds = new Vector<>();
+                                    case R.id.multi_build:
+                                        if (GameActivity.mTournament.runRound(makeMoveFragment, 3)) {
+                                            viewUpdater.updateView();
+                                        } else {
+                                            Toast toast = Toast.makeText(makeMoveFragment.getContext(),
+                                                    "Cannot make multibuild with selection.",
+                                                    Toast.LENGTH_SHORT);
+                                            toast.show();
+                                        }
+                                        break;
 
-                                    Toast toast = Toast.makeText(makeMoveFragment.getContext(),
-                                            "Cannot make multi build with selected cards.",
-                                            Toast.LENGTH_SHORT);
-                                    toast.show();
+                                    case R.id.increase_build:
+                                        if (GameActivity.mTournament.runRound(makeMoveFragment, 4)) {
+                                            viewUpdater.updateView();
+                                        } else {
+                                            Toast toast = Toast.makeText(makeMoveFragment.getContext(),
+                                                    "Cannot make multibuild with selection.",
+                                                    Toast.LENGTH_SHORT);
+                                            toast.show();
+                                        }
+                                        break;
+
+                                    case R.id.capture:
+                                        if (GameActivity.mLooseCards != null) {
+                                            if (GameActivity.mTournament.runRound(makeMoveFragment, 5)) {
+                                                viewUpdater.updateView();
+                                            } else {
+                                                Toast toast = Toast.makeText(makeMoveFragment.getContext(),
+                                                        "Cannot capture with selection.",
+                                                        Toast.LENGTH_SHORT);
+                                                toast.show();
+                                            }
+                                        } else {
+                                            Toast toast = Toast.makeText(makeMoveFragment.getContext(),
+                                                    "Please select loose cards to capture.",
+                                                    Toast.LENGTH_SHORT);
+                                            toast.show();
+                                        }
+                                        break;
+
                                 }
-                            }else {
+
+                                GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
+                                GameActivity.mCurrentTurn.setText("Current turn: " + GameActivity.mTournament.getCurrentRound().getTurn());
+
+                                // Clear all input containers after move is made
+                                // regardless of move status ( success failure).
+                                GameActivity.mChosenCard = null;
+                                GameActivity.mLooseCards = new Vector<>();
+                                GameActivity.mBuilds = new Vector<>();
+                            } else {
                                 Toast toast = Toast.makeText(makeMoveFragment.getContext(),
-                                        "Please select a card.",
+                                        "Please select a card",
                                         Toast.LENGTH_SHORT);
                                 toast.show();
+
+                                // Clear all input containers after move is made
+                                // regardless of move status ( success failure).
+                                GameActivity.mChosenCard = null;
+                                GameActivity.mLooseCards = new Vector<>();
+                                GameActivity.mBuilds = new Vector<>();
                             }
+
                         }
                     });
 
             AlertDialog alertDialog = alertDialogBuilder.create();
 
             alertDialog.show();
+
+
+        // If it is the computers turn then no prompting is needed for input.
         }else{
-                GameActivity.mTournament.getCurrentRound().execTurn(BasePlayerModel.TurnOptions.AI);
+                GameActivity.mTournament.runRound(makeMoveFragment, -1);
                 viewUpdater.updateComputerHandView();
 
                 mTable.notifyDataSetChanged();

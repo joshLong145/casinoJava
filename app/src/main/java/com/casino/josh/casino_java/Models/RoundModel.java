@@ -20,6 +20,7 @@ public class RoundModel {
     private Vector<BasePlayerModel> mPlayers;
     private CurrentTurn mCurrentTurn;
     private int mCurrentPlayerIndex = 0;
+    private boolean mRoundEnd = false;
 
     /**
      * Enum for Current Turn indication.
@@ -116,8 +117,10 @@ public class RoundModel {
             if(GameActivity.mHumanHandModelView != null) {
                 viewUpdater.updateHuamnHandView();
             }
-        }
 
+        }else if(emptyHands == mPlayers.size() && mTable.getDeck().getSize() <= 0){
+                mRoundEnd = true;
+        }
     }
 
     /**
@@ -142,10 +145,11 @@ public class RoundModel {
 
 
     /**
-     * Returns the player who's turn it currently is.
-     * @return BasePlayerModel &
+     * Returns the status of the round. If true, the round is over and scores must be shown and
+     * a new round can potentially be made.
+     * @return
      */
-    public final BasePlayerModel getCurrenntPlayer(){ return mPlayers.get(mCurrentPlayerIndex); }
+    public final boolean roundOver(){ return mRoundEnd;}
 
     /**
      * Serialize data encapsulated within class.

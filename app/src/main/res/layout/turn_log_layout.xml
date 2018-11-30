@@ -4,15 +4,16 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="75dp"
-    android:layout_margin="5dp">
+    android:layout_centerHorizontal="true">
 
 
     <TextView
         android:id="@+id/turn_info"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="75dp"
         android:scaleType="centerCrop"
-        android:background="@drawable/card_select"/>
+        android:textColor="#ffff"
+        android:background="#35012C"/>
 
 
 </android.support.v7.widget.CardView>

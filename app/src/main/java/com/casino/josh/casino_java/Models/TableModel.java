@@ -1,6 +1,7 @@
 package com.casino.josh.casino_java.Models;
 
 import android.os.Build;
+import android.support.v4.util.Pair;
 
 import com.casino.josh.casino_java.Models.CardModel;
 import com.casino.josh.casino_java.Models.DeckModel;
@@ -86,6 +87,20 @@ public class TableModel {
     }
 
     /**
+     *
+     * @param selectedCard
+     * @return
+     */
+    public boolean checkLooseCards(CardModel selectedCard){
+        for(CardModel looseCard : _looseCards){
+            if(looseCard.getValue() == selectedCard.getValue())
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Checks if the player has more than one card with the same sum to capture with.
      * @param hand
      * @return boolean
@@ -105,9 +120,12 @@ public class TableModel {
             return false;
 
         for (BuildModel build : mBuilds) {
-            if(selectedCard.getValue() == build.getCaptureValue() && Objects.equals(playerName, build.getBuildOwner())) {
+            if(selectedCard.getValue() == build.getCaptureValue()
+                                       && Objects.equals(playerName, build.getBuildOwner())) {
                 for(CardModel card : hand){
-                        if (card.getValue() == build.getCaptureValue() && Objects.equals(playerName, build.getBuildOwner()) && card != selectedCard) {
+                        if (card.getValue() == build.getCaptureValue()
+                                && Objects.equals(playerName, build.getBuildOwner())
+                                && card != selectedCard) {
                             return false;
                         }
                     }
@@ -196,7 +214,8 @@ public class TableModel {
     public Vector<CardModel> captureBuilds(CardModel selectedCard){
         Vector<CardModel> capturedCards = new Vector<>();
         for(int i = mBuilds.size() -1; i >= 0; i--){
-            // if the capture value is equal to the card value, capture all cards in the build with that card.
+            // if the capture value is equal to the card value, capture
+            // all cards in the build with that card.
             if(mBuilds.get(i).getCaptureValue() == selectedCard.getValue()){
                 for(Vector<CardModel> cardSets : mBuilds.get(i).getBuild()){
                     for(CardModel card : cardSets){
@@ -221,7 +240,8 @@ public class TableModel {
     }
 
     /**
-     * Creates a new build object if the specified rules for build creation are met. if not false is returned and the turn is not completed.
+     * Creates a new build object if the specified rules for build creation are met.
+     * If not false is returned and the turn is not completed.
      * @param looseCards
      * @param chosenCard
      * @param hand
@@ -252,7 +272,7 @@ public class TableModel {
     }
 
     /**
-     *
+     * Helper function to create multi build from previously created builds for both AI and human.
      * @param build
      * @param selectedLooseCards
      * @param chosenCard
@@ -281,13 +301,13 @@ public class TableModel {
     }
 
     /**
-     *
+     * Functionality for increasing an existing build for both AI and computer players.
      * @param build
      * @param chosenCard
      * @param hand
      * @return
      */
-    public boolean increaseBuild(BuildModel build, final CardModel chosenCard, final Vector<CardModel> hand, final String name){
+    boolean increaseBuild(BuildModel build, final CardModel chosenCard, final Vector<CardModel> hand, final String name){
         if(build.getBuildOwner().equals(name))
             return false;
 
@@ -319,8 +339,9 @@ public class TableModel {
     public DeckModel getDeck(){ return _deck; }
 
     /**
-     *
-     * @return
+     * Override of the base object toString() function for serialization to file for game state
+     * saving.
+     * @return String
      */
     public final String toString(){
         StringBuilder tableString = new StringBuilder("Table: ");
@@ -356,7 +377,7 @@ public class TableModel {
      * @param captureValue
      * @return
      */
-    public Vector<Vector<CardModel>> setCapture(final int captureValue){
+    Vector<Vector<CardModel>> setCapture(final int captureValue){
        Vector<Vector<CardModel>> cardSets = new Vector<>();
        Vector<Vector<CardModel>> capturableSets = new Vector<>();
 
@@ -393,17 +414,12 @@ public class TableModel {
            }
        }
         // Sort data based on length of the array.
-       capturableSets.sort(new Comparator<Vector<CardModel>>() {
-           @Override
-           public int compare(Vector<CardModel> o1, Vector<CardModel> o2) {
-               return (Integer.valueOf(o1.size()).compareTo(o2.size()));
-           }
-       });
+       capturableSets.sort((o1, o2) -> (Integer.valueOf(o1.size()).compareTo(o2.size())));
 
         return capturableSets;
     }
 
-    public Vector<Vector<CardModel>> checkBuildCreation(final int captureCardValue, final int selectedCardValue){
+    Vector<Vector<CardModel>> checkBuildCreation(final int captureCardValue, final int selectedCardValue){
         Vector<Vector<CardModel>> cardSets = new Vector<>();
         Vector<Vector<CardModel>> buildSets = new Vector<>();
 
@@ -444,15 +460,58 @@ public class TableModel {
 
         // Sort data based on length of the array.
 
-        buildSets.sort(new Comparator<Vector<CardModel>>() {
-            @Override
-            public int compare(Vector<CardModel> o1, Vector<CardModel> o2) {
-                return (Integer.valueOf(o1.size()).compareTo(o2.size()));
-            }
-        });
+        buildSets.sort((o1, o2) -> (Integer.valueOf(o1.size()).compareTo(o2.size())));
 
         return buildSets;
     }
+
+    public Vector<Pair<Integer, Vector<CardModel>>> checkMultiBuildCreation(final int captureCardValue, final int selectedCardValue){
+        Vector<Vector<CardModel>> cardSets = new Vector<>();
+        Vector<Pair<Integer, Vector<CardModel>>> buildSets = new Vector<>();
+
+        for(int i = 0; i < (int) Math.pow(2, _looseCards.size()); i++){
+            Vector<CardModel> cards = new Vector<>();
+
+            for(int j = 0; j < _looseCards.size(); j++){
+                // Check if jth bit in the i is set. If the bit
+                // is set, we consider jth element from set
+                if((i & (1 << j)) != 0){
+                    cards.add(_looseCards.get(j));
+                }
+
+                // Check if the combination is already present.
+                if(!cardSets.contains(cards)) {
+                    cardSets.add(cards);
+                }
+            }
+        }
+
+        // check if cardSet is a valid build.
+        for(Vector<CardModel> cardSet : cardSets) {
+            int sum = 0;
+
+            for (CardModel card : cardSet) {
+                int value = card.getValue();
+
+                sum += value;
+            }
+
+            // Check if any build has the same capture value as one of the generated card sets
+            // along with the selected card.
+            for(int i = 0; i < mBuilds.size(); i++){
+                if(sum + selectedCardValue == captureCardValue
+                        && captureCardValue == mBuilds.get(i).getCaptureValue()){
+                    buildSets.add(new Pair<>(i, cardSet));
+                }
+            }
+        }
+
+        // Sort data based on length of the array.
+        buildSets.sort((o1, o2) -> (Integer.valueOf(o1.second.size()).compareTo(o2.second.size())));
+
+        return buildSets;
+    }
+
 
     /**
      *

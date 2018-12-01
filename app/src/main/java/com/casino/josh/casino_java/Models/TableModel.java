@@ -46,6 +46,20 @@ public class TableModel {
     }
 
     /**
+     * Constructor to load create a new round once one is deemed to be over.
+     * Passing previous vector objects to update the reference count to them so they are not cleaned
+     * up by the JVM and thus can still be observed by live data models.
+     * @param looseCards
+     * @param builds
+     */
+    public TableModel(Vector<CardModel> looseCards, Vector<BuildModel> builds){
+        _deck = new DeckModel();
+        _deck.create(); // initialize the deck with cards.
+        _looseCards = looseCards;
+        mBuilds = builds;
+    }
+
+    /**
      * Constructor to load in a seeded deck into the tournament.
      * @param deck
      */
@@ -404,14 +418,12 @@ public class TableModel {
            for(CardModel card : cardSet){
                int value = card.getValue();
 
-               if(captureValue == value)
-                   break;
-               else
                    sum += value;
 
-               if(sum == captureValue)
-                   capturableSets.add(cardSet);
            }
+
+           if(sum % captureValue == 0)
+               capturableSets.add(cardSet);
        }
         // Sort data based on length of the array.
        capturableSets.sort((o1, o2) -> (Integer.valueOf(o1.size()).compareTo(o2.size())));

@@ -340,7 +340,7 @@ public class Serialization {
      * @return
      */
     public final TournamentModel createTournament(){
-        return new TournamentModel(mPlayers, new RoundModel(mPlayers, mTable, mCurrentTurn), mRoundNumber);
+        return new TournamentModel(mPlayers, new RoundModel(mPlayers, mTable, mCurrentTurn, true), mRoundNumber);
     }
 
 

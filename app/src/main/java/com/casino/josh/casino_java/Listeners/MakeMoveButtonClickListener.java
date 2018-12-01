@@ -9,9 +9,6 @@ import android.widget.Toast;
 
 import com.casino.josh.casino_java.Adapters.BuildAdapter;
 import com.casino.josh.casino_java.Adapters.ComputerHandAdapter;
-import com.casino.josh.casino_java.Helpers.viewUpdater;
-import com.casino.josh.casino_java.Models.BasePlayerModel;
-import com.casino.josh.casino_java.Models.CardModel;
 import com.casino.josh.casino_java.Fragments.MakeMoveButtonFragment;
 import com.casino.josh.casino_java.Adapters.HandAdapter;
 import com.casino.josh.casino_java.Models.RoundModel;
@@ -70,11 +67,12 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                          */
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            boolean turnSuccess = false;
                             if (GameActivity.mChosenCard != null) {
                                 switch (turnOptions.getCheckedRadioButtonId()) {
                                     case R.id.trail:
                                         if (GameActivity.mTournament.runRound(makeMoveFragment, 1)) {
-                                            viewUpdater.updateView();
+                                            turnSuccess = true;
                                         } else {
                                             Toast toast = Toast.makeText(makeMoveFragment.getContext(),
                                                     "Unable to trail selected card card",
@@ -83,9 +81,9 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                                         }
                                         break;
                                     case R.id.build:
-                                        if (GameActivity.mLooseCards == null) {
+                                        if (GameActivity.mLooseCards != null) {
                                             if (GameActivity.mTournament.runRound(makeMoveFragment, 2)) {
-                                                viewUpdater.updateView();
+                                                turnSuccess = true;
                                             } else {
                                                 Toast toast = Toast.makeText(makeMoveFragment.getContext(),
                                                         "Unable to build with selected cards",
@@ -102,7 +100,7 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
 
                                     case R.id.multi_build:
                                         if (GameActivity.mTournament.runRound(makeMoveFragment, 3)) {
-                                            viewUpdater.updateView();
+                                            turnSuccess = true;
                                         } else {
                                             Toast toast = Toast.makeText(makeMoveFragment.getContext(),
                                                     "Cannot make multibuild with selection.",
@@ -113,7 +111,7 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
 
                                     case R.id.increase_build:
                                         if (GameActivity.mTournament.runRound(makeMoveFragment, 4)) {
-                                            viewUpdater.updateView();
+                                            turnSuccess = true;
                                         } else {
                                             Toast toast = Toast.makeText(makeMoveFragment.getContext(),
                                                     "Cannot make multibuild with selection.",
@@ -125,7 +123,7 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                                     case R.id.capture:
                                         if (GameActivity.mLooseCards != null) {
                                             if (GameActivity.mTournament.runRound(makeMoveFragment, 5)) {
-                                                viewUpdater.updateView();
+                                                turnSuccess = true;
                                             } else {
                                                 Toast toast = Toast.makeText(makeMoveFragment.getContext(),
                                                         "Cannot capture with selection.",
@@ -142,8 +140,13 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
 
                                 }
 
-                                GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
-                                GameActivity.mCurrentTurn.setText("Current turn: " + GameActivity.mTournament.getCurrentRound().getTurn());
+                                // If the players turn was valid, change turns and notify adapters.
+                                if(turnSuccess){
+                                    GameActivity.updateView();
+                                    GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
+                                    GameActivity.mCurrentTurn.setText("Current turn: " +
+                                            GameActivity.mTournament.getCurrentRound().getTurn());
+                                }
 
                                 // Clear all input containers after move is made
                                 // regardless of move status ( success failure).
@@ -174,7 +177,7 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
         // If it is the computers turn then no prompting is needed for input.
         }else{
                 GameActivity.mTournament.runRound(makeMoveFragment, -1);
-                viewUpdater.updateComputerHandView();
+                GameActivity.updateComputerHandView();
 
                 mTable.notifyDataSetChanged();
                 mBuilds.notifyDataSetChanged();

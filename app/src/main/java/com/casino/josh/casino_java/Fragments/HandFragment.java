@@ -72,10 +72,6 @@ public class HandFragment extends Fragment {
                 for(int i = 0; i < hand.size(); i++){
                     cards.add(hand.get(i));
                 }
-
-               // mAdapter = new HandAdapter(cards, getActivity());
-               // mRecyclerView.setAdapter(mAdapter);
-               // mAdapter.notifyDataSetChanged();
         });
 
         return view;

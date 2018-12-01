@@ -99,7 +99,7 @@ public abstract class BasePlayerModel {
      * Capture builds if the capture value of the selected card value matches.
      * @param table
      * @param selectedCard
-     * @return Vector<CardModel></CardModel>
+     * @return Vector<CardModel>
      */
     protected Vector<CardModel> buildCapture(final TableModel table, final CardModel selectedCard){
         return table.captureBuilds(selectedCard);
@@ -134,28 +134,4 @@ public abstract class BasePlayerModel {
 
         return playerData.toString();
     }
-
-    /**
-     * Trails a card for the player.
-     * @param table
-     * @return boolean
-     */
-    protected  boolean trailCardAction(final TableModel table){return false; }
-
-    /**
-     * Capture cards on the table for the player
-     * @param table TableModel
-     * @param cardValue integer
-     * @return boolean
-     */
-    protected boolean captureCardOnTable(final TableModel table, final int cardValue){ return false; }
-
-    //std::vector<std::vector<std::string>> setCapture(const std::shared_ptr<Table> &table, const int cardValue);
-
-    //protected boolean createSingleBuild();
-
-    //bool createMultiBuild(const std::shared_ptr<Table> &table, const unsigned int cardIndex, const int buildIndex, std::string captureCardIndex, std::vector<int> cardIndexes);
-
-    //bool captureBuild(const int cardValue, const std::shared_ptr<Table> &table);
-
 }

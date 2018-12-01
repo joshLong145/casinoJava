@@ -8,6 +8,14 @@
     android:padding="10dp" >
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:scaleType="centerCrop"
+        android:textColor="#ffff"
+        android:background="#35012C"
+        android:text="@string/round_header"/>
+
+    <TextView
         android:id="@+id/computer_round_info"
         android:layout_width="match_parent"
         android:layout_height="75dp"

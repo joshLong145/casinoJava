@@ -3,6 +3,7 @@ package com.casino.josh.casino_java.Models;
 import android.app.ActionBar;
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
+import android.widget.Toast;
 
 import com.casino.josh.casino_java.Models.BasePlayerModel;
 import com.casino.josh.casino_java.Models.TableModel;
@@ -123,6 +124,80 @@ public class ComputerPlayerModel extends BasePlayerModel {
         // return true indicating turn executed successfully.
         return true;
     }
+
+    public String moveHelp(final TableModel table, final Vector<CardModel> hand){
+        // containers for mapping card data from the hand to correpsonding card data from the table.
+        Map<Pair<CardModel, CardModel>, Vector<CardModel>> buildMap = new LinkedHashMap<>();
+        Map<Pair<CardModel, CardModel>, Pair<Integer, Vector<CardModel>>> multiBuildMap = new LinkedHashMap<>();
+        Map<String, Vector<CardModel>> setMap = new LinkedHashMap<>();
+
+        Vector<Integer> captureWeights = new Vector<>();
+        int bestCaptureWeight = -1;
+        int bestSetCapture = -1;
+        int bestSetIndex= -1;
+
+        Pair<Integer, Integer> captureWeight = assesCaptureWeights(table, hand, captureWeights,
+                0, 0, setMap);
+
+        bestCaptureWeight = captureWeight.first;
+        bestSetIndex = captureWeight.second;
+
+
+        int bestSingleBuildWeight = -1;
+        Pair<Pair<CardModel, CardModel>, Integer> singleBuildWeight = assessSingleBuildWeights(table, hand, buildMap);
+        bestSingleBuildWeight = singleBuildWeight.second;
+
+        int bestMultiBuildWeight = -1;
+        Pair<Pair<CardModel, CardModel>, Integer> multiBuildWeight = assesMultiBuildWeights(table, hand, multiBuildMap);
+        bestMultiBuildWeight = multiBuildWeight.second;
+
+        StringBuilder helpString = new StringBuilder();
+
+        // Check if the weight of making a multibuild is more than making a single build.
+        // order of move priority ( multi -> single -> capture)
+        if(bestMultiBuildWeight >= bestSingleBuildWeight && bestMultiBuildWeight != -1){
+            helpString.append("Make multi build with the card: ");
+            helpString.append(multiBuildWeight.first.first.toStringSave());
+
+        }
+        // Check what weight is the highest, with priority on creating builds, and multibuilds.
+        // Reasoning is that this will allow for the largest capturing of cards in the future.
+        else if(bestSingleBuildWeight >= bestCaptureWeight && bestSingleBuildWeight != -1){
+            helpString.append("Make single build with the card: ");
+            helpString.append(singleBuildWeight.first.first.toStringSave());
+            helpString.append("\n with the loose cards:");
+            for(CardModel card : buildMap.get(singleBuildWeight.first)){
+                helpString.append(" ");
+                helpString.append(card.toStringSave());
+            }
+            // If building is not an option, check if capturing is possible.
+        } else if(0 < bestCaptureWeight){
+            helpString.append("Capture with the card : ");
+            CardModel handCard = hand.get(captureWeight.second);
+            Vector<CardModel> capturedCards = setMap.get(handCard.toStringSave());
+
+            helpString.append("\n with the loose cards:");
+            for(CardModel card : capturedCards){
+                helpString.append(" ");
+                helpString.append(card.toStringSave());
+            }
+
+            // If other options are not possible ( weights are -1). then trail the card.
+        }else {
+                helpString.append("No other options, trail");
+        }
+
+        helpString.append("weights: ");
+        helpString.append("Capture weight: ");
+        helpString.append(bestCaptureWeight);
+        helpString.append("\n Build weight: ")
+                  .append(bestSingleBuildWeight)
+                  .append("\n Multi build weight: ")
+                  .append(bestMultiBuildWeight);
+
+        return helpString.toString();
+    }
+
 
     /**
      * Checks if making a single build is possible, and stores all possible build mappings

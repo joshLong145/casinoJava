@@ -1,12 +1,5 @@
 package com.casino.josh.casino_java.Models;
 
-import android.support.v7.widget.RecyclerView;
-
-import com.casino.josh.casino_java.Adapters.ComputerHandAdapter;
-import com.casino.josh.casino_java.Adapters.HandAdapter;
-import com.casino.josh.casino_java.Helpers.viewUpdater;
-import com.casino.josh.casino_java.Models.BasePlayerModel;
-import com.casino.josh.casino_java.Models.TableModel;
 import com.casino.josh.casino_java.activites.GameActivity;
 
 import java.util.Vector;
@@ -43,9 +36,7 @@ public class RoundModel {
         else
             mCurrentTurn = CurrentTurn.Computer;
 
-        dealCards();
-
-
+        dealPlayerHands();
         mTable.getLooseCards().addAll(mTable.getDeck().dealHand());
     }
 
@@ -55,7 +46,7 @@ public class RoundModel {
      * @param table
      * @param firstTurn
      */
-    public RoundModel(Vector<BasePlayerModel> players, TableModel table, final int firstTurn){
+    public RoundModel(Vector<BasePlayerModel> players, TableModel table, final int firstTurn, final boolean serial){
         mTable = table;
         mPlayers = players;
         mCurrentPlayerIndex = firstTurn;
@@ -64,6 +55,11 @@ public class RoundModel {
             mCurrentTurn = CurrentTurn.Human;
         else
             mCurrentTurn = CurrentTurn.Computer;
+
+        if(!serial){
+            dealPlayerHands();
+            mTable.getLooseCards().addAll(mTable.getDeck().dealHand());
+        }
     }
 
     /**
@@ -81,7 +77,7 @@ public class RoundModel {
             }
 
             // check if new hands need to be dealt to the player.
-            dealCards();
+            dealPlayerHands();
             return true;
         }
 
@@ -97,7 +93,7 @@ public class RoundModel {
     /**
      * Deals cards to both player and computer if both hands are empty.
      */
-    private void dealCards(){
+    private void dealPlayerHands(){
         int emptyHands = 0;
         for(BasePlayerModel player : mPlayers) {
             if (player.getHand().size() <= 0)
@@ -111,11 +107,11 @@ public class RoundModel {
             }
 
             if(GameActivity.mComputerModelView != null) {
-                viewUpdater.updateComputerHandView();
+                GameActivity.updateComputerHandView();
             }
 
             if(GameActivity.mHumanHandModelView != null) {
-                viewUpdater.updateHuamnHandView();
+                GameActivity.updateHuamnHandView();
             }
 
         }else if(emptyHands == mPlayers.size() && mTable.getDeck().getSize() <= 0){

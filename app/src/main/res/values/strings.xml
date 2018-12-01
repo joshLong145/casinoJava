@@ -20,4 +20,5 @@
     <string name="log_string">turn log</string>
     <string name="multibuild_option">multibuild</string>
     <string name="increase_build_option">increase build</string>
+    <string name="round_header">Round completed! player scores:</string>
 </resources>

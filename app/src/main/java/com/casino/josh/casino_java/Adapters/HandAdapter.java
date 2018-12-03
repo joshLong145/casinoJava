@@ -84,7 +84,6 @@ public class HandAdapter extends RecyclerView.Adapter<HandAdapter.ViewHolder> {
         );
 
         holder.mimageBttn.setImageResource(res);
-
         holder.mimageBttn.setOnClickListener(new HandOnClickListener(mDataSet.get(position), holder.itemView.getContext()));
     }
 

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 import android.widget.Toast;
 
+import com.casino.josh.casino_java.Helpers.GameTreeNode;
 import com.casino.josh.casino_java.Models.BasePlayerModel;
 import com.casino.josh.casino_java.Models.TableModel;
 
@@ -121,6 +122,8 @@ public class ComputerPlayerModel extends BasePlayerModel {
             getHand().remove(0);
         }
 
+        GameTreeNode node = miniMax(table, _hand);
+
         // return true indicating turn executed successfully.
         return true;
     }
@@ -198,6 +201,95 @@ public class ComputerPlayerModel extends BasePlayerModel {
         return helpString.toString();
     }
 
+    /**
+     *
+     * @param table
+     * @param hand
+     */
+    public GameTreeNode miniMax(TableModel table, Vector<CardModel> hand){
+        Vector<GameTreeNode> options = new Vector<>();
+        Vector<GameTreeNode> results = new Vector<>();
+
+        for(CardModel card : hand){
+            Vector<CardModel> handCards = (Vector<CardModel>) hand.clone();
+            handCards.remove(card);
+            options.add(new GameTreeNode(new TableModel(table), card, hand, "capture"));
+            options.add(new GameTreeNode(new TableModel(table), card, hand, "single"));
+            options.add(new GameTreeNode(new TableModel(table), card, hand, "multi"));
+            options.add(new GameTreeNode(new TableModel(table), card, hand, "trail"));
+        }
+
+        for(GameTreeNode node : options){
+            results.add(generateGameStates(node.getTable(), node.getHand(), node.getCard(), node));
+        }
+
+        // find the best weighted node within the current turn options.
+        GameTreeNode bestNode = null;
+        int bestWeight = -1;
+        for(GameTreeNode node : options){
+            if(node.getWeight() > bestWeight){
+                bestWeight = node.getWeight();
+                bestNode =  node;
+            }
+        }
+
+        return bestNode;
+    }
+
+    /**
+     *
+     * @param table
+     * @param card
+     * @return
+     */
+    public final GameTreeNode generateGameStates(TableModel table, Vector<CardModel> hand,
+                                                         CardModel card,
+                                                         GameTreeNode node){
+
+        if(hand.size() <= 0){
+            return node;
+        }
+
+        node.getNodes().add(new GameTreeNode(new TableModel(table), card, hand, "capture"));
+        node.getNodes().add(new GameTreeNode(new TableModel(table), card, hand, "single"));
+        node.getNodes().add(new GameTreeNode(new TableModel(table), card, hand, "multi"));
+        node.getNodes().add(new GameTreeNode(new TableModel(table), card, hand, "trail"));
+
+        GameTreeNode bestNode = null;
+        int bestWeight = -1;
+
+        // find the best weighted node within the current turn options.
+        for(GameTreeNode gameNode : node.getNodes()){
+            if(node.getWeight() > bestWeight){
+                bestWeight = node.getWeight();
+                bestNode = gameNode;
+            }
+        }
+
+        if(bestWeight == -1){
+            for(GameTreeNode trailNode : node.getNodes()){
+                if(trailNode.getAction().equals("trail"))
+                    bestNode = trailNode;
+            }
+        }
+
+        Vector<CardModel> newHand = (Vector<CardModel>) hand.clone();
+        CardModel newHandCard = newHand.get(0);
+        newHand.remove(newHandCard);
+        // recurse with the best option.
+        generateGameStates(new TableModel(bestNode.getTable()),newHand, newHandCard, bestNode);
+
+        return bestNode;
+    }
+
+    /**
+     *
+     * @param root
+     * @param newNode
+     */
+    private void linkNodes(GameTreeNode root, GameTreeNode newNode){
+
+    }
 
     /**
      * Checks if making a single build is possible, and stores all possible build mappings
@@ -207,7 +299,7 @@ public class ComputerPlayerModel extends BasePlayerModel {
      * @param buildMap
      * @return Pair<Pair<CardModel, CardModel>, Integer>
      */
-    private Pair<Pair<CardModel, CardModel>, Integer> assessSingleBuildWeights(TableModel table, Vector<CardModel> hand,
+    protected Pair<Pair<CardModel, CardModel>, Integer> assessSingleBuildWeights(TableModel table, Vector<CardModel> hand,
                                                                                Map<Pair<CardModel, CardModel>, Vector<CardModel>> buildMap){
 
         Vector<Pair<CardModel, CardModel>> cardCombos = new Vector<>();
@@ -256,7 +348,7 @@ public class ComputerPlayerModel extends BasePlayerModel {
      * @param hand
      * @return Pair<CardModel, CardModel>
      */
-    private Pair<Pair<CardModel, CardModel>, Integer> assesMultiBuildWeights(final TableModel table,
+      protected Pair<Pair<CardModel, CardModel>, Integer> assesMultiBuildWeights(final TableModel table,
                                                               final Vector<CardModel> hand,
                                                               Map<Pair<CardModel, CardModel>, Pair<Integer, Vector<CardModel>>> multiBuildMap){
         Vector<Pair<CardModel, CardModel>> cardCombos = new Vector<>();
@@ -314,7 +406,7 @@ public class ComputerPlayerModel extends BasePlayerModel {
      * @param bestSetIndex
      * @return Pair<Integer, Integer>
      */
-    private Pair<Integer, Integer> assesCaptureWeights(TableModel table, final Vector<CardModel> hand, Vector<Integer> captureWeights,
+    protected Pair<Integer, Integer> assesCaptureWeights(TableModel table, final Vector<CardModel> hand, Vector<Integer> captureWeights,
                                                        int bestCaptureWeight, int bestSetIndex, Map<String, Vector<CardModel>> setMap){
 
         for(CardModel card : hand){
@@ -342,7 +434,7 @@ public class ComputerPlayerModel extends BasePlayerModel {
      * @param selectedCard
      * @return Integer.
      */
-    public int checkSets(final TableModel table, CardModel selectedCard, Map<String, Vector<CardModel>> setMap){
+     protected int checkSets(final TableModel table, CardModel selectedCard, Map<String, Vector<CardModel>> setMap){
         if(!table.isCaptureCard(getHand(), selectedCard, mName)) {
             Vector<Vector<CardModel>> sets = super.setCaptureCombinations(table, selectedCard.getValue());
             sets.add(super.buildCapture(table, selectedCard));

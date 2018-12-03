@@ -46,6 +46,16 @@ public class TableModel {
     }
 
     /**
+     * Copy Constructor for TableModel.
+     * @param table
+     */
+    public TableModel(TableModel table){
+        this._looseCards = (Vector<CardModel>) table.getLooseCards().clone();
+        this._deck = table.getDeck();
+        this.mBuilds = (Vector<BuildModel>) table.getBuilds().clone();
+    }
+
+    /**
      * Constructor to load create a new round once one is deemed to be over.
      * Passing previous vector objects to update the reference count to them so they are not cleaned
      * up by the JVM and thus can still be observed by live data models.
@@ -391,7 +401,7 @@ public class TableModel {
      * @param captureValue
      * @return
      */
-    Vector<Vector<CardModel>> setCapture(final int captureValue){
+    public Vector<Vector<CardModel>> setCapture(final int captureValue){
        Vector<Vector<CardModel>> cardSets = new Vector<>();
        Vector<Vector<CardModel>> capturableSets = new Vector<>();
 
@@ -431,7 +441,13 @@ public class TableModel {
         return capturableSets;
     }
 
-    Vector<Vector<CardModel>> checkBuildCreation(final int captureCardValue, final int selectedCardValue){
+    /**
+     *
+     * @param captureCardValue
+     * @param selectedCardValue
+     * @return
+     */
+    public Vector<Vector<CardModel>> checkBuildCreation(final int captureCardValue, final int selectedCardValue){
         Vector<Vector<CardModel>> cardSets = new Vector<>();
         Vector<Vector<CardModel>> buildSets = new Vector<>();
 

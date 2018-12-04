@@ -50,6 +50,9 @@ public class GameTreeNode {
         assessOptions();
     }
 
+    /**
+     * check the action given to the node and perform the corresponding heuristic assessment.
+     */
     private void assessOptions(){
 
         if(Objects.equals(action, "capture")) {
@@ -75,12 +78,15 @@ public class GameTreeNode {
             Vector<Vector<CardModel>> sets = table.setCapture(card.getValue());
             sets.add(table.captureBuilds(card));
 
-            if (sets.size() <= 0) {
+            weight += table.checkBuilds(card);
+
+            if (sets.size() > 0) {
+
                 int size = sets.get(0).size();
-                setMap.put(card.toStringSave(), sets.get(0));
-                weight = size;
-            }else{
-                weight = -1;
+                if(size > 0) {
+                    setMap.put(card.toStringSave(), sets.get(0));
+                    weight = size;
+                }
             }
         }
 
@@ -180,6 +186,26 @@ public class GameTreeNode {
         weight = -1;
         handPair = new Pair<>(card, null);
     }
+
+
+    /**
+     *
+     * @return
+     */
+    public final Map<String, Vector<CardModel>> getSetMap(){return setMap; }
+
+    /**
+     *
+     * @return
+     */
+    public Map<Pair<CardModel, CardModel>, Vector<CardModel>> getBuildMap(){ return buildMap; }
+
+    /**
+     *
+     * @return
+     */
+    public Map<Pair<CardModel, CardModel>, Pair<Integer, Vector<CardModel>>> getMultiMap(){ return multiBuildMap; }
+
 
     /**
      *

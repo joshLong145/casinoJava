@@ -47,65 +47,110 @@ public class ComputerPlayerModel extends BasePlayerModel {
      */
     @Override
     public boolean makeMove(TableModel table, TurnOptions option) {
-        // containers for mapping card data from the hand to correpsonding card data from the table.
-        Map<Pair<CardModel, CardModel>, Vector<CardModel>> buildMap = new LinkedHashMap<>();
-        Map<Pair<CardModel, CardModel>, Pair<Integer, Vector<CardModel>>> multiBuildMap = new LinkedHashMap<>();
-        Map<String, Vector<CardModel>> setMap = new LinkedHashMap<>();
 
-        Vector<Integer> captureWeights = new Vector<>();
-        int bestCaptureWeight = -1;
-        int bestSetCapture = -1;
-        int bestSetIndex= -1;
+        GameTreeNode node = miniMax(table, _hand);
 
-        Pair<Integer, Integer> captureWeight = assesCaptureWeights(table, _hand, captureWeights,
-                0, 0, setMap);
+        if(node.getAction().equals("capture")){
+            CardModel card = node.getHandPair().first;
+            Vector<CardModel> capturedCards = node.getSetMap().get(card.toStringSave());
+            Vector<CardModel> capturedBuildCards = table.captureBuilds(card);
 
-        bestCaptureWeight = captureWeight.first;
-        bestSetIndex = captureWeight.second;
+            // If capture cards are not null ( meaning more than a build was captured).
+            // remove it from the table.
+            if (capturedCards != null) {
+                table.getLooseCards().removeAll(capturedCards);
+                TurnLogModel.addCaptureMoveToLog(capturedCards, card, mName);
+            }
+
+            if (capturedBuildCards != null) {
+                table.removeBuilds(card);
+                _pile.addAll(capturedBuildCards);
+                TurnLogModel.addCaptureMoveToLog(capturedBuildCards, card, mName);
+            }
+
+            _pile.add(card);
+            _hand.remove(card);
+        }else if(node.getAction().equals("single")){
+            table.createBuild(node.getBuildMap().get(node.getHandPair()), node.getHandPair().second, _hand, mName);
+            _hand.remove(node.getCard());
+
+            TurnLogModel.addBuildMoveToLog(node.getBuildMap().get(node.getHandPair()),
+                                            node.getHandPair().first,
+                                            node.getHandPair().second, mName);
+
+        } else if(node.getAction().equals("multi")){
+            BuildModel selectedBuild;
+            selectedBuild = table.getBuilds().get(node.getMultiMap().get(node.getHandPair()).first);
+            Vector<CardModel> buildCards = node.getMultiMap().get(node.getHandPair().first).second;
+            CardModel selectedCard = node.getHandPair().first;
+            table.createMultiBuild(selectedBuild, buildCards, selectedCard, _hand);
+            _hand.remove(selectedCard);
+
+        }else if(node.getAction().equals("trail")){
+            table.getLooseCards().add(node.getHandPair().first);
+            TurnLogModel.addTrailMoveToLog(getHand().get(0), mName);
+            getHand().remove(node.getHandPair().first);
+
+        }else {
+            // containers for mapping card data from the hand to correpsonding card data from the table.
+            Map<Pair<CardModel, CardModel>, Vector<CardModel>> buildMap = new LinkedHashMap<>();
+            Map<Pair<CardModel, CardModel>, Pair<Integer, Vector<CardModel>>> multiBuildMap = new LinkedHashMap<>();
+            Map<String, Vector<CardModel>> setMap = new LinkedHashMap<>();
+
+            Vector<Integer> captureWeights = new Vector<>();
+            int bestCaptureWeight = -1;
+            int bestSetCapture = -1;
+            int bestSetIndex = -1;
+
+            Pair<Integer, Integer> captureWeight = assesCaptureWeights(table, _hand, captureWeights,
+                    0, 0, setMap);
+
+            bestCaptureWeight = captureWeight.first;
+            bestSetIndex = captureWeight.second;
 
 
-        int bestSingleBuildWeight = -1;
-        Pair<Pair<CardModel, CardModel>, Integer> singleBuildWeight = assessSingleBuildWeights(table, _hand, buildMap);
-        bestSingleBuildWeight = singleBuildWeight.second;
+            int bestSingleBuildWeight = -1;
+            Pair<Pair<CardModel, CardModel>, Integer> singleBuildWeight = assessSingleBuildWeights(table, _hand, buildMap);
+            bestSingleBuildWeight = singleBuildWeight.second;
 
-        int bestMultiBuildWeight = -1;
-        Pair<Pair<CardModel, CardModel>, Integer> multiBuildWeight = assesMultiBuildWeights(table, _hand, multiBuildMap);
-        bestMultiBuildWeight = multiBuildWeight.second;
+            int bestMultiBuildWeight = -1;
+            Pair<Pair<CardModel, CardModel>, Integer> multiBuildWeight = assesMultiBuildWeights(table, _hand, multiBuildMap);
+            bestMultiBuildWeight = multiBuildWeight.second;
 
 
-        // Check if the weight of making a multibuild is more than making a single build.
-        // order of move priority ( multi -> single -> capture)
-        if(bestMultiBuildWeight >= bestSingleBuildWeight && bestMultiBuildWeight != -1){
-               BuildModel selectedBuild;
-               selectedBuild = table.getBuilds().get(multiBuildMap.get(multiBuildWeight.first).first);
-               Vector<CardModel> buildCards = multiBuildMap.get(multiBuildWeight.first).second;
-               CardModel selectedCard = multiBuildWeight.first.first;
-               table.createMultiBuild(selectedBuild, buildCards, selectedCard, _hand);
-               _hand.remove(selectedCard);
-        }
-        // Check what weight is the highest, with priority on creating builds, and multibuilds.
-        // Reasoning is that this will allow for the largest capturing of cards in the future.
-        else if(bestSingleBuildWeight >= bestCaptureWeight && bestSingleBuildWeight != -1){
-            table.createBuild(buildMap.get(singleBuildWeight.first), singleBuildWeight.first.second, _hand, mName);
-            _hand.remove(singleBuildWeight.first.second);
+            // Check if the weight of making a multibuild is more than making a single build.
+            // order of move priority ( multi -> single -> capture)
+            if (bestMultiBuildWeight >= bestSingleBuildWeight && bestMultiBuildWeight != -1) {
+                BuildModel selectedBuild;
+                selectedBuild = table.getBuilds().get(multiBuildMap.get(multiBuildWeight.first).first);
+                Vector<CardModel> buildCards = multiBuildMap.get(multiBuildWeight.first).second;
+                CardModel selectedCard = multiBuildWeight.first.first;
+                table.createMultiBuild(selectedBuild, buildCards, selectedCard, _hand);
+                _hand.remove(selectedCard);
+            }
+            // Check what weight is the highest, with priority on creating builds, and multibuilds.
+            // Reasoning is that this will allow for the largest capturing of cards in the future.
+            else if (bestSingleBuildWeight >= bestCaptureWeight && bestSingleBuildWeight != -1) {
+                table.createBuild(buildMap.get(singleBuildWeight.first), singleBuildWeight.first.second, _hand, mName);
+                _hand.remove(singleBuildWeight.first.second);
 
-            TurnLogModel.addBuildMoveToLog(buildMap.get(singleBuildWeight.first),
-                    singleBuildWeight.first.first, singleBuildWeight.first.second, mName);
+                TurnLogModel.addBuildMoveToLog(buildMap.get(singleBuildWeight.first),
+                        singleBuildWeight.first.first, singleBuildWeight.first.second, mName);
 
-        // If building is not an option, check if capturing is possible.
-        } else if(0 < bestCaptureWeight){
+                // If building is not an option, check if capturing is possible.
+            } else if (0 < bestCaptureWeight) {
                 CardModel card = _hand.get(captureWeight.second);
                 Vector<CardModel> capturedCards = setMap.get(card.toStringSave());
                 Vector<CardModel> capturedBuildCards = table.captureBuilds(card);
 
                 // If capture cards are not null ( meaning more than a build was captured).
                 // remove it from the table.
-                if(capturedCards != null) {
+                if (capturedCards != null) {
                     table.getLooseCards().removeAll(capturedCards);
                     TurnLogModel.addCaptureMoveToLog(capturedCards, card, mName);
                 }
 
-                if(capturedBuildCards != null) {
+                if (capturedBuildCards != null) {
                     table.removeBuilds(card);
                     _pile.addAll(capturedBuildCards);
                     TurnLogModel.addCaptureMoveToLog(capturedBuildCards, card, mName);
@@ -114,15 +159,14 @@ public class ComputerPlayerModel extends BasePlayerModel {
                 _pile.add(card);
                 _hand.remove(card);
 
-        // If other options are not possible ( weights are -1). then trail the card.
-        }else {
+                // If other options are not possible ( weights are -1). then trail the card.
+            } else {
 
-            table.getLooseCards().add(getHand().get(0));
-            TurnLogModel.addTrailMoveToLog(getHand().get(0), mName);
-            getHand().remove(0);
+                table.getLooseCards().add(getHand().get(0));
+                TurnLogModel.addTrailMoveToLog(getHand().get(0), mName);
+                getHand().remove(0);
+            }
         }
-
-        GameTreeNode node = miniMax(table, _hand);
 
         // return true indicating turn executed successfully.
         return true;
@@ -213,12 +257,13 @@ public class ComputerPlayerModel extends BasePlayerModel {
         for(CardModel card : hand){
             Vector<CardModel> handCards = (Vector<CardModel>) hand.clone();
             handCards.remove(card);
-            options.add(new GameTreeNode(new TableModel(table), card, hand, "capture"));
+            options.add( new GameTreeNode(new TableModel(table), card, hand, "capture"));
             options.add(new GameTreeNode(new TableModel(table), card, hand, "single"));
             options.add(new GameTreeNode(new TableModel(table), card, hand, "multi"));
             options.add(new GameTreeNode(new TableModel(table), card, hand, "trail"));
         }
 
+        // generate best option from each move.
         for(GameTreeNode node : options){
             results.add(generateGameStates(node.getTable(), node.getHand(), node.getCard(), node));
         }

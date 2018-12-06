@@ -81,8 +81,12 @@ public class ComputerPlayerModel extends BasePlayerModel {
         } else if(node.getAction().equals("multi")){
             BuildModel selectedBuild;
             selectedBuild = table.getBuilds().get(node.getMultiMap().get(node.getHandPair()).first);
-            Vector<CardModel> buildCards = node.getMultiMap().get(node.getHandPair().first).second;
+            Vector<CardModel> buildCards = node.getMultiMap().get(node.getHandPair()).second;
             CardModel selectedCard = node.getHandPair().first;
+            if(buildCards.contains(selectedCard)){
+                buildCards.remove(selectedCard);
+            }
+
             table.createMultiBuild(selectedBuild, buildCards, selectedCard, _hand);
             _hand.remove(selectedCard);
 
@@ -254,16 +258,17 @@ public class ComputerPlayerModel extends BasePlayerModel {
         Vector<GameTreeNode> options = new Vector<>();
         Vector<GameTreeNode> results = new Vector<>();
 
+
         for(CardModel card : hand){
             Vector<CardModel> handCards = (Vector<CardModel>) hand.clone();
             handCards.remove(card);
-            options.add( new GameTreeNode(new TableModel(table), card, hand, "capture"));
-            options.add(new GameTreeNode(new TableModel(table), card, hand, "single"));
-            options.add(new GameTreeNode(new TableModel(table), card, hand, "multi"));
-            options.add(new GameTreeNode(new TableModel(table), card, hand, "trail"));
+            options.add(new GameTreeNode(new TableModel(table), card, handCards, "capture"));
+            options.add(new GameTreeNode(new TableModel(table), card, handCards, "single"));
+            options.add(new GameTreeNode(new TableModel(table), card, handCards, "multi"));
+            options.add(new GameTreeNode(new TableModel(table), card, handCards, "trail"));
         }
 
-        // generate best option from each move.
+        // Generate best option from each move.
         for(GameTreeNode node : options){
             results.add(generateGameStates(node.getTable(), node.getHand(), node.getCard(), node));
         }
@@ -272,12 +277,22 @@ public class ComputerPlayerModel extends BasePlayerModel {
         GameTreeNode bestNode = null;
         int bestWeight = -1;
         for(GameTreeNode node : options){
-            if(node.getWeight() > bestWeight){
-                bestWeight = node.getWeight();
+            int weight = node.getWeight();
+            if(weight > bestWeight){
+                bestWeight = weight;
                 bestNode =  node;
             }
         }
 
+        if(bestWeight <= -1){
+            for(GameTreeNode node : options){
+                if(node.getAction() == "trail"){
+                    bestNode = node;
+                }
+            }
+        }
+
+        // return the best node,
         return bestNode;
     }
 
@@ -321,20 +336,13 @@ public class ComputerPlayerModel extends BasePlayerModel {
         Vector<CardModel> newHand = (Vector<CardModel>) hand.clone();
         CardModel newHandCard = newHand.get(0);
         newHand.remove(newHandCard);
+
         // recurse with the best option.
-        generateGameStates(new TableModel(bestNode.getTable()),newHand, newHandCard, bestNode);
+        generateGameStates(bestNode.getTable(), newHand, newHandCard, bestNode);
 
         return bestNode;
     }
 
-    /**
-     *
-     * @param root
-     * @param newNode
-     */
-    private void linkNodes(GameTreeNode root, GameTreeNode newNode){
-
-    }
 
     /**
      * Checks if making a single build is possible, and stores all possible build mappings

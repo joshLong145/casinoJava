@@ -4,7 +4,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3A015C"
+    android:background="#b76e79"
     tools:context=".activites.GameActivity">
 
     <FrameLayout
@@ -13,7 +13,7 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:background="#35012C"
+        android:background="#e7b3b3"
         android:visibility="visible">
 
         <TextView
@@ -22,7 +22,7 @@
             android:layout_marginTop="10dp"
             android:textAlignment="center"
             android:text="@string/move_string"
-            android:textColor="#ffffff"/>
+            android:textColor="#f9f1f1"/>
     </FrameLayout>
 
 
@@ -33,7 +33,7 @@
         android:layout_below="@+id/save_game"
         android:layout_marginTop="50dp"
         android:layout_alignParentEnd="true"
-        android:background="#35012C"
+        android:background="#e7b3b3"
         android:visibility="visible">
 
         <TextView
@@ -42,7 +42,7 @@
             android:layout_marginTop="10dp"
             android:textAlignment="center"
             android:text="@string/deck_string"
-            android:textColor="#ffffff"/>
+            android:textColor="#ffff"/>
     </FrameLayout>
 
     <FrameLayout
@@ -52,7 +52,7 @@
         android:layout_below="@+id/ask_help"
         android:layout_marginTop="50dp"
         android:layout_alignParentEnd="true"
-        android:background="#35012C"
+        android:background="#e7b3b3"
         android:visibility="visible">
 
         <TextView
@@ -71,7 +71,7 @@
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
         android:padding="10dp"
-        android:background="#35012C"
+        android:background="#e7b3b3"
         android:visibility="visible">
 
         <TextView
@@ -90,7 +90,7 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:background="#35012C"
+        android:background="#e7b3b3"
         android:visibility="visible"
         android:elevation="2dp">
 
@@ -111,7 +111,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="320dp"
         android:layout_marginLeft="280dp"
-        android:background="#35012C"
+        android:background="#e7b3b3"
         android:visibility="visible"
         android:elevation="1dp">
 
@@ -132,7 +132,7 @@
         android:layout_width="75dp"
         android:layout_height="50dp"
         android:layout_marginLeft="280dp"
-        android:background="#35012C"
+        android:background="#e7b3b3"
         android:visibility="visible"
         android:elevation="2dp">
 
@@ -160,7 +160,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="320dp"
-        android:layout_marginLeft="490dp"
+        android:layout_marginLeft="520dp"
         android:textColor="#ffffff"/>
 
 

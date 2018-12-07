@@ -4,13 +4,12 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="#3A015C"
     android:padding="10dp" >
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/pile"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="200dp"
         android:scrollbars="horizontal"/>
 
 </LinearLayout>

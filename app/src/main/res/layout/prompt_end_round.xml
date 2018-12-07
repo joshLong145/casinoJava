@@ -4,7 +4,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="#3A015C"
     android:padding="10dp" >
 
     <TextView
@@ -12,7 +11,6 @@
         android:layout_height="30dp"
         android:scaleType="centerCrop"
         android:textColor="#ffff"
-        android:background="#35012C"
         android:text="@string/round_header"/>
 
     <TextView
@@ -20,15 +18,13 @@
         android:layout_width="match_parent"
         android:layout_height="75dp"
         android:scaleType="centerCrop"
-        android:textColor="#ffff"
-        android:background="#35012C"/>
+        android:textColor="#ffff"/>
 
     <TextView
         android:id="@+id/human_round_info"
         android:layout_width="match_parent"
         android:layout_height="75dp"
         android:scaleType="centerCrop"
-        android:textColor="#ffff"
-        android:background="#35012C"/>
+        android:textColor="#ffff"/>
 
 </LinearLayout>

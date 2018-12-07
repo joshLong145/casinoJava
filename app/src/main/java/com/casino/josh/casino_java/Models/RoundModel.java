@@ -72,8 +72,10 @@ public class RoundModel {
         if(mPlayers.get(mCurrentPlayerIndex).makeMove(mTable, option)) {
             if(mCurrentTurn == CurrentTurn.Human){
                 mCurrentTurn = CurrentTurn.Computer;
+                mCurrentPlayerIndex = 1;
             }else{
                 mCurrentTurn = CurrentTurn.Human;
+                mCurrentPlayerIndex = 0;
             }
 
             // check if new hands need to be dealt to the player.

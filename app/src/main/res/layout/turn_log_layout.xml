@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="75dp"
+    android:layout_height="125dp"
     android:layout_centerHorizontal="true">
 
 
@@ -12,8 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="75dp"
         android:scaleType="centerCrop"
-        android:textColor="#ffff"
-        android:background="#35012C"/>
+        android:textColor="#ffff"/>
 
 
 </android.support.v7.widget.CardView>

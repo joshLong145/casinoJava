@@ -2,6 +2,7 @@ package com.casino.josh.casino_java.activites;
 
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -270,6 +271,16 @@ public class GameActivity extends FragmentActivity  {
 
         mTournament.getHumanPlayer().setPoints(mTournament.getHumanPlayer().getPoints() + scores.first);
         mTournament.getComputerPlayer().setPoints(mTournament.getComputerPlayer().getPoints() + scores.second);
+
+        alertDialogBuilder.setCancelable(true);
+        alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(mTournament.getHumanPlayer().getPoints() >= 21 || mTournament.getComputerPlayer().getPoints() >= 21){
+                    finish(); // close the activity and revert back to ladning page if the scores are matching.
+                }
+            }
+        });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();

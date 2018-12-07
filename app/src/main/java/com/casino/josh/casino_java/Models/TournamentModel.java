@@ -111,7 +111,6 @@ public class TournamentModel {
 
         // If the round is over, show data regarding the round and make a new one.
         if(mRounds.get(mCurrentRound).roundOver()){
-            makeNewRound();
             mRoundOver.setBool(true); // set the roundOver flag to true which will trigger an event.
         }
 

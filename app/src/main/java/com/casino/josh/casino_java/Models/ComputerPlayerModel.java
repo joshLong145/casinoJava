@@ -71,7 +71,12 @@ public class ComputerPlayerModel extends BasePlayerModel {
             _pile.add(card);
             _hand.remove(card);
         }else if(node.getAction().equals("single")){
-            table.createBuild(node.getBuildMap().get(node.getHandPair()), node.getHandPair().second, _hand, mName);
+            Vector<CardModel> cardSet = node.getBuildMap().get(node.getHandPair());
+            CardModel selectedCard = node.getHandPair().second;
+            if(cardSet.contains(selectedCard))
+                cardSet.remove(selectedCard);
+
+            table.createBuild(cardSet, selectedCard, _hand, mName);
             _hand.remove(node.getCard());
 
             TurnLogModel.addBuildMoveToLog(node.getBuildMap().get(node.getHandPair()),

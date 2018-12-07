@@ -60,7 +60,6 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
             alertDialogBuilder
                     .setCancelable(true)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        // TODO: refactor into modular switch statement to avoid code redundancy.
                         /** Executes when positive button on alert dialog is pressed.
                          * @param dialog DialogInterface
                          * @param which int
@@ -143,7 +142,7 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                                 // If the players turn was valid, change turns and notify adapters.
                                 if(turnSuccess){
                                     GameActivity.updateView();
-                                    GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
+                                    //GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(1);
                                     GameActivity.mCurrentTurn.setText("Current turn: " +
                                             GameActivity.mTournament.getCurrentRound().getTurn());
                                 }
@@ -182,7 +181,7 @@ public class MakeMoveButtonClickListener implements View.OnClickListener {
                 mTable.notifyDataSetChanged();
                 mBuilds.notifyDataSetChanged();
 
-                GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(0);
+                //GameActivity.mTournament.getCurrentRound().setCurrentPlayerIndex(0);
                 GameActivity.mCurrentTurn.setText("Current turn: " + GameActivity.mTournament.getCurrentRound().getTurn());
         }
     }

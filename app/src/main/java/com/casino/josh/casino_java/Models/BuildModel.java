@@ -1,5 +1,7 @@
 package com.casino.josh.casino_java.Models;
 
+import android.os.Build;
+
 import java.util.Vector;
 
 /**
@@ -17,6 +19,21 @@ public class BuildModel {
      */
     public BuildModel(){
         mCards = new Vector<>();
+    }
+
+    /**
+     * Copy constructor.
+     * @param build
+     */
+    public BuildModel(BuildModel build){
+        mCards = new Vector<>();
+        for(Vector<CardModel> sets : build.getBuild()) {
+            mCards.add((Vector<CardModel>) sets.clone());
+        }
+
+        mOwner = build.getBuildOwner();
+
+        mCaptureValue = build.getCaptureValue();
     }
 
     /**

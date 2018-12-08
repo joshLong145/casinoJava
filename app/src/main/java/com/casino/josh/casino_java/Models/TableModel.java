@@ -52,7 +52,10 @@ public class TableModel {
     public TableModel(TableModel table){
         this._looseCards = (Vector<CardModel>) table.getLooseCards().clone();
         this._deck = table.getDeck();
-        this.mBuilds = (Vector<BuildModel>) table.getBuilds().clone();
+
+        mBuilds = new Vector<>();
+        for(BuildModel build : table.getBuilds())
+            mBuilds.add(new BuildModel(build));
     }
 
     /**
@@ -432,11 +435,19 @@ public class TableModel {
 
            }
 
-           if(sum % captureValue == 0)
+           if(sum == captureValue)
                capturableSets.add(cardSet);
        }
         // Sort data based on length of the array.
-       capturableSets.sort((o1, o2) -> (Integer.valueOf(o1.size()).compareTo(o2.size())));
+       capturableSets.sort((o1, o2) -> {
+           if(o1.size() > o2.size()){
+               return 1;
+           }else if(o1.size() < o2.size()){
+               return -1;
+           }
+
+           return 0;
+       });
 
         return capturableSets;
     }

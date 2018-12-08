@@ -2,6 +2,7 @@ package com.casino.josh.casino_java.activites;
 
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -239,31 +240,39 @@ public class GameActivity extends FragmentActivity  {
         View promptsView = li.inflate(R.layout.prompt_end_round, null);
         TextView computerDataContainer = promptsView.findViewById(R.id.computer_round_info);
         TextView humanDataContainer = promptsView.findViewById(R.id.human_round_info);
-
+        TextView prompting = promptsView.findViewById(R.id.prompt);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(promptsView);
 
         Pair<Integer, Integer> scores = mTournament.calculateScores();
+        int finalPlayerScore = mTournament.getHumanPlayer().getPoints() + scores.first;
+        int finalComputerScore = mTournament.getComputerPlayer().getPoints() + scores.second;
 
-        StringBuilder playerInfo = new StringBuilder("Pile:");
-        for(CardModel card : mTournament.getHumanPlayer().getPile()){
+
+
+        StringBuilder playerInfo = new StringBuilder("Human \n Pile:");
+        for (CardModel card : mTournament.getHumanPlayer().getPile()) {
             playerInfo.append(" ").append(card.toStringSave());
         }
 
         playerInfo.append("\n Score: ");
-        playerInfo.append(scores.first);
 
+        StringBuilder computerInfo = new StringBuilder("Computer \n Pile: ");
+        computerInfo.append("\n Score: ");
 
-        StringBuilder computerInfo = new StringBuilder("Pile: ");
-
-        for(CardModel card : mTournament.getComputerPlayer().getPile()){
+        for (CardModel card : mTournament.getComputerPlayer().getPile()) {
             computerInfo.append(" ").append(card.toStringSave());
         }
 
-        computerInfo.append("\n");
-        computerInfo.append("Score: ");
-        computerInfo.append(scores.second);
+        if(finalPlayerScore >= 21 || finalComputerScore >= 21) {
+            prompting.setText("Tournament Results.");
+            playerInfo.append(finalPlayerScore);
+            computerInfo.append(finalComputerScore);
+        }else{
+            computerInfo.append(scores.second);
+            playerInfo.append(scores.first);
+        }
 
         computerDataContainer.setText(computerInfo.toString());
         humanDataContainer.setText(playerInfo.toString());
@@ -271,14 +280,23 @@ public class GameActivity extends FragmentActivity  {
         mTournament.getHumanPlayer().setPoints(mTournament.getHumanPlayer().getPoints() + scores.first);
         mTournament.getComputerPlayer().setPoints(mTournament.getComputerPlayer().getPoints() + scores.second);
 
+        alertDialogBuilder.setPositiveButton("Continue", (dialog, which) -> {
+            if(mTournament.getHumanPlayer().getPoints() >= 21 || mTournament.getComputerPlayer().getPoints() >= 21){
+                finish(); // close the activity and revert back to ladning page if the scores are matching.
+            }else{
+                mTournament.makeNewRound();
+
+                // update text views relating to the round, and scores.
+                // Only needs to update if the tournament is not over.
+                mRoundNumber.setText("Round number: " + Integer.toString(mTournament.getRoundNumber()));
+                mComputerScore.setText("Computer Score: " + mTournament.getComputerPlayer().getPoints());
+                mHumanScore.setText("Human Score: " + mTournament.getHumanPlayer().getPoints());
+            }
+        });
+
         AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
-
-        // update text views relating to the round, and scores.
-        mRoundNumber.setText("Round number: " + Integer.toString(mTournament.getRoundNumber()));
-        mComputerScore.setText("Computer Score: " + mTournament.getComputerPlayer().getPoints());
-        mHumanScore.setText("Human Score: " + mTournament.getHumanPlayer().getPoints());
-
     }
 
 

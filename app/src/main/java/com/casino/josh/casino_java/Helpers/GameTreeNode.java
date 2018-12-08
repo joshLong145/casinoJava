@@ -6,6 +6,7 @@ import com.casino.josh.casino_java.Models.BuildModel;
 import com.casino.josh.casino_java.Models.CardModel;
 import com.casino.josh.casino_java.Models.ComputerPlayerModel;
 import com.casino.josh.casino_java.Models.TableModel;
+import com.casino.josh.casino_java.Models.TurnLogModel;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class GameTreeNode {
     private Vector<CardModel> hand;
     private Vector<GameTreeNode> nodes;
     private CardModel card;
-    private int weight = -1;
+    private int weight;
 
 
     Map<Pair<CardModel, CardModel>, Vector<CardModel>> buildMap;
@@ -46,22 +47,26 @@ public class GameTreeNode {
         multiBuildMap = new LinkedHashMap<>();
 
         this.nodes = new Vector<>();
+        this.weight = -1;
 
         assessOptions();
     }
 
+    /**
+     * check the action given to the node and perform the corresponding heuristic assessment.
+     */
     private void assessOptions(){
 
-        if(Objects.equals(action, "capture")) {
+        if(action.equals("capture")) {
            checkCapture();
 
-        }else if(Objects.equals(action, "single")) {
+        }else if(action.equals("single")) {
             checkSingleBuilds();
 
-        }else if(Objects.equals(action, "multi")) {
+        }else if(action.equals("multi")) {
             checkMultiBuilds();
 
-        }else if(Objects.equals(action, "trail")) {
+        }else if(action.equals( "trail")) {
             trailCard();
         }
     }
@@ -73,17 +78,33 @@ public class GameTreeNode {
     private void checkCapture(){
         if(!table.isCaptureCard(hand, card, "Computer")) {
             Vector<Vector<CardModel>> sets = table.setCapture(card.getValue());
-            sets.add(table.captureBuilds(card));
 
-            if (sets.size() <= 0) {
+            weight += table.checkBuilds(card);
+
+            if (sets.size() > 0) {
                 int size = sets.get(0).size();
-                setMap.put(card.toStringSave(), sets.get(0));
-                weight = size;
-            }else{
-                weight = -1;
-            }
-        }
+                if(size > 0) {
+                    setMap.put(card.toStringSave(), sets.get(0));
+                    weight += size;
 
+                    Vector<CardModel> capturedCards = setMap.get(card.toStringSave());
+                    Vector<CardModel> capturedBuildCards = table.captureBuilds(card);
+
+                    // If capture cards are not null ( meaning more than a build was captured).
+                    // remove it from the table.
+                    if (capturedCards != null) {
+                        table.getLooseCards().removeAll(capturedCards);
+                    }
+
+                    if (capturedBuildCards != null) {
+                        table.removeBuilds(card);
+                    }
+                }
+            }
+        }else{
+            weight += table.checkBuilds(card);
+        }
+        System.out.println("Capture: " + Integer.toString(weight));
         handPair = new Pair<>(card, null);
     }
 
@@ -92,7 +113,7 @@ public class GameTreeNode {
      */
     private void checkMultiBuilds(){
         Vector<Pair<CardModel, CardModel>> cardCombos = new Vector<>();
-        if(hand.size() > 1) {
+        if(hand.size() >= 1) {
             for (CardModel selectedCard : hand) {
                 if (selectedCard != card && selectedCard.getValue() <= card.getValue()) {
                     if (!table.checkLooseCards(selectedCard)) {
@@ -133,6 +154,26 @@ public class GameTreeNode {
                         bestBuildWeight += card.getValue();
                     weight = bestBuildWeight;
                 }
+                weight += card.getValue();
+            }
+
+            if(weight > -1){
+                BuildModel selectedBuild;
+                selectedBuild = table.getBuilds().get(multiBuildMap.get(handPair).first);
+                Vector<CardModel> buildCards = multiBuildMap.get(handPair).second;
+                CardModel selectedCard = handPair.first;
+
+                boolean doesContain = false;
+                for(Vector<CardModel> buildSet : selectedBuild.getBuild()){
+                    if(buildSet.contains(selectedCard))
+                        doesContain = true;
+                }
+
+                if(!doesContain){
+                    table.createMultiBuild(selectedBuild, buildCards, card, hand);
+                    //if(hand.size() > 0)
+                        //hand.remove(card);
+                }
             }
         }
     }
@@ -142,7 +183,7 @@ public class GameTreeNode {
      */
     private void checkSingleBuilds() {
         Vector<Pair<CardModel, CardModel>> cardCombos = new Vector<>();
-        if (hand.size() > 1) {
+        if (hand.size() >= 1) {
             for (CardModel captureCard : hand) {
                 if (card != captureCard && card.getValue() < captureCard.getValue()) {
                     if (!table.isCaptureCard(hand, card, "Computer")) {
@@ -172,6 +213,11 @@ public class GameTreeNode {
                 bestBuildWeight++;
 
             weight = bestBuildWeight;
+
+            if(weight > -1)
+                table.createBuild(buildMap.get(handPair), handPair.second, hand, "Computer");
+
+
         }
     }
 
@@ -180,6 +226,26 @@ public class GameTreeNode {
         weight = -1;
         handPair = new Pair<>(card, null);
     }
+
+
+    /**
+     *
+     * @return
+     */
+    public final Map<String, Vector<CardModel>> getSetMap(){return setMap; }
+
+    /**
+     *
+     * @return
+     */
+    public Map<Pair<CardModel, CardModel>, Vector<CardModel>> getBuildMap(){ return buildMap; }
+
+    /**
+     *
+     * @return
+     */
+    public Map<Pair<CardModel, CardModel>, Pair<Integer, Vector<CardModel>>> getMultiMap(){ return multiBuildMap; }
+
 
     /**
      *

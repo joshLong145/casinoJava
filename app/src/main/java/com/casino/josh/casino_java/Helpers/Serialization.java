@@ -71,7 +71,9 @@ public class Serialization {
 
             //
             int humanScoreIndex = mSaveData.indexOf("Score:");
-            mHumanScore = Integer.parseInt("" + mSaveData.charAt(humanScoreIndex + 7));
+            String humanScoreString = mSaveData.substring(humanScoreIndex+ 7, mSaveData.indexOf("Hand:"));
+            humanScoreString.replace(" ", "");
+            mHumanScore = Integer.parseInt(humanScoreString);
             int humanHandIndex = mSaveData.indexOf("Hand:");
             String humanHandString = mSaveData.substring(humanHandIndex + 5, mSaveData.indexOf("Pile:"));
             mHumanHand = createCards(tokenizeInput(humanHandString));
@@ -82,12 +84,15 @@ public class Serialization {
             mPlayers.add(createHumanPlayer(mHumanScore, mHumanHand, mHumanPile));
 
             int computerScoreIndex = mSaveData.lastIndexOf("Score:");
-            mComputerScore = Integer.parseInt("" + mSaveData.charAt(computerScoreIndex + 7));
+            String computerScoreString = mSaveData.substring(computerScoreIndex + 7, mSaveData.lastIndexOf("Hand:"));
+            computerScoreString.replace(" ", "");
+            mComputerScore = Integer.parseInt(computerScoreString);
             int computerHandIndex = mSaveData.lastIndexOf("Hand:");
             String computerHandString = mSaveData.substring(computerHandIndex + 5, mSaveData.lastIndexOf("Pile:"));
             mComputerHand = createCards(tokenizeInput(computerHandString));
             int computerPileIndex = mSaveData.lastIndexOf("Pile:");
             String computerPileString = mSaveData.substring(computerPileIndex + 5, mSaveData.indexOf("Table:"));
+            mComputerPile = createCards(tokenizeInput(computerPileString));
 
             mPlayers.add(createComputerPlayer(mComputerScore, mComputerHand, mComputerPile));
 

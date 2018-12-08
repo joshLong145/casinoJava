@@ -60,6 +60,7 @@ public class ComputerPlayerModel extends BasePlayerModel {
             if (capturedCards != null) {
                 table.getLooseCards().removeAll(capturedCards);
                 TurnLogModel.addCaptureMoveToLog(capturedCards, card, mName);
+                _pile.addAll(capturedCards);
             }
 
             if (capturedBuildCards != null) {

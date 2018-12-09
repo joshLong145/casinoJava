@@ -31,7 +31,9 @@ public class HandOnClickListener implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         GameActivity.mChosenCard = mCard;
-        Toast cardSelectedPrompt =  Toast.makeText(mContext, "Selected card: " + mCard.toString(), Toast.LENGTH_SHORT);
+        Toast cardSelectedPrompt =  Toast.makeText(mContext,
+                                              "Selected card: " + mCard.toStringSave(),
+                                                   Toast.LENGTH_SHORT);
         cardSelectedPrompt.show();
 
     }

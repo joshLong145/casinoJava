@@ -69,12 +69,7 @@ public class BuildAdapter extends RecyclerView.Adapter<BuildAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         final String data = mDataSet.get(position).toString() + "\n" + mDataSet.get(position).getBuildOwner();
         holder.mButton.setText(data);
-
-        if(mDataSet.get(position).getBuildOwner() == "Human")
-            holder.mButton.setBackgroundColor(Color.CYAN);
-        else
-            holder.mButton.setBackgroundColor(Color.RED);
-
+        //holder.mButton.setBackgroundColor(Color.TRANSPARENT);
         holder.mButton.setOnClickListener(new BuildOnClickListener(mDataSet.get(position), holder.itemView.getContext()));
     }
 

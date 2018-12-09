@@ -130,6 +130,10 @@ public class TournamentModel {
         mCurrentRound++;
         mRoundNumber++;
 
+        // clear both players pile before the new round begins.
+        getComputerPlayer().getPile().clear();
+        getHumanPlayer().getPile().clear();
+
         GameActivity.updateTableAdapterData();
         GameActivity.updateBuildAdapterData();
     }
@@ -143,7 +147,7 @@ public class TournamentModel {
      *
      * @return
      */
-    public final Pair<Integer, Integer> calculateScores(){
+    public final Pair<Pair<Integer, Integer>, Pair<Integer, Integer>> calculateScores(){
         int humanScore = 0;
         int computerScore = 0;
 
@@ -185,7 +189,8 @@ public class TournamentModel {
         else if(humanSpades > computerSpades)
             computerScore += 1;
 
-        return new Pair<>(humanScore, computerScore);
+        return new Pair<>(new Pair<>(humanScore, computerScore),
+                          new Pair<>(humanSpades, computerSpades));
     }
 
     /**

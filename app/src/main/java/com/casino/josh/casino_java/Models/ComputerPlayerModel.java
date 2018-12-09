@@ -264,7 +264,6 @@ public class ComputerPlayerModel extends BasePlayerModel {
         Vector<GameTreeNode> options = new Vector<>();
         Vector<GameTreeNode> results = new Vector<>();
 
-
         for(CardModel card : hand){
             Vector<CardModel> handCards = (Vector<CardModel>) hand.clone();
             handCards.remove(card);
@@ -290,10 +289,12 @@ public class ComputerPlayerModel extends BasePlayerModel {
             }
         }
 
+        // if there is no other option trail the card with the highest value in the hand.
         if(bestWeight <= -1){
             for(GameTreeNode node : options){
-                if(node.getAction() == "trail"){
+                if(node.getAction() == "trail" && node.getCard().getValue() > bestWeight){
                     bestNode = node;
+                    bestWeight = bestNode.getCard().getValue();
                 }
             }
         }

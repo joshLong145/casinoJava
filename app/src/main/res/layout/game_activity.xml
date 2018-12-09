@@ -176,7 +176,7 @@
         android:id="@+id/round_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="490dp"
+        android:layout_marginLeft="520dp"
         android:textColor="#ffffff"/>
 
     <android.support.v7.widget.RecyclerView

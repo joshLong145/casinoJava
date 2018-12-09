@@ -84,7 +84,9 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
         );
 
         holder.mimageBttn.setImageResource(res);
-        holder.mimageBttn.setOnClickListener(new LooseCardOnClickListener(mDataSet.get(position)));
+        holder.mimageBttn.setOnClickListener(new LooseCardOnClickListener(mDataSet.get(position),
+                                                                          holder.mimageBttn,
+                                                                          holder.itemView.getContext()));
     }
 
     /**

@@ -245,9 +245,9 @@ public class GameActivity extends FragmentActivity  {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(promptsView);
 
-        Pair<Integer, Integer> scores = mTournament.calculateScores();
-        int finalPlayerScore = mTournament.getHumanPlayer().getPoints() + scores.first;
-        int finalComputerScore = mTournament.getComputerPlayer().getPoints() + scores.second;
+        Pair<Pair<Integer, Integer>, Pair<Integer, Integer>> scores = mTournament.calculateScores();
+        int finalPlayerScore = mTournament.getHumanPlayer().getPoints() + scores.first.first;
+        int finalComputerScore = mTournament.getComputerPlayer().getPoints() + scores.first.second;
 
 
 
@@ -259,26 +259,32 @@ public class GameActivity extends FragmentActivity  {
         playerInfo.append("\n Score: ");
 
         StringBuilder computerInfo = new StringBuilder("Computer \n Pile: ");
-        computerInfo.append("\n Score: ");
 
         for (CardModel card : mTournament.getComputerPlayer().getPile()) {
             computerInfo.append(" ").append(card.toStringSave());
         }
 
+        computerInfo.append("\n Score: ");
+
+        // if the tournament is over, then we need to modify the prompt.
         if(finalPlayerScore >= 21 || finalComputerScore >= 21) {
             prompting.setText("Tournament Results.");
             playerInfo.append(finalPlayerScore);
             computerInfo.append(finalComputerScore);
+
         }else{
-            computerInfo.append(scores.second);
-            playerInfo.append(scores.first);
+            computerInfo.append(scores.first.first);
+            playerInfo.append(scores.first.second);
         }
+
+        playerInfo.append("\n Spades captured: " + Integer.toString(scores.second.first));
+        computerInfo.append("\n Spades captured: " + Integer.toString(scores.second.second));
 
         computerDataContainer.setText(computerInfo.toString());
         humanDataContainer.setText(playerInfo.toString());
 
-        mTournament.getHumanPlayer().setPoints(mTournament.getHumanPlayer().getPoints() + scores.first);
-        mTournament.getComputerPlayer().setPoints(mTournament.getComputerPlayer().getPoints() + scores.second);
+        mTournament.getHumanPlayer().setPoints(finalPlayerScore);
+        mTournament.getComputerPlayer().setPoints(finalComputerScore);
 
         alertDialogBuilder.setPositiveButton("Continue", (dialog, which) -> {
             if(mTournament.getHumanPlayer().getPoints() >= 21 || mTournament.getComputerPlayer().getPoints() >= 21){
@@ -291,11 +297,13 @@ public class GameActivity extends FragmentActivity  {
                 mRoundNumber.setText("Round number: " + Integer.toString(mTournament.getRoundNumber()));
                 mComputerScore.setText("Computer Score: " + mTournament.getComputerPlayer().getPoints());
                 mHumanScore.setText("Human Score: " + mTournament.getHumanPlayer().getPoints());
+                mCurrentTurn.setText("Current turn: " + mTournament.getCurrentRound().getTurn());
             }
         });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.setCanceledOnTouchOutside(false);
+
         alertDialog.show();
     }
 
@@ -333,7 +341,6 @@ public class GameActivity extends FragmentActivity  {
 
     /**
      *
-     * @param looseCards
      */
     public static void updateTableAdapterData(){
         mTableModelView.getAdapter().notifyDataSetChanged();
@@ -341,7 +348,6 @@ public class GameActivity extends FragmentActivity  {
 
     /**
      *
-     * @param builds
      */
     public static void updateBuildAdapterData(){
         mBuildModelView.getAdapter().notifyDataSetChanged();

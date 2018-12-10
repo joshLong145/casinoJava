@@ -18,14 +18,14 @@
     <TextView
         android:id="@+id/computer_round_info"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="100dp"
         android:scaleType="centerCrop"
         android:textColor="#000"/>
 
     <TextView
         android:id="@+id/human_round_info"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="100dp"
         android:scaleType="centerCrop"
         android:textColor="#000"/>
 

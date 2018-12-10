@@ -60,23 +60,27 @@ public class TurnLogModel {
     /**
      *
      * @param build
-     * @param captureCard
      * @param selectedCard
      * @param playerName
      */
-    public static void addBuildMoveToLog(final Vector<CardModel> build, final CardModel captureCard,
-                                         final CardModel selectedCard, final String playerName){
+    public static void addBuildMoveToLog(final Vector<CardModel> build, final CardModel selectedCard,
+                                                                        final String playerName){
 
         StringBuilder turnData = new StringBuilder(playerName + "create a build with the cards cards:");
+        int captureValue = 0;
         for(CardModel card : build){
             turnData.append(" ")
                     .append(card.toStringSave());
+            captureValue += card.getValue();
         }
+
+        captureValue += selectedCard.getValue();
 
         turnData.append(" ")
                 .append(selectedCard.toStringSave())
-                .append(" Capturing with the card: ")
-                .append(captureCard.toStringSave());
+                .append(". With the capture value: ")
+                .append(captureValue);
+
 
         mLog.add(turnData.toString());
     }

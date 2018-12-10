@@ -37,19 +37,33 @@ public class LooseCardOnClickListener implements View.OnClickListener {
         if(GameActivity.mLooseCards == null)
             GameActivity.mLooseCards = new Vector<>();
 
-        if(!GameActivity.mLooseCards.contains(mCard))
+
+        if(!GameActivity.mLooseCards.contains(mCard)) {
             GameActivity.mLooseCards.add(mCard);
 
-        StringBuilder selectedCardPrompt = new StringBuilder(mCard.toStringSave() + " Selected, Current selected cards: ");
-        for(CardModel card : GameActivity.mLooseCards)
-            selectedCardPrompt.append(" ").append(card.toStringSave());
+            StringBuilder selectedCardPrompt = new StringBuilder(mCard.toStringSave() + " selected, Current selected cards: ");
+            for (CardModel card : GameActivity.mLooseCards)
+                selectedCardPrompt.append(" ").append(card.toStringSave());
 
 
-        Toast cardSelectedPrompt =  Toast.makeText(mContext,
-                                                   selectedCardPrompt.toString(),
-                                                   Toast.LENGTH_SHORT);
+            Toast cardSelectedPrompt = Toast.makeText(mContext,
+                    selectedCardPrompt.toString(),
+                    Toast.LENGTH_SHORT);
 
-        cardSelectedPrompt.show();
+            cardSelectedPrompt.show();
+        }else {
+            GameActivity.mLooseCards.remove(mCard);
 
+            StringBuilder selectedCardPrompt = new StringBuilder(mCard.toStringSave() + " removed, Current selected cards: ");
+            for (CardModel card : GameActivity.mLooseCards)
+                selectedCardPrompt.append(" ").append(card.toStringSave());
+
+
+            Toast cardSelectedPrompt = Toast.makeText(mContext,
+                    selectedCardPrompt.toString(),
+                    Toast.LENGTH_SHORT);
+
+            cardSelectedPrompt.show();
+        }
     }
 }

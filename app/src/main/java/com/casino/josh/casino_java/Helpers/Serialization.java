@@ -72,7 +72,7 @@ public class Serialization {
             //
             int humanScoreIndex = mSaveData.indexOf("Score:");
             String humanScoreString = mSaveData.substring(humanScoreIndex+ 7, mSaveData.indexOf("Hand:"));
-            humanScoreString.replace(" ", "");
+            humanScoreString.replaceAll("\\s+", "");
             mHumanScore = Integer.parseInt(humanScoreString);
             int humanHandIndex = mSaveData.indexOf("Hand:");
             String humanHandString = mSaveData.substring(humanHandIndex + 5, mSaveData.indexOf("Pile:"));
@@ -85,7 +85,7 @@ public class Serialization {
 
             int computerScoreIndex = mSaveData.lastIndexOf("Score:");
             String computerScoreString = mSaveData.substring(computerScoreIndex + 7, mSaveData.lastIndexOf("Hand:"));
-            computerScoreString.replace(" ", "");
+            computerScoreString.replaceAll("\\s+", "");
             mComputerScore = Integer.parseInt(computerScoreString);
             int computerHandIndex = mSaveData.lastIndexOf("Hand:");
             String computerHandString = mSaveData.substring(computerHandIndex + 5, mSaveData.lastIndexOf("Pile:"));
@@ -199,7 +199,29 @@ public class Serialization {
         for(int i = 0; i < tokenData.length; i++){
             if(!Objects.equals(tokenData[i], "")) {
                 char suit = tokenData[i].charAt(0);
-                int value = Integer.parseInt(tokenData[i].substring(1));
+                suit = Character.toLowerCase(suit);
+                String rawValue = tokenData[i].substring(1);
+                int value = 0;
+
+                if(rawValue.equals("Q")){
+                    value = 12;
+
+                }else if(rawValue.equals("K")){
+                    value = 13;
+
+                } else if(rawValue.equals("J")){
+                    value = 11;
+
+                }else if(rawValue.equals("A")){
+                    value = 1;
+
+                } else if(rawValue.equals("X")){
+                    value = 10;
+
+                } else{
+                    value = Integer.parseInt(tokenData[i].substring(1));
+                }
+
                 if (value != 1)
                     cards.add(new CardModel(suit, value, false));
                 else

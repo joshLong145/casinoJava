@@ -43,11 +43,14 @@ public class HumanPlayerModel extends BasePlayerModel {
     @Override
     public boolean makeMove(TableModel table, TurnOptions option) {
         if(option == TurnOptions.TRIAL){
+            if(GameActivity.mLooseCards.size() > 0)
+                return false;
+
             if(!GameActivity.mTournament.getCurrentRound().getTable().isCaptureCard(getHand(), GameActivity.mChosenCard, mName)) {
                 if (table.canTrailCard(GameActivity.mChosenCard, mName)) {
                     getHand().remove(GameActivity.mChosenCard);
                     table.getLooseCards().add(GameActivity.mChosenCard);
-                    TurnLogModel.AddToLog("Human trailed the card: " + GameActivity.mChosenCard.toString());
+                    TurnLogModel.addTrailMoveToLog(GameActivity.mChosenCard, mName);
                     return true;
                 } else {
                     return false;
@@ -66,13 +69,7 @@ public class HumanPlayerModel extends BasePlayerModel {
                 getPile().addAll(capturedLooseCards);
                 getHand().remove(GameActivity.mChosenCard);
 
-                String turnLog = "Human captured with the card: " + GameActivity.mChosenCard.toString()
-                        + "Capturing cards: ";
-                for(CardModel card : capturedLooseCards){
-                    turnLog += " " + card.toString();
-                }
-
-                TurnLogModel.AddToLog(turnLog);
+                TurnLogModel.addCaptureMoveToLog(GameActivity.mLooseCards, GameActivity.mChosenCard, mName);
 
                 if(capturedBuildCards.size() > 0){
                     getPile().addAll(capturedBuildCards);
@@ -95,6 +92,8 @@ public class HumanPlayerModel extends BasePlayerModel {
                 String turnLog = "Human created a build with the card: " + GameActivity.mChosenCard.toString();
                 TurnLogModel.AddToLog(turnLog);
 
+                TurnLogModel.addBuildMoveToLog(GameActivity.mLooseCards, GameActivity.mChosenCard, mName);
+
                 return true;
             }
         } else if(option == TurnOptions.MULTIBUILD){
@@ -109,12 +108,14 @@ public class HumanPlayerModel extends BasePlayerModel {
                 return true;
             }
         } else if(option == TurnOptions.EXTEND){
-            if(table.increaseBuild(GameActivity.mBuilds.get(0), GameActivity.mChosenCard, getHand(), mName)){
-                getHand().remove(GameActivity.mChosenCard);
+            if(GameActivity.mBuilds.size() > 0) {
+                if (table.increaseBuild(GameActivity.mBuilds.get(0), GameActivity.mChosenCard, getHand(), mName)) {
+                    getHand().remove(GameActivity.mChosenCard);
 
-                String turnLog = "Human Increased build with: " + GameActivity.mChosenCard.toString();
-                TurnLogModel.AddToLog(turnLog);
-                return true;
+                    String turnLog = "Human Increased build with: " + GameActivity.mChosenCard.toStringSave();
+                    TurnLogModel.AddToLog(turnLog);
+                    return true;
+                }
             }
         }
 

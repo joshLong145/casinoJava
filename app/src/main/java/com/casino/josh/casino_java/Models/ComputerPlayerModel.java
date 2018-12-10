@@ -81,8 +81,7 @@ public class ComputerPlayerModel extends BasePlayerModel {
             _hand.remove(node.getCard());
 
             TurnLogModel.addBuildMoveToLog(node.getBuildMap().get(node.getHandPair()),
-                                            node.getHandPair().first,
-                                            node.getHandPair().second, mName);
+                                           node.getHandPair().first, mName);
 
         } else if(node.getAction().equals("multi")){
             BuildModel selectedBuild;
@@ -97,9 +96,9 @@ public class ComputerPlayerModel extends BasePlayerModel {
             _hand.remove(selectedCard);
 
         }else if(node.getAction().equals("trail")){
-            table.getLooseCards().add(node.getHandPair().first);
+            table.getLooseCards().add(_hand.get(0));
             TurnLogModel.addTrailMoveToLog(getHand().get(0), mName);
-            getHand().remove(node.getHandPair().first);
+            getHand().remove(0);
 
         }else {
             // containers for mapping card data from the hand to correpsonding card data from the table.
@@ -145,7 +144,7 @@ public class ComputerPlayerModel extends BasePlayerModel {
                 _hand.remove(singleBuildWeight.first.second);
 
                 TurnLogModel.addBuildMoveToLog(buildMap.get(singleBuildWeight.first),
-                        singleBuildWeight.first.first, singleBuildWeight.first.second, mName);
+                        singleBuildWeight.first.first, mName);
 
                 // If building is not an option, check if capturing is possible.
             } else if (0 < bestCaptureWeight) {
@@ -278,7 +277,7 @@ public class ComputerPlayerModel extends BasePlayerModel {
             results.add(generateGameStates(node.getTable(), node.getHand(), node.getCard(), node));
         }
 
-        // find the best weighted node within the current turn options.
+        // Find the best weighted node within the current turn options.
         GameTreeNode bestNode = null;
         int bestWeight = -1;
         for(GameTreeNode node : options){
@@ -289,7 +288,7 @@ public class ComputerPlayerModel extends BasePlayerModel {
             }
         }
 
-        // if there is no other option trail the card with the highest value in the hand.
+        // If there is no other option trail the card with the highest value in the hand.
         if(bestWeight <= -1){
             for(GameTreeNode node : options){
                 if(node.getAction() == "trail" && node.getCard().getValue() > bestWeight){

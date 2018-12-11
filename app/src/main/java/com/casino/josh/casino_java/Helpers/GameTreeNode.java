@@ -78,6 +78,11 @@ public class GameTreeNode {
     private void checkCapture(){
         if(!table.isCaptureCard(hand, card, "Computer")) {
             Vector<Vector<CardModel>> sets = table.setCapture(card.getValue());
+            Vector<CardModel> looseCards = table.captureLooseCards(card.getValue());
+
+            for(CardModel cards : looseCards){
+                weight += 1;
+            }
 
             weight += table.checkBuilds(card);
 
@@ -94,6 +99,10 @@ public class GameTreeNode {
                     // remove it from the table.
                     if (capturedCards != null) {
                         table.getLooseCards().removeAll(capturedCards);
+                    }
+
+                    if(looseCards.size() > 0){
+                        table.getLooseCards().remove(looseCards);
                     }
 
                     if (capturedBuildCards != null) {
@@ -154,6 +163,7 @@ public class GameTreeNode {
                         bestBuildWeight += card.getValue();
                     weight = bestBuildWeight;
                 }
+
                 weight += card.getValue();
             }
 

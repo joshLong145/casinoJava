@@ -31,7 +31,7 @@
         android:layout_width="75dp"
         android:layout_height="50dp"
         android:layout_below="@+id/save_game"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:layout_alignParentEnd="true"
         android:background="#e7b3b3"
         android:visibility="visible">
@@ -50,7 +50,7 @@
         android:layout_width="75dp"
         android:layout_height="50dp"
         android:layout_below="@+id/ask_help"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:layout_alignParentEnd="true"
         android:background="#e7b3b3"
         android:visibility="visible">
@@ -70,14 +70,13 @@
         android:layout_height="50dp"
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
-        android:padding="10dp"
         android:background="#e7b3b3"
         android:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:textAlignment="center"
             android:text="@string/help_string"
             android:textColor="#ffffff"/>
@@ -97,8 +96,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:text="@string/save_game_string"
             android:textAlignment="center"
             android:textColor="#ffffff"/>

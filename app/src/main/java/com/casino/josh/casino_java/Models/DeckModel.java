@@ -69,12 +69,21 @@ public class DeckModel {
 
         Vector<CardModel> dealtCards = new Vector<>();
         if(_currentCardIndex > 0 && _currentCardIndex < mCards.size()){
+            /*
             for(int i = 0; i < HANDSIZE; i ++){
                 CardModel card = mCards.lastElement();
                 dealtCards.add(card);
                 mCards.removeElementAt(_currentCardIndex);
                 _currentCardIndex--;
             }
+            */
+
+            for(int i = 0; i < 4; i++){
+                dealtCards.add(mCards.get(i));
+                _currentCardIndex--;
+            }
+
+            mCards.removeAll(dealtCards);
         }
 
         return dealtCards;
@@ -97,11 +106,16 @@ public class DeckModel {
      * @return
      */
     public final String toString(){
-        String deckString = "Deck:";
-        for(CardModel card : mCards){
-            deckString += " " + card.toStringSave();
+        StringBuilder deckString = new StringBuilder("Deck:");
+
+        if(mCards.size() <= 0){
+            deckString.append(" none");
+        }else {
+            for (CardModel card : mCards) {
+                deckString.append(" ").append(card.toStringSave());
+            }
         }
 
-        return deckString;
+        return deckString.toString();
     }
 }

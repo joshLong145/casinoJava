@@ -41,7 +41,8 @@ public class LooseCardOnClickListener implements View.OnClickListener {
         if(!GameActivity.mLooseCards.contains(mCard)) {
             GameActivity.mLooseCards.add(mCard);
 
-            StringBuilder selectedCardPrompt = new StringBuilder(mCard.toStringSave() + " selected, Current selected cards: ");
+            StringBuilder selectedCardPrompt = new StringBuilder(mCard.toStringSave()
+                                                                + " selected, Current selected cards: ");
             for (CardModel card : GameActivity.mLooseCards)
                 selectedCardPrompt.append(" ").append(card.toStringSave());
 
@@ -54,7 +55,8 @@ public class LooseCardOnClickListener implements View.OnClickListener {
         }else {
             GameActivity.mLooseCards.remove(mCard);
 
-            StringBuilder selectedCardPrompt = new StringBuilder(mCard.toStringSave() + " removed, Current selected cards: ");
+            StringBuilder selectedCardPrompt = new StringBuilder(mCard.toStringSave()
+                                                                    + " removed, Current selected cards: ");
             for (CardModel card : GameActivity.mLooseCards)
                 selectedCardPrompt.append(" ").append(card.toStringSave());
 

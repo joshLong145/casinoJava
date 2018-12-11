@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.casino.josh.casino_java.Helpers.GameTreeNode;
 import com.casino.josh.casino_java.Models.BasePlayerModel;
 import com.casino.josh.casino_java.Models.TableModel;
+import com.casino.josh.casino_java.activites.GameActivity;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -54,6 +55,7 @@ public class ComputerPlayerModel extends BasePlayerModel {
             CardModel card = node.getHandPair().first;
             Vector<CardModel> capturedCards = node.getSetMap().get(card.toStringSave());
             Vector<CardModel> capturedBuildCards = table.captureBuilds(card);
+            Vector<CardModel> looseCards = table.captureLooseCards(card.getValue());
 
             // If capture cards are not null ( meaning more than a build was captured).
             // remove it from the table.
@@ -69,8 +71,15 @@ public class ComputerPlayerModel extends BasePlayerModel {
                 TurnLogModel.addCaptureMoveToLog(capturedBuildCards, card, mName);
             }
 
+            if(looseCards.size() > 0){
+                table.getLooseCards().removeAll(looseCards);
+                _pile.addAll(looseCards);
+            }
+
             _pile.add(card);
             _hand.remove(card);
+
+            GameActivity.mTournament.getCurrentRound().setLastCapture(RoundModel.CurrentTurn.Computer);
         }else if(node.getAction().equals("single")){
             Vector<CardModel> cardSet = node.getBuildMap().get(node.getHandPair());
             CardModel selectedCard = node.getHandPair().second;
@@ -87,12 +96,15 @@ public class ComputerPlayerModel extends BasePlayerModel {
             BuildModel selectedBuild;
             selectedBuild = table.getBuilds().get(node.getMultiMap().get(node.getHandPair()).first);
             Vector<CardModel> buildCards = node.getMultiMap().get(node.getHandPair()).second;
-            CardModel selectedCard = node.getHandPair().first;
+            CardModel selectedCard = node.getHandPair().second;
             if(buildCards.contains(selectedCard)){
                 buildCards.remove(selectedCard);
             }
 
             table.createMultiBuild(selectedBuild, buildCards, selectedCard, _hand);
+
+            // remove cards from hand and table used to create multibuild.
+            table.getLooseCards().removeAll(buildCards);
             _hand.remove(selectedCard);
 
         }else if(node.getAction().equals("trail")){

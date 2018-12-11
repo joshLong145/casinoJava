@@ -21,7 +21,8 @@
 
         <activity android:name=".activites.GameActivity"
             android:parentActivityName="com.casino.josh.casino_java.activites.MainActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:resumeWhilePausing="true">
         </activity>
     </application>
 

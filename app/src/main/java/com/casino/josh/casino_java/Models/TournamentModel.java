@@ -126,7 +126,11 @@ public class TournamentModel {
         looseCards.clear();
 
         TableModel newTable = new TableModel(looseCards, builds);
-        mRounds.add(new RoundModel(mPlayers, newTable, 0, false));
+        if(getCurrentRound().getLastCapture() == RoundModel.CurrentTurn.Human)
+            mRounds.add(new RoundModel(mPlayers, newTable, 0, false));
+        else
+            mRounds.add(new RoundModel(mPlayers, newTable, 1, false));
+
         mCurrentRound++;
         mRoundNumber++;
 

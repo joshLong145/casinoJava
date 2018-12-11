@@ -14,6 +14,8 @@ public class RoundModel {
     private CurrentTurn mCurrentTurn;
     private int mCurrentPlayerIndex = 0;
     private boolean mRoundEnd = false;
+    private CurrentTurn mLastCapture;
+
 
     /**
      * Enum for Current Turn indication.
@@ -38,6 +40,8 @@ public class RoundModel {
 
         dealPlayerHands();
         mTable.getLooseCards().addAll(mTable.getDeck().dealHand());
+
+        mLastCapture = null;
     }
 
     /**
@@ -134,6 +138,18 @@ public class RoundModel {
      * @param index Integer.
      */
     public void setCurrentPlayerIndex(final int index){ mCurrentPlayerIndex = index; }
+
+    /**
+     *
+     * @return
+     */
+    public CurrentTurn getLastCapture(){ return mLastCapture; }
+
+    /**
+     *
+     * @param captured
+     */
+    public void setLastCapture(CurrentTurn captured){ mLastCapture = captured; }
 
     /**
      * Returns Vector of players active within the current round.

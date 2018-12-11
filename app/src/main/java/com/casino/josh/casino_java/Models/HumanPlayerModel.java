@@ -64,6 +64,8 @@ public class HumanPlayerModel extends BasePlayerModel {
             if(capturedBuildCards.size() <= 0 && table.isCaptureCard(_hand, GameActivity.mChosenCard, mName))
                 return false;
 
+            GameActivity.mTournament.getCurrentRound().setLastCapture(RoundModel.CurrentTurn.Human);
+
             if(capturedLooseCards.size() > 0){
                 capturedLooseCards.add(GameActivity.mChosenCard);
                 getPile().addAll(capturedLooseCards);
@@ -104,7 +106,9 @@ public class HumanPlayerModel extends BasePlayerModel {
                 return false;
 
             if(table.createMultiBuild(GameActivity.mBuilds.get(0),GameActivity.mLooseCards, GameActivity.mChosenCard, getHand())){
+                // remove cards from table and the hand.
                 getHand().remove(GameActivity.mChosenCard);
+                table.getLooseCards().removeAll(GameActivity.mLooseCards);
                 return true;
             }
         } else if(option == TurnOptions.EXTEND){

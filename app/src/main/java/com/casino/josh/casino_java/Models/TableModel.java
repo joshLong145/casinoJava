@@ -114,7 +114,7 @@ public class TableModel {
     }
 
     /**
-     *
+     * Returns a boolean indicating if there are loose cards that can be captured.
      * @param selectedCard
      * @return
      */
@@ -125,6 +125,22 @@ public class TableModel {
         }
 
         return false;
+    }
+
+    /**
+     * Returns references to cards that
+     * have the same value as a selected card.
+     * @param captureValue
+     * @return Vector<CardModel>
+     */
+    public Vector<CardModel> captureLooseCards(final int captureValue){
+        Vector<CardModel> capturedCards = new Vector<>();
+        for(CardModel card : _looseCards){
+            if(card.getValue() == captureValue)
+                capturedCards.add(card);
+        }
+
+        return capturedCards;
     }
 
     /**
@@ -304,9 +320,10 @@ public class TableModel {
      * @param selectedLooseCards
      * @param chosenCard
      * @param hand
-     * @return
+     * @return boolean
      */
-    public boolean createMultiBuild(BuildModel build, final Vector<CardModel> selectedLooseCards, final CardModel chosenCard, final Vector<CardModel> hand){
+    public boolean createMultiBuild(BuildModel build, final Vector<CardModel> selectedLooseCards,
+                                    final CardModel chosenCard, final Vector<CardModel> hand){
         int sum = 0;
         for(CardModel card : selectedLooseCards){
             sum += card.getValue();
@@ -382,9 +399,14 @@ public class TableModel {
         tableString.append(System.getProperty("line.separator"));
 
         tableString.append("Build Owners: ");
-        for(BuildModel build : mBuilds){
-            tableString.append(build.toString() + " ");
-            tableString.append(build.getBuildOwner());
+
+        if(mBuilds.size() <= 0) {
+            tableString.append("none");
+        }else {
+            for (BuildModel build : mBuilds) {
+                tableString.append(build.toString() + " ");
+                tableString.append(build.getBuildOwner());
+            }
         }
 
         tableString.append(System.getProperty("line.separator"));
@@ -392,6 +414,7 @@ public class TableModel {
 
         tableString.append(_deck.toString());
         tableString.append(System.getProperty("line.separator"));
+
 
         return tableString.toString();
     }
@@ -430,8 +453,11 @@ public class TableModel {
 
            for(CardModel card : cardSet){
                int value = card.getValue();
+               if(value == captureValue)
+                   break;
 
-                   sum += value;
+               sum += value;
+
 
            }
 
@@ -461,6 +487,11 @@ public class TableModel {
     public Vector<Vector<CardModel>> checkBuildCreation(final int captureCardValue, final int selectedCardValue){
         Vector<Vector<CardModel>> cardSets = new Vector<>();
         Vector<Vector<CardModel>> buildSets = new Vector<>();
+        Vector<Integer> buildSums = new Vector<>();
+
+
+        for(BuildModel build : mBuilds)
+            buildSums.add(build.getCaptureValue());
 
         for(int i = 0; i < (int) Math.pow(2, _looseCards.size()); i++){
             Vector<CardModel> cards = new Vector<>();
@@ -490,11 +521,12 @@ public class TableModel {
                     break;
                 else
                     sum += value;
-
-                // If the cardSet is valid, then add it to the list of valid builds.
-                if (sum + selectedCardValue == captureCardValue)
-                    buildSets.add(cardSet);
             }
+            sum += selectedCardValue;
+
+            // If the cardSet is valid, then add it to the list of valid builds.
+            if (sum == captureCardValue && !buildSums.contains(sum))
+                buildSets.add(cardSet);
         }
 
         // Sort data based on length of the array.
@@ -538,8 +570,8 @@ public class TableModel {
             // Check if any build has the same capture value as one of the generated card sets
             // along with the selected card.
             for(int i = 0; i < mBuilds.size(); i++){
-                if(sum + selectedCardValue == captureCardValue
-                        && captureCardValue == mBuilds.get(i).getCaptureValue()){
+                if(sum + captureCardValue == selectedCardValue
+                        && selectedCardValue == mBuilds.get(i).getCaptureValue()){
                     buildSets.add(new Pair<>(i, cardSet));
                 }
             }
@@ -563,7 +595,7 @@ public class TableModel {
             if (build.getCaptureValue() == selectedCard.getValue()) {
                 for (Vector<CardModel> cardSets : build.getBuild()) {
                     for (CardModel card : cardSets) {
-                        weight += card.getValue();
+                        weight += 1;
                     }
                 }
             }

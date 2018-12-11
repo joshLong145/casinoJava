@@ -33,7 +33,9 @@ public class PlayButtonClickListener implements View.OnClickListener {
      */
     private int generateRandom(){
         Random rand = new Random(System.currentTimeMillis());
-        return rand.nextInt(2) + 1;
+        int ranNum = rand.nextInt(2) + 1;
+        System.out.println("Random num: " + Integer.toString(ranNum));
+        return ranNum;
     }
 
     /**
@@ -58,13 +60,13 @@ public class PlayButtonClickListener implements View.OnClickListener {
                     public void onClick(DialogInterface dialog, int which) {
                         int turn = generateRandom();
                         if(tossOption.getCheckedRadioButtonId() == R.id.heads){
-                            if(turn == 0)
+                            if(turn == 1)
                                 eventInformationIntent.putExtra("firstTurn", 0);
                             else
                                 eventInformationIntent.putExtra("firstTurn", 1);
 
                         }else if(tossOption.getCheckedRadioButtonId() == R.id.tails){
-                            if(turn == 0)
+                            if(turn == 2)
                                 eventInformationIntent.putExtra("firstTurn", 0);
                             else
                                 eventInformationIntent.putExtra("firstTurn", 1);

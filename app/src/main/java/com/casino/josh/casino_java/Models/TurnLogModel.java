@@ -45,7 +45,7 @@ public class TurnLogModel {
      */
     public static void addCaptureMoveToLog(final Vector<CardModel> cards, final CardModel handCard,
                                            final String playerName){
-        StringBuilder turnData = new StringBuilder(playerName + "Captured cards:");
+        StringBuilder turnData = new StringBuilder(playerName + " Captured cards:");
         for(CardModel card : cards){
             turnData.append(" ")
                     .append(card.toStringSave());
@@ -66,8 +66,9 @@ public class TurnLogModel {
     public static void addBuildMoveToLog(final Vector<CardModel> build, final CardModel selectedCard,
                                                                         final String playerName){
 
-        StringBuilder turnData = new StringBuilder(playerName + "create a build with the cards cards:");
+        StringBuilder turnData = new StringBuilder(playerName + " created a build with the cards:");
         int captureValue = 0;
+
         for(CardModel card : build){
             turnData.append(" ")
                     .append(card.toStringSave());

@@ -31,7 +31,8 @@ public class GameTreeNode {
     Map<String, Vector<CardModel>> setMap;
 
     /**
-     *
+     * Constructor, takes a deep copy of the table, a refernce to a card, the player's hand,
+     * and a indicator of what action should be performed in this instance of the turn.
      * @param table
      * @param action
      */
@@ -73,7 +74,7 @@ public class GameTreeNode {
 
 
     /**
-     *
+     * Check if there any sets that can be captured and asses the weight of it.
      */
     private void checkCapture(){
         if(!table.isCaptureCard(hand, card, "Computer")) {
@@ -118,7 +119,8 @@ public class GameTreeNode {
     }
 
     /**
-     *
+     * Check if builds can be made under the correct conditions. and asses the weight of each valid
+     * build.
      */
     private void checkMultiBuilds(){
         Vector<Pair<CardModel, CardModel>> cardCombos = new Vector<>();
@@ -180,7 +182,7 @@ public class GameTreeNode {
                 }
 
                 if(!doesContain){
-                    table.createMultiBuild(selectedBuild, buildCards, card, hand);
+                    table.createMultiBuild(selectedBuild, buildCards, card, hand, "Computer");
                     //if(hand.size() > 0)
                         //hand.remove(card);
                 }
@@ -189,7 +191,8 @@ public class GameTreeNode {
     }
 
     /**
-     *
+     * Check if builds can be made under the correct conditions. and asses the weight of each valid
+     * build.
      */
     private void checkSingleBuilds() {
         Vector<Pair<CardModel, CardModel>> cardCombos = new Vector<>();
@@ -231,7 +234,9 @@ public class GameTreeNode {
         }
     }
 
-
+    /**
+     * give the weight of trailing -1 since it is the default option when no moves can be made.
+     */
     private void trailCard(){
         weight = -1;
         handPair = new Pair<>(card, null);
@@ -239,62 +244,65 @@ public class GameTreeNode {
 
 
     /**
-     *
+     * Return the map of all sets that can be captured.
      * @return
      */
     public final Map<String, Vector<CardModel>> getSetMap(){return setMap; }
 
     /**
-     *
+     * Return a map of all builds that can be made with the corresponding card combinations.
      * @return
      */
     public Map<Pair<CardModel, CardModel>, Vector<CardModel>> getBuildMap(){ return buildMap; }
 
     /**
-     *
-     * @return
+     * Return a map of card pairs to cards to make a build of.
+     * @return Map<Pair<CardModel, CardModel>, Pair<Integer, Vector<CardModel>>>
      */
     public Map<Pair<CardModel, CardModel>, Pair<Integer, Vector<CardModel>>> getMultiMap(){ return multiBuildMap; }
 
 
     /**
-     *
-     * @return
+     * Rerturn the current card used for evaulation within this node.
+     * @return CardModel
      */
     public final CardModel getCard(){ return card; }
 
-
+    /**
+     * Get the hand container given to this node for evaluation.
+     * @return Vector<CardModel>
+     */
     public final Vector<CardModel> getHand(){ return  hand; }
 
     /**
-     *
-     * @return
+     * return the collection of nodes that are children of this node.
+     * @return Vector<GameTreeNode>
      */
     public final Vector<GameTreeNode> getNodes(){ return nodes; }
 
 
     /**
-     *
-     * @return
+     * Return the action this node performed.
+     * @return String
      */
     public final String getAction(){ return action; }
 
     /**
-     *
-     * @return
+     * Get the pair of cards used for assesment within the node.
+     * @return Pair<CardModel, CardModel>
      */
     public final Pair<CardModel, CardModel> getHandPair(){ return handPair; }
 
     /**
-     *
-     * @return
+     * Return the table copy from this node.
+     * @return TableModel
      */
     public final TableModel getTable(){return  table; }
 
 
     /**
-     *
-     * @return
+     * Return the weight determined for this node.
+     * @return integer
      */
     public final int getWeight(){ return weight; }
 }

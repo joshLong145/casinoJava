@@ -21,4 +21,6 @@
     <string name="multibuild_option">multibuild</string>
     <string name="increase_build_option">increase build</string>
     <string name="round_header">Round completed! player scores:</string>
+    <string name="strat">AI\'s strategy\nAI tries to get the most cards possible\nIt does not care about specifics of the cards.\nWhatever will  get it the most cards it will do.</string>
+    <string name="home_string">Kumar\'s Casino</string>
 </resources>

@@ -140,13 +140,13 @@ public class RoundModel {
     public void setCurrentPlayerIndex(final int index){ mCurrentPlayerIndex = index; }
 
     /**
-     *
-     * @return
+     * Return an enum indicating who last made a capture action.
+     * @return CurrentTurn
      */
     public CurrentTurn getLastCapture(){ return mLastCapture; }
 
     /**
-     *
+     * Set the enum of who last made a capture action.
      * @param captured
      */
     public void setLastCapture(CurrentTurn captured){ mLastCapture = captured; }

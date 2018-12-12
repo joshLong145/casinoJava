@@ -71,7 +71,13 @@ public class HumanPlayerModel extends BasePlayerModel {
                 getPile().addAll(capturedLooseCards);
                 getHand().remove(GameActivity.mChosenCard);
 
-                TurnLogModel.addCaptureMoveToLog(GameActivity.mLooseCards, GameActivity.mChosenCard, mName);
+                Vector<CardModel> tmpCardContainer = new Vector<>();
+
+                tmpCardContainer.addAll(capturedBuildCards);
+
+                tmpCardContainer.addAll(capturedLooseCards);
+
+                TurnLogModel.addCaptureMoveToLog(tmpCardContainer, GameActivity.mChosenCard, mName);
 
                 if(capturedBuildCards.size() > 0){
                     getPile().addAll(capturedBuildCards);
@@ -105,7 +111,10 @@ public class HumanPlayerModel extends BasePlayerModel {
             if(GameActivity.mBuilds.size() <= 0)
                 return false;
 
-            if(table.createMultiBuild(GameActivity.mBuilds.get(0),GameActivity.mLooseCards, GameActivity.mChosenCard, getHand())){
+            if(table.createMultiBuild(GameActivity.mBuilds.get(0), GameActivity.mLooseCards, GameActivity.mChosenCard,
+                                      getHand(),
+                                      mName)){
+
                 // remove cards from table and the hand.
                 getHand().remove(GameActivity.mChosenCard);
                 table.getLooseCards().removeAll(GameActivity.mLooseCards);

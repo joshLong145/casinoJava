@@ -18,7 +18,8 @@ import java.util.regex.Pattern;
  */
 
 public class TableModel {
-    private int _lastCaptured = 0;
+
+    // Private member variables.
     private DeckModel _deck;
     private Vector<CardModel> _looseCards;
     Vector<BuildModel> mBuilds;
@@ -214,10 +215,6 @@ public class TableModel {
         return new Vector<>();
     }
 
-    public boolean OwnBuild(final String name){
-        return false;
-    }
-
 
     /**
      * Capture selected builds that are on the table.
@@ -293,12 +290,16 @@ public class TableModel {
     public boolean createBuild(Vector<CardModel> looseCards, final CardModel chosenCard, final Vector<CardModel> hand, final String owner){
         int sum = 0;
 
+        // If the loose card container is null, then we return false immediately.
+        if(looseCards.size() <= 0)
+            return false;
+
         for(CardModel card : looseCards){
             sum += card.getValue();
         }
 
         for(CardModel card : hand) {
-            if (sum + chosenCard.getValue() == card.getValue()) {
+            if (sum + chosenCard.getValue() == card.getValue() && chosenCard != card) {
                 getLooseCards().removeAll(looseCards);
                 BuildModel build = new BuildModel();
                 looseCards.add(chosenCard);
@@ -323,7 +324,8 @@ public class TableModel {
      * @return boolean
      */
     public boolean createMultiBuild(BuildModel build, final Vector<CardModel> selectedLooseCards,
-                                    final CardModel chosenCard, final Vector<CardModel> hand){
+                                    final CardModel chosenCard, final Vector<CardModel> hand,
+                                    final String name){
         int sum = 0;
         for(CardModel card : selectedLooseCards){
             sum += card.getValue();
@@ -336,6 +338,7 @@ public class TableModel {
                 if(card.getValue() == build.getCaptureValue()){
                     selectedLooseCards.add(chosenCard);
                     build.addBuildToBuild(selectedLooseCards);
+                    build.setBuildOwner(name);
                     return true;
                 }
             }
@@ -351,7 +354,9 @@ public class TableModel {
      * @param hand
      * @return
      */
-    boolean increaseBuild(BuildModel build, final CardModel chosenCard, final Vector<CardModel> hand, final String name){
+    boolean increaseBuild(BuildModel build, final CardModel chosenCard, final Vector<CardModel> hand,
+                          final String name){
+
         if(build.getBuildOwner().equals(name))
             return false;
 
@@ -479,10 +484,10 @@ public class TableModel {
     }
 
     /**
-     *
+     * Create all card combinations and see if a build can be made from any of them.
      * @param captureCardValue
      * @param selectedCardValue
-     * @return
+     * @return  Vector
      */
     public Vector<Vector<CardModel>> checkBuildCreation(final int captureCardValue, final int selectedCardValue){
         Vector<Vector<CardModel>> cardSets = new Vector<>();
@@ -536,6 +541,12 @@ public class TableModel {
         return buildSets;
     }
 
+    /**
+     * Check al card combinations and see if a multibuild can be made from any of them
+     * @param captureCardValue
+     * @param selectedCardValue
+     * @return
+     */
     public Vector<Pair<Integer, Vector<CardModel>>> checkMultiBuildCreation(final int captureCardValue, final int selectedCardValue){
         Vector<Vector<CardModel>> cardSets = new Vector<>();
         Vector<Pair<Integer, Vector<CardModel>>> buildSets = new Vector<>();
@@ -585,9 +596,9 @@ public class TableModel {
 
 
     /**
-     *
+     * Check if builds can be captured this turn.
      * @param selectedCard
-     * @return
+     * @return Integer.
      */
     public int checkBuilds(CardModel selectedCard){
         int weight = 0;
@@ -603,5 +614,4 @@ public class TableModel {
 
         return weight;
     }
-
 }

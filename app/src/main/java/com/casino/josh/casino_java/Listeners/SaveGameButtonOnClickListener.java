@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.casino.josh.casino_java.Fragments.SaveGameButtonFragment;
+import com.casino.josh.casino_java.Models.TurnLogModel;
 import com.casino.josh.casino_java.R;
 import com.casino.josh.casino_java.activites.GameActivity;
 
@@ -29,7 +30,7 @@ public class SaveGameButtonOnClickListener implements View.OnClickListener {
     private SaveGameButtonFragment saveGameFragment;
 
     /**
-     *
+     * Default constructor.
      * @param fragment
      */
     public SaveGameButtonOnClickListener(SaveGameButtonFragment fragment){
@@ -37,7 +38,7 @@ public class SaveGameButtonOnClickListener implements View.OnClickListener {
     }
 
     /**
-     *
+     * Implementation of function from interface.
      * @param v
      */
     @Override
@@ -91,7 +92,7 @@ public class SaveGameButtonOnClickListener implements View.OnClickListener {
                     Toast.LENGTH_SHORT);
             toast.show();
 
-
+            TurnLogModel.getLog().clear();
             saveGameFragment.getActivity().finish();
         } catch (IOException e) {
             Toast toast = Toast.makeText(saveGameFragment.getContext(),

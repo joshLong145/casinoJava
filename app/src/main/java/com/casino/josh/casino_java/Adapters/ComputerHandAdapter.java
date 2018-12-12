@@ -18,6 +18,8 @@ import java.util.Vector;
  */
 
 public class ComputerHandAdapter extends RecyclerView.Adapter<ComputerHandAdapter.ViewHolder> {
+
+    // Private member variables.
     private Vector<CardModel> mDataSet;
     private Context context;
 

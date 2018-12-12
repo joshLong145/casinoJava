@@ -37,7 +37,7 @@ public class TournamentModel {
     }
 
     /**
-     *
+     * Constructor for serial data constructing the tournament.
      * @param players
      * @param round
      */
@@ -74,9 +74,9 @@ public class TournamentModel {
     public final int getRoundNumber(){ return mRoundNumber; }
 
     /**
-     *
+     * Run the current round and execute move actions when required from the view.
      * @param menuOption
-     * @return
+     * @return boolean
      */
     public boolean runRound(MakeMoveButtonFragment moveButtonFragment, final int menuOption){
         boolean turnStatus = false;
@@ -111,6 +111,15 @@ public class TournamentModel {
 
         // If the round is over, show data regarding the round and make a new one.
         if(mRounds.get(mCurrentRound).roundOver()){
+            if(getCurrentRound().getLastCapture() == RoundModel.CurrentTurn.Human){
+                getHumanPlayer().getPile().addAll(getCurrentRound().getTable().getLooseCards());
+                getCurrentRound().getTable().getLooseCards().clear();
+            }else{
+                getComputerPlayer().getPile().addAll(getCurrentRound().getTable().getLooseCards());
+                getCurrentRound().getTable().getLooseCards().clear();
+            }
+
+
             mRoundOver.setBool(true); // set the roundOver flag to true which will trigger an event.
         }
 
@@ -138,6 +147,8 @@ public class TournamentModel {
         getComputerPlayer().getPile().clear();
         getHumanPlayer().getPile().clear();
 
+        TurnLogModel.getLog().clear();
+
         GameActivity.updateTableAdapterData();
         GameActivity.updateBuildAdapterData();
     }
@@ -148,8 +159,8 @@ public class TournamentModel {
     }
 
     /**
-     *
-     * @return
+     * creates the score for a round when it reaches it conclusion.
+     * @return Pair
      */
     public final Pair<Pair<Integer, Integer>, Pair<Integer, Integer>> calculateScores(){
         int humanScore = 0;

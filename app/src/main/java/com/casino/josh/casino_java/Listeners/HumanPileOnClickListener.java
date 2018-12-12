@@ -31,7 +31,6 @@ public class HumanPileOnClickListener implements View.OnClickListener {
         mPlayerPileFragment = playerPileFragment;
     }
 
-
     /**
      * Executes on event of button being pressed.
      * @param v View

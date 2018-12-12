@@ -1,6 +1,7 @@
 package com.casino.josh.casino_java.Listeners;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,7 +29,7 @@ public class TurnLogOnClickListener implements View.OnClickListener {
     private LogButtonFragment mLogButtonFragment;
 
     /**
-     *
+     * Default constructor.
      * @param a_turnLog
      */
     public TurnLogOnClickListener(LogButtonFragment a_turnLog){
@@ -66,6 +67,9 @@ public class TurnLogOnClickListener implements View.OnClickListener {
         });
 
         alertDialogBuilder.setCancelable(true);
+        // want a button but can have default behavior of closing the dialog view.
+        // So we initialize to null.
+        alertDialogBuilder.setPositiveButton("Close", null);
 
         AlertDialog alertDialog = alertDialogBuilder.create();
 

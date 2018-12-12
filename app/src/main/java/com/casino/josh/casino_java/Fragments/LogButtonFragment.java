@@ -22,7 +22,6 @@ public class LogButtonFragment extends Fragment {
 
     /**
      * Executed on the creation of the view, creates component and returns the view.
-     *
      * @param inflater           LayoutInflater
      * @param container          ViewGroup
      * @param savedInstanceState Bundle

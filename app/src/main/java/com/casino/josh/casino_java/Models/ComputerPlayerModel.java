@@ -28,7 +28,7 @@ public class ComputerPlayerModel extends BasePlayerModel {
     }
 
     /**
-     *
+     * Constructor used when passing serial data.
      * @param score
      * @param hand
      * @param pile
@@ -61,20 +61,26 @@ public class ComputerPlayerModel extends BasePlayerModel {
             // remove it from the table.
             if (capturedCards != null) {
                 table.getLooseCards().removeAll(capturedCards);
-                TurnLogModel.addCaptureMoveToLog(capturedCards, card, mName);
                 _pile.addAll(capturedCards);
             }
 
             if (capturedBuildCards != null) {
                 table.removeBuilds(card);
                 _pile.addAll(capturedBuildCards);
-                TurnLogModel.addCaptureMoveToLog(capturedBuildCards, card, mName);
             }
 
             if(looseCards.size() > 0){
                 table.getLooseCards().removeAll(looseCards);
                 _pile.addAll(looseCards);
             }
+
+            if(capturedBuildCards != null)
+                looseCards.addAll(capturedBuildCards);
+
+            if(capturedCards != null)
+                looseCards.addAll(capturedCards);
+
+            TurnLogModel.addCaptureMoveToLog(looseCards, card, mName);
 
             _pile.add(card);
             _hand.remove(card);
@@ -101,7 +107,7 @@ public class ComputerPlayerModel extends BasePlayerModel {
                 buildCards.remove(selectedCard);
             }
 
-            table.createMultiBuild(selectedBuild, buildCards, selectedCard, _hand);
+            table.createMultiBuild(selectedBuild, buildCards, selectedCard, _hand, mName);
 
             // remove cards from hand and table used to create multibuild.
             table.getLooseCards().removeAll(buildCards);
@@ -146,7 +152,7 @@ public class ComputerPlayerModel extends BasePlayerModel {
                 selectedBuild = table.getBuilds().get(multiBuildMap.get(multiBuildWeight.first).first);
                 Vector<CardModel> buildCards = multiBuildMap.get(multiBuildWeight.first).second;
                 CardModel selectedCard = multiBuildWeight.first.first;
-                table.createMultiBuild(selectedBuild, buildCards, selectedCard, _hand);
+                table.createMultiBuild(selectedBuild, buildCards, selectedCard, _hand, mName);
                 _hand.remove(selectedCard);
             }
             // Check what weight is the highest, with priority on creating builds, and multibuilds.
@@ -193,6 +199,14 @@ public class ComputerPlayerModel extends BasePlayerModel {
         return true;
     }
 
+
+    /**
+     * Finds the best move to be made this turn and returns a string repersenting the move to the user
+     * to be displayed within a dialog box.
+     * @param table
+     * @param hand
+     * @return String
+     */
     public String moveHelp(final TableModel table, final Vector<CardModel> hand){
         // containers for mapping card data from the hand to correpsonding card data from the table.
         Map<Pair<CardModel, CardModel>, Vector<CardModel>> buildMap = new LinkedHashMap<>();
@@ -228,20 +242,27 @@ public class ComputerPlayerModel extends BasePlayerModel {
             helpString.append(multiBuildWeight.first.first.toStringSave());
 
         }
+
         // Check what weight is the highest, with priority on creating builds, and multibuilds.
         // Reasoning is that this will allow for the largest capturing of cards in the future.
         else if(bestSingleBuildWeight >= bestCaptureWeight && bestSingleBuildWeight != -1){
             helpString.append("Make single build with the card: ");
-            helpString.append(singleBuildWeight.first.first.toStringSave());
-            helpString.append("\n with the loose cards:");
+            helpString.append(singleBuildWeight.first.second.toStringSave());
+            helpString.append("\nwith the loose cards:");
             for(CardModel card : buildMap.get(singleBuildWeight.first)){
                 helpString.append(" ");
                 helpString.append(card.toStringSave());
             }
+
+            helpString.append("\nwith the capture card being: ")
+                      .append(singleBuildWeight.first.first.toStringSave());
+
             // If building is not an option, check if capturing is possible.
         } else if(0 < bestCaptureWeight){
-            helpString.append("Capture with the card : ");
+            helpString.append("Capture with the card: ");
             CardModel handCard = hand.get(captureWeight.second);
+            helpString.append(handCard.toStringSave());
+            int buildCaptureAmount = table.checkBuilds(handCard);
             Vector<CardModel> capturedCards = setMap.get(handCard.toStringSave());
 
             helpString.append("\n with the loose cards:");
@@ -250,26 +271,33 @@ public class ComputerPlayerModel extends BasePlayerModel {
                 helpString.append(card.toStringSave());
             }
 
+            if(buildCaptureAmount > 0){
+                helpString.append("\n Capture builds with the capture value of: ");
+                helpString.append(Integer.toString(handCard.getValue()));
+            }
+
             // If other options are not possible ( weights are -1). then trail the card.
         }else {
-                helpString.append("No other options, trail");
+                helpString.append("No other options, trail the card you like the least.");
         }
 
-        helpString.append("weights: ");
+        helpString.append("\nweights:\n");
         helpString.append("Capture weight: ");
         helpString.append(bestCaptureWeight);
-        helpString.append("\n Build weight: ")
+        helpString.append("\nBuild weight: ")
                   .append(bestSingleBuildWeight)
-                  .append("\n Multi build weight: ")
+                  .append("\nMulti build weight: ")
                   .append(bestMultiBuildWeight);
 
         return helpString.toString();
     }
 
     /**
-     *
+     * Plays through the players hand and finds the option this turn that will result in the most cards
+     * turns ahead (when the hand is empty).
      * @param table
      * @param hand
+     * @return GameTreeNode
      */
     public GameTreeNode miniMax(TableModel table, Vector<CardModel> hand){
         Vector<GameTreeNode> options = new Vector<>();
@@ -315,10 +343,10 @@ public class ComputerPlayerModel extends BasePlayerModel {
     }
 
     /**
-     *
+     * Starts the max heap generation.
      * @param table
      * @param card
-     * @return
+     * @return GameTreeNode
      */
     public final GameTreeNode generateGameStates(TableModel table, Vector<CardModel> hand,
                                                          CardModel card,

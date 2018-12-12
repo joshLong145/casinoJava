@@ -22,7 +22,7 @@ public class HelpOnClickListener implements View.OnClickListener {
     }
 
     /**
-     *
+     * Implementation of function from interface.
      * @param v
      */
     @Override

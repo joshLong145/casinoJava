@@ -27,6 +27,10 @@ public class DeckOnClickListener implements View.OnClickListener {
         mDeckButtonFragment = a_DeckButtonFragment;
     }
 
+    /**
+     * Implementation of function from interface.
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         LayoutInflater li = LayoutInflater.from(mDeckButtonFragment.getActivity());

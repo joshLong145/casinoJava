@@ -140,7 +140,6 @@ public class Serialization {
         return true;
     }
 
-
     /**
      * parses string at spaces to construct an array of string from which CardModel's can be created.
      * @param serialData
@@ -369,7 +368,4 @@ public class Serialization {
     public final TournamentModel createTournament(){
         return new TournamentModel(mPlayers, new RoundModel(mPlayers, mTable, mCurrentTurn, true), mRoundNumber);
     }
-
-
-
 }

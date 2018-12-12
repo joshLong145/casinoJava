@@ -21,6 +21,7 @@ import java.util.Vector;
 
 public class HandAdapter extends RecyclerView.Adapter<HandAdapter.ViewHolder> {
 
+    // Private member variables.
     private Vector<CardModel> mDataSet;
     private Context context;
 

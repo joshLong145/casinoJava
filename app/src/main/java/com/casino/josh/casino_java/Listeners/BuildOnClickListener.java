@@ -26,7 +26,7 @@ public class BuildOnClickListener implements View.OnClickListener {
     }
 
     /**
-     *
+     * Implementation of function from interface.
      * @param v
      */
     @Override

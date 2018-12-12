@@ -21,7 +21,7 @@ import java.util.Vector;
 
 public class BuildAdapter extends RecyclerView.Adapter<BuildAdapter.ViewHolder> {
 
-
+    // Private member variables.
     private Vector<BuildModel> mDataSet;
     private Context context;
     private FragmentActivity mActivity;

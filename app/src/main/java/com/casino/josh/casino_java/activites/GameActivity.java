@@ -47,6 +47,8 @@ import java.util.Vector;
  */
 
 public class GameActivity extends FragmentActivity  {
+
+    // Private member variables.
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private HandViewModel handVM;
     private ComputerHandViewModel mComputerHandVM;
@@ -84,17 +86,6 @@ public class GameActivity extends FragmentActivity  {
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             getResources().getConfiguration().orientation = Configuration.ORIENTATION_LANDSCAPE;
         }
-    }
-
-    //TODO: change adapter model so that you no longer store data in temp storage to be used within the model. will make adapter use actually make sense!!!!
-
-    /**
-     * Executed when the activity is activated and ready to run.
-     * Creates components and attaches fragments to desired components defined within the layout.
-     */
-    @Override
-    public void onStart(){
-        super.onStart();
 
         int firstTurn = getIntent().getIntExtra("firstTurn", -1);
 
@@ -218,6 +209,15 @@ public class GameActivity extends FragmentActivity  {
         mRoundNumber.setText("Round number: " + Integer.toString(mTournament.getRoundNumber()));
         mCurrentTurn = findViewById(R.id.current_turn);
         mCurrentTurn.setText("Current turn: " + mTournament.getCurrentRound().getTurn());
+    }
+
+    /**
+     * Executed when the activity is activated and ready to run.
+     * Creates components and attaches fragments to desired components defined within the layout.
+     */
+    @Override
+    public void onStart(){
+        super.onStart();
 
         // Add fragment components framelayouts defined within the XML layout.
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -233,7 +233,9 @@ public class GameActivity extends FragmentActivity  {
 
 
     /**
-     *
+     * Called when the round is determined to be over.
+     * asesses scores at the end of the round and determines if a new round should start,
+     * or if the tournament should end.
      */
     public void roundOverPrompt(){
         LayoutInflater li = LayoutInflater.from(this);
@@ -249,12 +251,12 @@ public class GameActivity extends FragmentActivity  {
         int finalPlayerScore = mTournament.getHumanPlayer().getPoints() + scores.first.first;
         int finalComputerScore = mTournament.getComputerPlayer().getPoints() + scores.first.second;
 
-
-
         StringBuilder playerInfo = new StringBuilder("Human \n Pile:");
         for (CardModel card : mTournament.getHumanPlayer().getPile()) {
             playerInfo.append(" ").append(card.toStringSave());
         }
+
+        playerInfo.append("\n Pile size: " + Integer.toString(mTournament.getHumanPlayer().getPile().size()));
 
         playerInfo.append("\n Score: ");
 
@@ -264,15 +266,30 @@ public class GameActivity extends FragmentActivity  {
             computerInfo.append(" ").append(card.toStringSave());
         }
 
+        computerInfo.append("\n Pile size: " + Integer.toString(mTournament.getComputerPlayer().getPile().size()));
+
         computerInfo.append("\n Score: ");
 
         // if the tournament is over, then we need to modify the prompt.
         if(finalPlayerScore >= 21 || finalComputerScore >= 21) {
-            prompting.setText("Tournament Results.");
-            playerInfo.append(finalPlayerScore);
-            computerInfo.append(finalComputerScore);
 
+            if(finalPlayerScore > finalComputerScore)
+                prompting.setText("Tournament Results. Player wins!");
+            else
+                prompting.setText("Tournament Results. Computer wins");
+
+            playerInfo.append(finalPlayerScore);
+            playerInfo.append("\nRound score: ");
+            playerInfo.append(Integer.toString(scores.first.second));
+            computerInfo.append(finalComputerScore);
+            computerInfo.append("\nRound score: ");
+            computerInfo.append(Integer.toString(scores.first.first));
         }else{
+            if(scores.first.second > scores.first.first)
+                prompting.setText("Round over, player wins!");
+            else
+                prompting.setText("Round over, computer wins!");
+
             computerInfo.append(scores.first.first);
             playerInfo.append(scores.first.second);
         }
@@ -286,6 +303,8 @@ public class GameActivity extends FragmentActivity  {
         mTournament.getHumanPlayer().setPoints(finalPlayerScore);
         mTournament.getComputerPlayer().setPoints(finalComputerScore);
 
+
+        alertDialogBuilder.setCancelable(false);
         alertDialogBuilder.setPositiveButton("Continue", (dialog, which) -> {
             if(mTournament.getHumanPlayer().getPoints() >= 21 || mTournament.getComputerPlayer().getPoints() >= 21){
                 finish(); // close the activity and revert back to ladning page if the scores are matching.
@@ -295,8 +314,8 @@ public class GameActivity extends FragmentActivity  {
                 // update text views relating to the round, and scores.
                 // Only needs to update if the tournament is not over.
                 mRoundNumber.setText("Round number: " + Integer.toString(mTournament.getRoundNumber()));
-                mComputerScore.setText("Computer Score: " + mTournament.getComputerPlayer().getPoints());
-                mHumanScore.setText("Human Score: " + mTournament.getHumanPlayer().getPoints());
+                mComputerScore.setText("Computer score: " + mTournament.getComputerPlayer().getPoints());
+                mHumanScore.setText("Human score: " + mTournament.getHumanPlayer().getPoints());
                 mCurrentTurn.setText("Current turn: " + mTournament.getCurrentRound().getTurn());
             }
         });
@@ -340,14 +359,14 @@ public class GameActivity extends FragmentActivity  {
     }
 
     /**
-     *
+     * Calls the notify function for the Table adapter.
      */
     public static void updateTableAdapterData(){
         mTableModelView.getAdapter().notifyDataSetChanged();
     }
 
     /**
-     *
+     * Calls the notify function for the Build adapter.
      */
     public static void updateBuildAdapterData(){
         mBuildModelView.getAdapter().notifyDataSetChanged();

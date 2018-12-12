@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
  * MainActivity
  */
 public class MainActivity extends FragmentActivity {
+    // private member variables.
     private FragmentManager fragmentManager = getSupportFragmentManager();
 
     /**
@@ -66,7 +67,8 @@ public class MainActivity extends FragmentActivity {
     }
 
     /**
-     *
+     * Called when the app's permission retrieved from the manifest. prompt for perssion to access
+     * public file system.
      * @param requestCode
      * @param resultCode
      * @param resultData

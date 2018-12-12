@@ -31,15 +31,15 @@ public class BooleanVariable {
     }
 
     /**
-     *
-     * @return
+     * Returns a ChangeListner object.
+     * @return ChangeListener
      */
     public ChangeListener getListener() {
         return listener;
     }
 
     /**
-     *
+     * Set the value of the ChangeListener object within the class.
      * @param listener
      */
     public void setListener(ChangeListener listener) {
@@ -47,7 +47,7 @@ public class BooleanVariable {
     }
 
     /**
-     *
+     * Interface for the custom listener we will be
      */
     public interface ChangeListener {
         void onChange();

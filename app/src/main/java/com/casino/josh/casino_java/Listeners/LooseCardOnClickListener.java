@@ -15,11 +15,15 @@ import java.util.Vector;
  */
 
 public class LooseCardOnClickListener implements View.OnClickListener {
+
+    // Private member variables.
     private CardModel mCard;
     private ImageButton mButton;
     private Context mContext;
+
+
     /**
-     *
+     * Default constructor, which takes the view relating to the current activity.
      * @param card
      */
     public LooseCardOnClickListener(CardModel card, ImageButton cardButton, Context context){
@@ -29,7 +33,7 @@ public class LooseCardOnClickListener implements View.OnClickListener {
     }
 
     /**
-     *
+     * implementation of inteface from onClick listener.
      * @param v
      */
     @Override

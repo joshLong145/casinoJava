@@ -15,7 +15,7 @@ public class LoadGameOnClickListener implements View.OnClickListener {
     private LoadGameButtonFragment loadGameFragment;
 
     /**
-     *
+     * Default constructor
      * @param fragment
      */
     public LoadGameOnClickListener(LoadGameButtonFragment fragment){

@@ -86,10 +86,10 @@ public abstract class BasePlayerModel {
     public abstract boolean makeMove(TableModel table, TurnOptions option);
 
     /**
-     *
+     * Return a container containing combinations of cards from the table.
      * @param table
      * @param cardValue
-     * @return
+     * @return Vector
      */
     protected Vector<Vector<CardModel>> setCaptureCombinations(final TableModel table, final int cardValue){
         return table.setCapture(cardValue);

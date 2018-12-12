@@ -89,7 +89,7 @@ public class CardModel {
     }
 
     /**
-     *
+     * Used for serialization and most abasement within the
      * @return
      */
     public final String toStringSave(){

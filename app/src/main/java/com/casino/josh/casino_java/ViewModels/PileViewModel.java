@@ -17,7 +17,7 @@ public class PileViewModel extends ViewModel {
     private MutableLiveData<Vector<CardModel>> mCards;
 
     /**
-     * @summary Constructor for the pile View Model
+     * Constructor for the pile View Model
      */
     public PileViewModel() {
         mCards = new MutableLiveData<>();

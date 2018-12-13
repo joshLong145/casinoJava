@@ -23,6 +23,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+
+************************************************************
+* Name: Joshua Long                                   	   *
+* Project: Casino (Java Android)            		   *
+* Class:  OPL                        			   *
+* Date: 12/28/18                            		   *
+************************************************************
+
+
 /**
  * MainActivity
  */

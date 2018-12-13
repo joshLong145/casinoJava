@@ -1,0 +1,159 @@
+10/30/18
+-setup of android project. (10 minutes).
+- creation of DFD for data flow between controller, model and view. (1 hour).
+- setup of basic mainActivity and related fragments for the view data ( 1 hour).
+- barebone transition from mainAcitivty to gameActivity (.5 hours).
+- sourcing of needed asset files for UI (.5 hour
+
+10/31/18
+- Got sick, cannot code with a fever of 101. will come back when fever breaks.
+
+11/1/18
+- Implementation of hands (1 hour)
+- fever still in full swing. cannot code anymore for today.
+
+11/2/18
+- fixed issues with inflating a layout from fragment on attach (3 hours).
+- still sick and will work more when recovered.
+
+11/3/18
+- Implementation of tournament model, porting classes from c++ code (2 hours).
+
+11/4/18
+- Setup of table, player hands and UI layout (2 hours).
+- creation of fragments for all buttons within the view (.25 hours)
+- setup of observables for updating of view ( 1 hour).
+
+11/5/18
+-Implemntation of trailing for human player (.5 hours).
+- implementation of view updating after moves are made ( 1 hour).
+
+11/6/18
+- fixing of bugs relation to model interaction with view ( 1 hour).
+
+11/7/18
+- Implementation of basic loose card capture (1 hour)
+- Creation of Pile within the view that updates when cards are captured ( 1 hour).
+
+11/8/18
+-Refactoring of Model to act automoiously of Controller (1 hour).
+- Refactoring of source code into packages (1 hour).
+
+11/9/18
+- Addition of computer pile functionality ( 1 hour)
+- Addition of deck button where you can view all cards still within the deck (1 hour).
+
+11/10/18
+- Addition of Log for each turn that takes place within the game. ( 1 hour).
+
+11/11/18
+- Creation of build feature within the model. ( 1 hour).
+- Creation of build component to be repersented within the view (1 hour).
+- Addition of rule checking within Controler to make sure no invalid builds can be made (1 hour11/9/18
+- Addition of computer pile functionality ( 1 hour)
+- Addition of deck button where you can view all cards still within the deck (1 hour).
+
+11/10/18
+- Addition of Log for each turn that takes place within the game. ( 1 hour).
+
+11/11/18
+- Creation of build feature within the model. ( 1 hour).
+- Creation of build component to be repersented within the view (1 hour).
+- Addition of rule checking within Controler to make sure no invalid builds can be made (1 hour).
+
+11/12/18 
+- Addition of rules dictating that you cannot trail a capture card.
+- Implementation of build capturing (1 hour).
+- Implementation of prevention of trailing a capture card and not capturing a build with a capture card (1 hour).
+
+11/13/18
+- Addition of build owner within build View (.1 hours).
+- Bug fixes regarding null objects when selecting data to perform actions with ( 2 hours).
+- Bug fix. where selecting builds would sometimes not be repersented within the controller. ( 1 hour).
+
+11/14/18
+- Addition of round and score indications within the view (1 hour).
+- Minor bug fixes of rules regarding trailing when owning a build (1 hour).
+
+11/15/18
+- Addition of View options for increasing and creating multibuilds (1 hour).
+
+11/16/18
+- Addition of round number within the view (1 hour).
+- bug fix for capturing sets (.5 hour).
+
+11/17/18
+- implmentation of serialization to file within downlaods folder in public storage ( 2 hour).
+- implementation of reading file data ( 2 hours).
+
+11/18/18
+- Implementation of deserialization, creation of a serialization class that is instancable for constructing java objects from serial data (1 hour).
+- bug fixes relating to loading a save game vs starting a new game and objects created within main activity passed to game activity (.2 hours).
+
+11/19/18
+- Implementation of multibuilds fully done (1 hour)
+
+11/20/18
+- Bug fixes regarding deserializing multiple builds from file. (1 hour).
+
+11/21/18
+- More bug fixes regarding deserialization cases. (1 hour).
+ 
+11/23/18
+- Implementation of multi build parsing for deserialization. (2 hours)
+- implementation of build owner parsing for deserialization. (.5 hours)
+- bug fixes regarding buissness logic. (.2 hours)
+
+
+11/25/18
+- Deserialization of build owner data. (1 hour).
+- Implementation of build increasing. (1 hour).
+
+11/26/18
+- implementation of build capturing for AI ( 2 hours).
+
+11/27/18
+- Implementation of build creation for AI (2 hours).
+
+11/28/18
+- Implementation of multi build creation for AI (2 hours).
+
+11/29/18
+- Implementation for round end menu (1 hour).
+
+11/30/18
+- Design change for round end. not triggered on the event of a flag changin within the tournament model. (1 hour).
+- Implementation of player help for the human (2 hours).
+
+12/1/18
+- Design of max heap for deciding what the action in the current turn should be. ( 2 hours).
+- Start of implementation of the new AI algorithim (1 hour).
+
+12/2/18
+- Imepmentation of Node structure for new AI structure. given the task of calculating the hueristic for each turn. (1 hour).
+
+12/3/18
+- Redesign of UI to promote better touch input selection process for end user. (1 hour)
+
+12/5/18
+- implementation of AI selection process for best node to bubble to the top of the heap. (2 hours).
+
+12/6/18
+- Tweaking of heuristic prioriization. (1 hour)
+- Bug fixes regarding display of help menu. ( .5 hour)
+
+12/7/18
+- Implementation of new help menu where is is displayed as a dialog box with persistent viewing (1 hour)
+
+12/8/18
+- Bug fixes regarding save cases. ( 1 hour)
+
+12/9/18
+- Bug fixes regarding build logic (1 hour)
+
+12/10/18
+- Bug fixes regarding AI logic when trailing a card in hand (1 hour).
+
+12/11/18
+- Bug fixes regarding turn log (1 hour)
+
